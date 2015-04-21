@@ -5,11 +5,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+//import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+//import android.view.View;
+//import android.view.ViewGroup;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -27,10 +27,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         osm = (MapView) findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.MAPNIK);
+        osm.setTileSource(TileSourceFactory.ROADS_OVERLAY_NL);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
-
         mc = (MapController) osm.getController();
         mc.setZoom(20);
         GeoPoint center = new GeoPoint(-34.15691, -70.75072);
