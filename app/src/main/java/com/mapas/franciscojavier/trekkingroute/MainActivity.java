@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         osm = (MapView) findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.ROADS_OVERLAY_NL);
+        osm.setTileSource(TileSourceFactory.MAPQUESTOSM);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
