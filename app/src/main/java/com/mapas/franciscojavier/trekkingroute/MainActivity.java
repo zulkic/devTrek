@@ -1,5 +1,8 @@
 package com.mapas.franciscojavier.trekkingroute;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -8,41 +11,47 @@ import android.os.Bundle;
 //import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 //import android.view.View;
-//import android.view.ViewGroup;
+//import android.view.ViewGroup
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.PathOverlay;
 
 
 public class MainActivity extends ActionBarActivity implements LocationListener{
     private MapView osm;
     private MapController mc;
     private LocationManager locationManager;
+    private PathOverlay po;
+    private Boolean encendido= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         osm = (MapView) findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.MAPQUESTOSM);
-
+        osm.setTileSource(TileSourceFactory.MAPNIK);
 
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
-        mc.setZoom(20);
+        mc.setZoom(15);
+        initPathOverlay();
         GeoPoint center = new GeoPoint(-34.15691, -70.75072);
         mc.animateTo(center);
-        addMarket(center);
+        //addMarket(center);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
 
     }
-    public void addMarket(GeoPoint center)
+    public void addMarket(GeoPoint center, Boolean encendido)
     {
         Marker marker = new Marker(osm);
         marker.setPosition(center);
@@ -50,8 +59,43 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         //marker.setIcon(getResources().getDrawable(R.drawable.zoom_in));
 
         osm.getOverlays().clear();
+
+        if(encendido)
+        {
+            osm.getOverlays().add(addPointsLine(center));
+
+
+        }
+        osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
         osm.invalidate();
+    }
+
+    public void initPathOverlay(){
+        po = new PathOverlay(Color.RED,this);
+        po.getPaint().setStyle(Paint.Style.STROKE);
+        po.getPaint().setStrokeWidth(5);
+        //Paint p = new Paint();
+        //p.setColor(Color.RED);
+        //p.setStyle(Paint.Style.STROKE);
+        //p.setStrokeWidth(5);
+        //po.setPaint(p);
+
+    }
+
+    public PathOverlay addPointsLine(GeoPoint gp){
+        po.addPoint(gp);
+        return po;
+    }
+
+    public void encenderGps(View view)
+    {
+        initPathOverlay();
+        encendido = true;
+    }
+    public void apagarGps(View view)
+    {
+       encendido = false;
     }
 
     @Override
@@ -80,9 +124,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
     public void onLocationChanged(Location location) {
         GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
         mc.animateTo(punto);
-        addMarket(punto);
-
-
+        addMarket(punto,encendido);
     }
 
     @Override
@@ -100,3 +142,4 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
 
     }
 }
+

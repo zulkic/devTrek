@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Trekking Route</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="button_start">Inicio</string>
+    <string name="button_end">Fin</string>
     <string name="action_settings">Settings</string>
 </resources>
