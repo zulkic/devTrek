@@ -1,6 +1,5 @@
 package com.mapas.franciscojavier.trekkingroute;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
@@ -8,10 +7,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-//import android.view.LayoutInflater;
+
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 //import android.view.View;
 //import android.view.ViewGroup
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -19,8 +20,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
-import org.osmdroid.views.overlay.Overlay;
+
+
 import org.osmdroid.views.overlay.PathOverlay;
 
 
@@ -30,11 +31,35 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
     private LocationManager locationManager;
     private PathOverlay po;
     private Boolean encendido= false;
+    // GPSTracker class
+    GPS gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        gps = new GPS(MainActivity.this);
+
+        double latitude = gps.getLatitude();
+        double longitude = gps.getLongitude();
+        // Verificar si el GPS esta prendido
+        if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+            // \n para saltarse una linea
+            //Toast.makeText(getApplicationContext(), "Tu ubicacion es - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+
+
+        }else{
+            // no tengo la ubicacion
+            // GPS o Network no estan activos
+            // Pregunto si quiero ir a los Ajustes
+            gps.showSettingsAlert();
+        }
         osm = (MapView) findViewById(R.id.mapview);
         osm.setTileSource(TileSourceFactory.MAPNIK);
 
@@ -43,12 +68,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         mc = (MapController) osm.getController();
         mc.setZoom(15);
         initPathOverlay();
-        GeoPoint center = new GeoPoint(-34.15691, -70.75072);
+        //GeoPoint center = new GeoPoint(-34.15691, -70.75072);
+        GeoPoint center = new GeoPoint(latitude, longitude);
         mc.animateTo(center);
         //addMarket(center);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
+
 
     }
     public void addMarket(GeoPoint center, Boolean encendido)
@@ -90,6 +117,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
 
     public void encenderGps(View view)
     {
+        //dentro de la clase gps esta la funcion para apagarlo asiq esta puede q no sea necesaria
         initPathOverlay();
         encendido = true;
     }
@@ -122,9 +150,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
 
     @Override
     public void onLocationChanged(Location location) {
+
+        //Log.i(">>><<<<<", "---------=========ERROR==========------------");
         GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
         mc.animateTo(punto);
         addMarket(punto,encendido);
+
     }
 
     @Override
