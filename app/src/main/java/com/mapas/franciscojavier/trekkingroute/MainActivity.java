@@ -1,4 +1,5 @@
 package com.mapas.franciscojavier.trekkingroute;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -61,8 +62,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
             gps.showSettingsAlert();
         }
         osm = (MapView) findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.MAPNIK);
-
+        osm.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
@@ -90,8 +90,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         if(encendido)
         {
             osm.getOverlays().add(addPointsLine(center));
-
-
         }
         osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
@@ -153,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
 
         //Log.i(">>><<<<<", "---------=========ERROR==========------------");
         GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
-        mc.animateTo(punto);
+        //mc.animateTo(punto);
         addMarket(punto,encendido);
 
     }
