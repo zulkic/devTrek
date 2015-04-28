@@ -1,6 +1,6 @@
 package com.mapas.franciscojavier.trekkingroute;
 import android.content.Context;
-import android.graphics.Canvas;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 //import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +20,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.PathOverlay;
-
+import greendao.*;
+import repositorios.RutaRepo;
 
 public class MainActivity extends ActionBarActivity implements LocationListener{
     private MapView osm;
@@ -30,10 +30,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
     private LocationManager locationManager;
     private PathOverlay po;
     private Boolean encendido= false;
+    private Integer contador = 1;
+    public DaoSession daoSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupDatabase();
         setContentView(R.layout.activity_main);
         osm = (MapView) findViewById(R.id.mapview);
         osm.setTileSource(TileSourceFactory.MAPNIK);
@@ -51,6 +54,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
 
     }
+
+    private void setupDatabase() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "example-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+    }
+
+    public DaoSession getDaoSession() {
+        return daoSession;
+    }
+
     public void addMarket(GeoPoint center, Boolean encendido)
     {
         Marker marker = new Marker(osm);
@@ -92,6 +107,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
     {
         initPathOverlay();
         encendido = true;
+        try {
+            for(int j=1; j<contador; j++) {
+                Log.i(("mostrar algo"), RutaRepo.getRutaForId(MainActivity.this, (long) j).getName() + " j: " + j);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.i("exception: ", e.getMessage());
+        }
     }
     public void apagarGps(View view)
     {
@@ -125,6 +149,22 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
         mc.animateTo(punto);
         addMarket(punto,encendido);
+        try {
+            Ruta ruta = new Ruta();
+            ruta.setId((long) contador);
+            ruta.setName("Ruta test");
+            ruta.setDescripcion("Esta es una ruta de ejemplo");
+            ruta.setKms((float) 100);
+            ruta.setOficial(true);
+            ruta.setTiempo_estimado("10 horas");
+            RutaRepo.insertOrUpdate(MainActivity.this, ruta);
+            contador++;
+        }
+        catch (Exception e)
+        {
+            Log.i("exception: ", e.getMessage());
+        }
+
     }
 
     @Override
