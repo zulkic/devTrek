@@ -5,18 +5,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 
 public class MenuPrincipal extends ActionBarActivity
@@ -50,9 +45,25 @@ public class MenuPrincipal extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        Fragment fragment= null;
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+        switch (position){
+            case 0:
+                fragment = new VisualizarMapa();
+                break;
+            case 1:
+                fragment = new CrearRuta();
+                break;
+            case 2:
+                fragment = new CrearRuta();
+                break;
+            case 3:
+                fragment = new CrearRuta();
+                break;
+        }
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container,fragment)
                 .commit();
     }
 
@@ -67,6 +78,8 @@ public class MenuPrincipal extends ActionBarActivity
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
+            case 4:
+                mTitle = getString(R.string.title_section4);
         }
     }
 
