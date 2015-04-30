@@ -145,7 +145,12 @@ public class GPS extends Service implements LocationListener {
      * @return boolean
      * */
     public boolean canGetLocation() {
-        return this.canGetLocation;
+        // obteniendo el estado del GPS
+        isGPSEnabled = locationManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        Log.i("---"," "+isGPSEnabled);
+        return isGPSEnabled;
     }
 
     /**

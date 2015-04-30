@@ -1,54 +1,97 @@
 package com.mapas.franciscojavier.trekkingroute;
-import android.app.Application;
+
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-//import android.view.LayoutInflater;
-import android.view.Menu;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-//import android.view.View;
-//import android.view.ViewGroup
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.PathOverlay;
 
-
-public class MainActivity extends ActionBarActivity implements LocationListener{
+/**
+ * Created by FranciscoJavier on 28-04-2015.
+ */
+public class VisualizarMapa extends Fragment implements LocationListener ,  View.OnClickListener{
     private MapView osm;
     private MapController mc;
     private LocationManager locationManager;
     private PathOverlay po;
     private Boolean encendido= false;
-
+    // GPSTracker class
+    GPS gps;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        osm = (MapView) findViewById(R.id.mapview);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        gps = new GPS(getActivity());
+
+        double latitude = -35.40472228;
+        double longitude = -71.04858398;
+        // Verificar si el GPS esta prendido
+        /*if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+            // \n para saltarse una linea
+            //Toast.makeText(getApplicationContext(), "Tu ubicacion es - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+
+
+        }else{
+            // no tengo la ubicacion
+            // GPS o Network no estan activos
+            // Pregunto si quiero ir a los Ajustes
+            gps.showSettingsAlert();
+        }*/
+        View view = inflater.inflate(R.layout.fragment_visualizar_mapa, container, false);
+
+       // ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
+        //Button fin = (Button) view.findViewById(R.id.button_end);
+       // botonGps.setOnClickListener(this);
+        //inicio.setOnClickListener(this);
+        //fin.setOnClickListener(this);
+
+        osm = (MapView) view.findViewById(R.id.mapview);
         osm.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
-        mc.setZoom(15);
-        initPathOverlay();
-        GeoPoint center = new GeoPoint(-34.15691, -70.75072);
+        mc.setZoom(10);
+        //GeoPoint center = new GeoPoint(-34.15691, -70.75072);
+        GeoPoint center = new GeoPoint(latitude, longitude);
         mc.animateTo(center);
         //addMarket(center);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
+
+
+        return view;
+        //return super.onCreateView(inflater, container, savedInstanceState);
+
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_main);
+
+
 
     }
     public void addMarket(GeoPoint center, Boolean encendido)
@@ -59,49 +102,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
         //marker.setIcon(getResources().getDrawable(R.drawable.zoom_in));
 
         osm.getOverlays().clear();
-
-        if(encendido)
-        {
-            osm.getOverlays().add(addPointsLine(center));
-        }
-        osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
         osm.invalidate();
     }
 
-    public void initPathOverlay(){
-        po = new PathOverlay(Color.RED,this);
-        po.getPaint().setStyle(Paint.Style.STROKE);
-        po.getPaint().setStrokeWidth(5);
-        //Paint p = new Paint();
-        //p.setColor(Color.RED);
-        //p.setStyle(Paint.Style.STROKE);
-        //p.setStrokeWidth(5);
-        //po.setPaint(p);
 
-    }
 
-    public PathOverlay addPointsLine(GeoPoint gp){
-        po.addPoint(gp);
-        return po;
-    }
 
-    public void encenderGps(View view)
-    {
-        initPathOverlay();
-        encendido = true;
-    }
-    public void apagarGps(View view)
-    {
-       encendido = false;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    /*public void activarGps() {
+        if (gps.canGetLocation()) {
+            gps.showSettingsAlert();
+        }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -120,9 +132,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
 
     @Override
     public void onLocationChanged(Location location) {
+
         GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
         //mc.animateTo(punto);
         addMarket(punto,encendido);
+
     }
 
     @Override
@@ -139,5 +153,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener{
     public void onProviderDisabled(String provider) {
 
     }
-}
 
+    @Override
+    public void onClick(View v) {
+        /*switch (v.getId()){
+            case R.id.imageButtonGPS:
+                activarGps();
+                break;
+        }*/
+    }
+}
