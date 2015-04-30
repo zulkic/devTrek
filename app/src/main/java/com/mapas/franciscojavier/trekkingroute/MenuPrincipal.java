@@ -1,6 +1,7 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+
+import greendao.DaoMaster;
+import greendao.DaoSession;
 
 
 public class MenuPrincipal extends ActionBarActivity
@@ -26,10 +30,12 @@ public class MenuPrincipal extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    public DaoSession daoSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupDatabase();
         setContentView(R.layout.activity_menu_principal);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -157,6 +163,17 @@ public class MenuPrincipal extends ActionBarActivity
             ((MenuPrincipal) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
+    }
+
+    private void setupDatabase() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "devtrek-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+    }
+
+    public DaoSession getDaoSession() {
+        return daoSession;
     }
 
 }

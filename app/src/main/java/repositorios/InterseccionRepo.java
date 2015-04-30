@@ -4,10 +4,13 @@ package repositorios;
  * Created by juancarlosgonzalezca on 27-04-2015.
  */
 import android.content.Context;
+
+import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
+
 import java.util.List;
+
 import greendao.Interseccion;
 import greendao.InterseccionDao;
-import com.mapas.franciscojavier.trekkingroute.MainActivity;
 
 public class InterseccionRepo {
     public static void insertOrUpdate(Context context, Interseccion interseccion) {
@@ -31,6 +34,6 @@ public class InterseccionRepo {
     }
 
     private static InterseccionDao getInterseccionDao(Context c) {
-        return ((MainActivity) c).getDaoSession().getInterseccionDao();
+        return ((MenuPrincipal) c).getDaoSession().getInterseccionDao();
     }
 }

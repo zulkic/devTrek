@@ -30,6 +30,7 @@ public class GPS extends Service implements LocationListener {
     Location location;
     double latitude;
     double longitude;
+    double altitude;
 
     // La distancia mínima para cambiar Actualizaciones en metros
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 0 meters
@@ -131,8 +132,8 @@ public class GPS extends Service implements LocationListener {
     /**
      *  Funcion para obtener la longitud
      * */
-    public double getLongitude(){
-        if(location != null){
+    public double getLongitude() {
+        if (location != null) {
             longitude = location.getLongitude();
         }
 
@@ -140,11 +141,34 @@ public class GPS extends Service implements LocationListener {
         return longitude;
     }
 
+    public double getAltitude() {
+        if (location != null) {
+            altitude = location.getAltitude();
+        }
+
+        // return longitud
+        return longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setAltitude(double altitude){
+        this.altitude = altitude;
+    }
+
+
     /**
      * Funcion para revisar si GPS/wifi esta activo
      * @return boolean
      * */
-    public boolean canGetLocation() {
+
+     public boolean canGetLocation() {
         // obteniendo el estado del GPS
         isGPSEnabled = locationManager
                 .isProviderEnabled(LocationManager.GPS_PROVIDER);

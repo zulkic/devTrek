@@ -5,10 +5,13 @@ package repositorios;
  */
 
 import android.content.Context;
+
+import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
+
 import java.util.List;
+
 import greendao.Estadistica;
 import greendao.EstadisticaDao;
-import com.mapas.franciscojavier.trekkingroute.MainActivity;
 
 public class EstadisticaRepo {
     public static void insertOrUpdate(Context context, Estadistica estadistica) {
@@ -32,6 +35,6 @@ public class EstadisticaRepo {
     }
 
     private static EstadisticaDao getEstadisticaDao(Context c) {
-        return ((MainActivity) c).getDaoSession().getEstadisticaDao();
+        return ((MenuPrincipal) c).getDaoSession().getEstadisticaDao();
     }
 }

@@ -5,10 +5,13 @@ package repositorios;
  */
 
 import android.content.Context;
+
+import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
+
 import java.util.List;
+
 import greendao.Obstaculo;
 import greendao.ObstaculoDao;
-import com.mapas.franciscojavier.trekkingroute.MainActivity;
 
 public class ObstaculoRepo {
     public static void insertOrUpdate(Context context, Obstaculo obstaculo) {
@@ -32,6 +35,6 @@ public class ObstaculoRepo {
     }
 
     private static ObstaculoDao getObstaculoDao(Context c) {
-        return ((MainActivity) c).getDaoSession().getObstaculoDao();
+        return ((MenuPrincipal) c).getDaoSession().getObstaculoDao();
     }
 }

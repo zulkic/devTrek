@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,9 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.PathOverlay;
 
+import greendao.Coordenada;
+import repositorios.CoordenadaRepo;
+
 public class CrearRuta extends Fragment implements LocationListener, View.OnClickListener{
     View rootView;
     private MapView osm;
@@ -33,11 +35,16 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     private LocationManager locationManager;
     private PathOverlay po;
     private Boolean encendido= false;
+    private Integer contador = 1;
+    private Integer id_ruta = 1;
     // GPSTracker class
     GPS gps;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //rootView = inflater.inflate(R.layout.fragment_crear_ruta);
+
+        AsyncCallWS task = new AsyncCallWS();
+        task.execute();
 
         gps = new GPS(getActivity());
 
@@ -117,7 +124,7 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
 
     public void initPathOverlay(){
         po = new PathOverlay(Color.CYAN,getActivity());
-        po.getPaint().setStyle(Paint.Style.FILL);
+        po.getPaint().setStyle(Paint.Style.STROKE);
         po.getPaint().setStrokeWidth(5);
         //Paint p = new Paint();
         //p.setColor(Color.RED);
@@ -137,10 +144,24 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
         //dentro de la clase gps esta la funcion para apagarlo asiq esta puede q no sea necesaria
         initPathOverlay();
         encendido = true;
+
     }
     public void apagarRecorrido()
     {
         encendido = false;
+        try{
+            for(Coordenada coordenada: CoordenadaRepo.getAllCoordenadas(getActivity()))
+            {
+                    Log.i("coordenada: ", coordenada.getId().toString() + " " + coordenada.getLatitud().toString() + " " + coordenada.getLongitud() + " " + coordenada.getAltitud());
+
+            }
+            contador=1;
+            id_ruta++;
+        }
+        catch (Exception e)
+        {
+            Log.i("Error fin: ", e.toString());
+        }
     }
 
     public void activarGps() {
@@ -171,9 +192,26 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     public void onLocationChanged(Location location) {
 
         //Log.i(">>><<<<<", "---------=========ERROR==========------------");
+        gps.setLatitude(location.getLatitude());
+        gps.setLongitude(location.getLongitude());
+        gps.setAltitude(location.getAltitude());
         GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
         //mc.animateTo(punto);
         addMarket(punto,encendido);
+        try {
+            Coordenada nueva_coordenada = new Coordenada();
+            nueva_coordenada.setId((long) contador);
+            nueva_coordenada.setLatitud((double) punto.getLatitude());
+            nueva_coordenada.setLongitud((double) punto.getLongitude());
+            nueva_coordenada.setAltitud((int) punto.getAltitude());
+            nueva_coordenada.setId_ruta(id_ruta);
+            contador++;
+            CoordenadaRepo.insertOrUpdate(getActivity(), nueva_coordenada);
+        }
+        catch (Exception e)
+        {
+            Log.i("Error inicio: ", e.toString());
+        }
 
     }
 

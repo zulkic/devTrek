@@ -1,10 +1,13 @@
 package repositorios;
 
 import android.content.Context;
+
+import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
+
 import java.util.List;
+
 import greendao.Ruta;
 import greendao.RutaDao;
-import com.mapas.franciscojavier.trekkingroute.MainActivity;
 /**
  * Created by juancarlosgonzalezca on 24-04-2015.
  */
@@ -31,7 +34,7 @@ public class RutaRepo {
     }
 
     private static RutaDao getRutaDao(Context c) {
-        return ((MainActivity) c).getDaoSession().getRutaDao();
+        return ((MenuPrincipal) c).getDaoSession().getRutaDao();
     }
 }
 

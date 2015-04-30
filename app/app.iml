@@ -91,7 +91,9 @@
     <orderEntry type="library" exported="" name="osmbonuspack_v5.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="ksoap2" level="project" />
     <orderEntry type="library" exported="" name="slf4j-android-1.6.1-RC1" level="project" />
+    <orderEntry type="library" exported="" name="osmdroid-android-4.2-javadoc" level="project" />
     <orderEntry type="library" exported="" name="osmdroid-android-4.2" level="project" />
   </component>
 </module>

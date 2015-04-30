@@ -4,10 +4,13 @@ package repositorios;
  * Created by juancarlosgonzalezca on 27-04-2015.
  */
 import android.content.Context;
+
+import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
+
 import java.util.List;
+
 import greendao.Punto_interes;
 import greendao.Punto_interesDao;
-import com.mapas.franciscojavier.trekkingroute.MainActivity;
 
 public class Punto_interesRepo {
     public static void insertOrUpdate(Context context, Punto_interes punto_interes) {
@@ -31,6 +34,6 @@ public class Punto_interesRepo {
     }
 
     private static Punto_interesDao getPunto_interesDao(Context c) {
-        return ((MainActivity) c).getDaoSession().getPunto_interesDao();
+        return ((MenuPrincipal) c).getDaoSession().getPunto_interesDao();
     }
 }

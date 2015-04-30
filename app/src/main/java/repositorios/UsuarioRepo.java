@@ -5,10 +5,13 @@ package repositorios;
  */
 
 import android.content.Context;
+
+import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
+
 import java.util.List;
+
 import greendao.Usuario;
 import greendao.UsuarioDao;
-import com.mapas.franciscojavier.trekkingroute.MainActivity;
 
 public class UsuarioRepo {
     public static void insertOrUpdate(Context context, Usuario usuario) {
@@ -32,6 +35,6 @@ public class UsuarioRepo {
     }
 
     private static UsuarioDao getUsuarioDao(Context c) {
-        return ((MainActivity) c).getDaoSession().getUsuarioDao();
+        return ((MenuPrincipal) c).getDaoSession().getUsuarioDao();
     }
 }
