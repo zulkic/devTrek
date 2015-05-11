@@ -9,7 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -112,10 +112,10 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
         //marker.setIcon(getResources().getDrawable(R.drawable.zoom_in));
 
         osm.getOverlays().clear();
-
         if(encendido)
         {
             osm.getOverlays().add(addPointsLine(center));
+            mc.animateTo(center);
         }
         osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
@@ -144,7 +144,6 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
         //dentro de la clase gps esta la funcion para apagarlo asiq esta puede q no sea necesaria
         initPathOverlay();
         encendido = true;
-
     }
     public void apagarRecorrido()
     {
