@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Nombre de la Ruta"
+        android:id="@+id/textView_nombre_ruta" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_nombre_ruta"
+        android:id="@+id/editText_nombre_ruta" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Tiempo Estimado"
+        android:layout_below="@id/editText_nombre_ruta"
+        android:id="@+id/textView_tiempo_estimado" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:text="0"
+        android:layout_below="@id/textView_tiempo_estimado"
+        android:id="@+id/editText_tiempo_estimado" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Recorrido mediente"
+        android:layout_below="@id/editText_tiempo_estimado"
+        android:id="@+id/textView_recorrido_mediante" />
+<!--
+    <Spinner
+        android:id="@+id/spinner_recorrido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/rec_arrays"
+        android:layout_below="@id/textView_recorrido_mediante"
+        android:prompt="@string/rec_prompt" />
+-->
+    <Spinner
+        android:id="@+id/spinner_recorrido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_recorrido_mediante"
+        android:prompt="@string/rec_prompt" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_guardar_ruta"
+        android:id="@+id/button_guardar_ruta"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_cancelar_ruta"
+        android:id="@+id/button_cancelar_ruta"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    />
+
+
+</RelativeLayout>
