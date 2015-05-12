@@ -54,6 +54,7 @@
         android:id="@+id/spinner_recorrido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center|bottom"
         android:layout_below="@id/textView_recorrido_mediante"
         android:prompt="@string/rec_prompt" />
 
