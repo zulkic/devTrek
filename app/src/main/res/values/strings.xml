@@ -16,4 +16,20 @@
 
     <string name="action_example"> </string>
 
+    <string name="button_guardar_ruta">Guardar</string>
+    <string name="button_cancelar_ruta">Cancelar</string>
+    <string name="rec_prompt">Como reocrrio la ruta?</string>
+<!--
+    <string-array name="rec_arrays">
+        <item>Caminando</item>
+        <item>Trotando</item>
+        <item>Corriendo</item>
+        <item>En Bicicleta</item>
+        <item>A Caballo</item>
+        <item>En Auto</item>
+    </string-array>
+-->
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

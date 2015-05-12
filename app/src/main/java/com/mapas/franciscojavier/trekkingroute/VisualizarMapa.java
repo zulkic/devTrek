@@ -8,7 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,7 +77,7 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         //addMarket(center);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
+        locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,1000,10,this);
 
 
         return view;

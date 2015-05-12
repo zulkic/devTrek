@@ -9,7 +9,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,6 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -37,6 +44,8 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     private Boolean encendido= false;
     private Integer contador = 1;
     private Integer id_ruta = 1;
+    Long i, f;
+    SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     // GPSTracker class
     GPS gps;
     @Override
@@ -50,22 +59,7 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
 
         double latitude = gps.getLatitude();
         double longitude = gps.getLongitude();
-        // Verificar si el GPS esta prendido
-        /*if(gps.canGetLocation()){
 
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
-
-            // \n para saltarse una linea
-            //Toast.makeText(getApplicationContext(), "Tu ubicacion es - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-
-
-        }else{
-            // no tengo la ubicacion
-            // GPS o Network no estan activos
-            // Pregunto si quiero ir a los Ajustes
-            gps.showSettingsAlert();
-        }*/
         View view = inflater.inflate(R.layout.fragment_crear_ruta, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
         Button inicio = (Button) view.findViewById(R.id.button_start);
@@ -112,10 +106,10 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
         //marker.setIcon(getResources().getDrawable(R.drawable.zoom_in));
 
         osm.getOverlays().clear();
-
         if(encendido)
         {
             osm.getOverlays().add(addPointsLine(center));
+            mc.animateTo(center);
         }
         osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
@@ -144,7 +138,6 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
         //dentro de la clase gps esta la funcion para apagarlo asiq esta puede q no sea necesaria
         initPathOverlay();
         encendido = true;
-
     }
     public void apagarRecorrido()
     {
@@ -232,12 +225,44 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
 
     @Override
     public void onClick(View v) {
+        Fragment newFragment=null;
+        Date c = null;
         switch (v.getId()){
             case R.id.button_start:
+                c = new Date();
+                System.out.println("getTimeInicio() => "+c.getTime());
+                i = c.getTime();
+                //System.out.println("getTimeInicio "+i);
+                String tiempoInicioRecorrido= df.format(i);
+                System.out.println("getTimeInicio "+tiempoInicioRecorrido);
                 grabarRecorrido();
                 break;
             case R.id.button_end :
-                apagarRecorrido();
+                if(encendido){
+                    c = new Date();
+                    System.out.println("getTimeFin() => "+c.getTime());
+                    f = c.getTime();
+                    String tiempoFinRecorrido= df.format(f);
+                    System.out.println("getTimeFin "+tiempoFinRecorrido);
+
+                    f=f-i;
+                    String tiempoTotalRecorrido= df.format(f);
+                    System.out.println("getTimeTotal "+tiempoTotalRecorrido);
+
+                    apagarRecorrido();
+
+                    newFragment = new DetallesRuta().newInstance(tiempoTotalRecorrido, "");
+                    //newFragment.setTiempoTotal(tiempoTotalRecorrido);
+                    FragmentManager fm1 = getFragmentManager();
+                    FragmentTransaction ft1 = fm1.beginTransaction();
+                    ft1.replace(R.id.container, newFragment)
+                            .addToBackStack(null)
+                            .commit();
+
+                }
+                else{
+                    Toast.makeText(v.getContext(), "Primero inicie un Ruta", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.imageButtonGPS:
                 activarGps();
