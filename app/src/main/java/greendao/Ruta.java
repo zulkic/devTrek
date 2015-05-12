@@ -7,7 +7,7 @@ package greendao;
 public class Ruta {
 
     private Long id;
-    private String name;
+    private String nombre;
     private String descripcion;
     private Float kms;
     private String tiempo_estimado;
@@ -20,9 +20,9 @@ public class Ruta {
         this.id = id;
     }
 
-    public Ruta(Long id, String name, String descripcion, Float kms, String tiempo_estimado, Boolean oficial) {
+    public Ruta(Long id, String nombre, String descripcion, Float kms, String tiempo_estimado, Boolean oficial) {
         this.id = id;
-        this.name = name;
+        this.nombre = nombre;
         this.descripcion = descripcion;
         this.kms = kms;
         this.tiempo_estimado = tiempo_estimado;
@@ -37,12 +37,12 @@ public class Ruta {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {
