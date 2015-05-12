@@ -1,9 +1,5 @@
 package JSON;
 
-/**
- * Created by juancarlosgonzalezca on 12-05-2015.
- */
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Ruta;
-
+//clase para obtener rutas
 public class Obtener_Rutas extends AsyncTask<Void, Void, Void> {
 
     private ArrayList<Ruta> rutasList;

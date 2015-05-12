@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Ruta;
-
+//clase para crear una nueva ruta
 public class Nueva_Ruta extends AsyncTask<Void, Void, Void> {
 
     private Ruta ruta;
