@@ -13,7 +13,7 @@ import java.util.List;
 
 import greendao.Ruta;
 //clase para obtener rutas
-public class Obtener_Rutas extends AsyncTask<Void, Void, Void> {
+public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
 
     private ArrayList<Ruta> rutasList;
     private JSONParser jsonParser;
@@ -46,7 +46,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, Void> {
     /**
      * getting All products from url
      */
-    protected Void doInBackground(Void... args) {
+    protected ArrayList<Ruta> doInBackground(Void... args) {
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         // getting JSON string from URL
@@ -83,7 +83,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
 
-        return null;
+        return rutasList;
     }
 
     /**
@@ -91,11 +91,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, Void> {
      * *
      */
 
-    public ArrayList<Ruta> obtenerRutas()
-    {
-        return this.rutasList;
-    }
-
-    protected void onPostExecute(String file_url) {
+    protected void onPostExecute(ArrayList<Ruta> result) {
+        super.onPostExecute(result);
     }
 }
