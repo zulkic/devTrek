@@ -44,6 +44,12 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     private Boolean encendido= false;
     private Integer contador = 1;
     private Integer id_ruta = 1;
+
+    private Location localicacionA = new Location("punto A");
+    private Location localicacionB = new Location("punto B");
+    private Boolean primerLocalicacion = true;
+    private float distancia;
+
     Long i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     // GPSTracker class
@@ -192,6 +198,22 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
         //mc.animateTo(punto);
         addMarket(punto,encendido);
         try {
+
+            if(primerLocalicacion){
+                localicacionA.setLatitude(location.getLatitude());
+                localicacionA.setLongitude(location.getLongitude());
+                distancia =0;
+                primerLocalicacion=false;
+            }
+            else{
+                localicacionB.setLatitude(location.getLatitude());
+                localicacionB.setLongitude(location.getLongitude());
+
+                distancia = distancia + localicacionA.distanceTo(localicacionB);
+
+                localicacionA.setLatitude(location.getLatitude());
+                localicacionA.setLongitude(location.getLongitude());
+            }
             Coordenada nueva_coordenada = new Coordenada();
             nueva_coordenada.setId((long) contador);
             nueva_coordenada.setLatitud((double) punto.getLatitude());
@@ -247,11 +269,11 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
 
                     f=f-i;
                     String tiempoTotalRecorrido= df.format(f);
-                    System.out.println("getTimeTotal "+tiempoTotalRecorrido);
+                    System.out.println("distancia ----------->"+distancia);
 
                     apagarRecorrido();
 
-                    newFragment = new DetallesRuta().newInstance(tiempoTotalRecorrido, "");
+                    newFragment = new DetallesRuta().newInstance(tiempoTotalRecorrido, distancia);
                     //newFragment.setTiempoTotal(tiempoTotalRecorrido);
                     FragmentManager fm1 = getFragmentManager();
                     FragmentTransaction ft1 = fm1.beginTransaction();

@@ -38,9 +38,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Recorrido mediente"
+        android:text="Distacia recorrida (mts)"
         android:layout_below="@id/editText_tiempo_estimado"
-        android:id="@+id/textView_recorrido_mediante" />
+        android:id="@+id/textView_distancia_recorrida" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="0"
+        android:layout_below="@id/textView_distancia_recorrida"
+        android:id="@+id/editText_distancia_recorrida" />
 <!--
     <Spinner
         android:id="@+id/spinner_recorrido"
@@ -50,11 +57,18 @@
         android:layout_below="@id/textView_recorrido_mediante"
         android:prompt="@string/rec_prompt" />
 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Recorrido mediante"
+        android:layout_below="@id/editText_distancia_recorrida"
+        android:id="@+id/textView_recorrido_mediante" />
     <Spinner
         android:id="@+id/spinner_recorrido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center|bottom"
+        android:gravity="center|center_vertical"
         android:layout_below="@id/textView_recorrido_mediante"
         android:prompt="@string/rec_prompt" />
 

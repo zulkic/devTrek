@@ -16,10 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import greendao.Ruta;
+import repositorios.RutaRepo;
 
 
 public class DetallesRuta extends Fragment implements View.OnClickListener{
@@ -28,28 +33,35 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
     int LARGO_NOMBRE_RUTA=1;
     private static final String ARG_PARAM1 = "nada";
     private static final String ARG_PARAM2 = "vacio";
-    private static String ARG_PARAM3 = "hollow";
+    private static String ARG_TIEMPO_RUTA = "hollow";
+    private static String ARG_DISTANCIA_RUTA;
     private Spinner spinnerReco;
     private Button btnSubmit;
-    private String Caminando="\nCaminando";
-    private String Trotando="\nTrotando";
-    private String Corriendo="\nCorriendo";
-    private String Bicicleta="\nBicicleta";
-    private String Caballo="\nCaballo";
-    private String Auto="\nAuto";
+    private String Caminando="Caminando";
+    private String Trotando="Trotando";
+    private String Corriendo="Corriendo";
+    private String Bicicleta="Bicicleta";
+    private String Caballo="Caballo";
+    private String Auto="Auto";
 
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
     public DetallesRuta() {
         // Required empty public constructor
     }
-    public static DetallesRuta newInstance(String param1, String param2) {
+    public static DetallesRuta newInstance(String tiempoTotalRuta, float distaciaRuta) {
         DetallesRuta fragment = new DetallesRuta();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, tiempoTotalRuta);
+        args.putFloat(ARG_PARAM2, distaciaRuta);
         fragment.setArguments(args);
-        ARG_PARAM3=param1;
+        ARG_TIEMPO_RUTA=tiempoTotalRuta;
+        //trunco la distacia con 2 decimales
+        DecimalFormat df = new DecimalFormat("##.##");
+        df.setRoundingMode(RoundingMode.DOWN);
+        String mts = df.format(distaciaRuta);
+        //float mtrs = Float.valueOf(mts);
+        ARG_DISTANCIA_RUTA=mts;
         return fragment;
     }
 
@@ -58,24 +70,28 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detalles_ruta, container, false);
-        Button b = (Button) v.findViewById(R.id.button_guardar_ruta);
-        EditText e = (EditText) v.findViewById(R.id.editText_nombre_ruta);
-        TextView textFragment = (TextView)v.findViewById(R.id.editText_tiempo_estimado);
+        Button botonGuardar = (Button) v.findViewById(R.id.button_guardar_ruta);
+        EditText editNombreRuta = (EditText) v.findViewById(R.id.editText_nombre_ruta);
+        TextView textTiempoEstimado = (TextView)v.findViewById(R.id.editText_tiempo_estimado);
+        TextView textDistanciaRecorrida = (TextView)v.findViewById(R.id.editText_distancia_recorrida);
 
-        e.setOnClickListener(this);
-        b.setOnClickListener(this);
-        textFragment.setText(ARG_PARAM3);
-        textFragment.setOnClickListener(this);
+        editNombreRuta.setOnClickListener(this);
+        botonGuardar.setOnClickListener(this);
+        textTiempoEstimado.setText(ARG_TIEMPO_RUTA);
+        textTiempoEstimado.setOnClickListener(this);
+
+        textDistanciaRecorrida.setText(ARG_DISTANCIA_RUTA);
+        textDistanciaRecorrida.setOnClickListener(this);
 
         //SPINER
         spinnerReco = (Spinner) v.findViewById(R.id.spinner_recorrido);
         /**List<String> listRecorido = new ArrayList<String>();
-        listRecorido.add("Caminando");
-        listRecorido.add("Trotando");
-        listRecorido.add("Corriendo");
-        listRecorido.add("En Bicicleta");
-        listRecorido.add("A Caballo");
-        listRecorido.add("En Auto");*/
+         listRecorido.add("Caminando");
+         listRecorido.add("Trotando");
+         listRecorido.add("Corriendo");
+         listRecorido.add("En Bicicleta");
+         listRecorido.add("A Caballo");
+         listRecorido.add("En Auto");*/
 
         //ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,listRecorido);
 
@@ -95,20 +111,36 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_guardar_ruta:
-                EditText e = (EditText) getActivity().findViewById(R.id.editText_nombre_ruta);
-                TextView textFragment = (TextView)getActivity().findViewById(R.id.editText_tiempo_estimado);
+                EditText editTextNombreRuta= (EditText) getActivity().findViewById(R.id.editText_nombre_ruta);
+                TextView textTiempoEstimado = (TextView)getActivity().findViewById(R.id.editText_tiempo_estimado);
                 spinnerReco = (Spinner) getActivity().findViewById(R.id.spinner_recorrido);
-                if(e.getText().length()<LARGO_NOMBRE_RUTA){
+                if(editTextNombreRuta.getText().length()<LARGO_NOMBRE_RUTA){
                     Toast.makeText(getActivity().getBaseContext(), "Ingrese un Nombre", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    //Toast.makeText(getActivity().getBaseContext(), e.getText()+" \n "+ ARG_PARAM3, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity().getBaseContext(), editTextNombreRuta.getText()+" \n "+ ARG_PARAM3, Toast.LENGTH_SHORT).show();
+                    String nombreRuta = editTextNombreRuta.getText().toString();
+                    String tiempoRuta = textTiempoEstimado.getText().toString();
+                    String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
+                    float mtrs = Float.valueOf(ARG_DISTANCIA_RUTA);
+
+                    Ruta nuevaRuta = new Ruta();
+                    nuevaRuta.setNombre(nombreRuta);
+                    nuevaRuta.setTiempo_estimado(tiempoRuta);
+                    nuevaRuta.setDescripcion(tipoRuta);
+                    nuevaRuta.setKms(mtrs);
+                    nuevaRuta.setOficial(false);    //verificar mas adelante
+                    nuevaRuta.setId(1l);            //verificar mas adelante
+
                     Toast.makeText(getActivity().getBaseContext(),
                             "Datos: "+"\n"
-                                   + e.getText()+"\n"
-                                   + textFragment.getText()+"\n"
-                                   + String.valueOf(spinnerReco.getSelectedItem())
+                                    + nombreRuta+"\n"
+                                    + tiempoRuta+"\n"
+                                    + mtrs
+                                    + tipoRuta
                             ,Toast.LENGTH_SHORT).show();
+
+                    RutaRepo.insertOrUpdate(getActivity(),nuevaRuta); //Aca lo guardo en la base de datos local.
                 }
                 break;
             default:
