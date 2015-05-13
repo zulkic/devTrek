@@ -2,9 +2,11 @@ package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.mapas.franciscojavier.trekkingroute.dummy.DummyContent;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+import JSON.Obtener_Rutas;
+import greendao.Ruta;
 
 /**
  * A fragment representing a list of Items.
@@ -28,7 +36,7 @@ import com.mapas.franciscojavier.trekkingroute.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class RoutesFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class RoutesFragment extends Fragment{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,16 +49,8 @@ public class RoutesFragment extends Fragment implements AbsListView.OnItemClickL
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * The fragment's ListView/GridView.
-     */
-    private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
+    private ListView listView;
+    ArrayList<Ruta> rutas = null;
 
     // TODO: Rename and change types of parameters
     public static RoutesFragment newInstance(String param1, String param2) {
@@ -77,36 +77,50 @@ public class RoutesFragment extends Fragment implements AbsListView.OnItemClickL
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        LayoutInflater inflater = (LayoutInflater) getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View routeview = inflater.inflate(R.layout.route_row,mListView,false);
 
-        String[] values = new String[] { "Ruta 1", "Ruta 2", "Ruta3",
-                "Ruta 4", "Ruta 5", "Ruta 6", "Ruta 7", "Ruta 8",
-                "Ruta 9", "Ruta 10" };
-        TextView textView = (TextView) routeview.findViewById(R.id.label);
-        ImageView imageView = (ImageView) routeview.findViewById(R.id.icon);
-        textView.setText(values[0]);
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1,values);
+        try {
+            Obtener_Rutas task = new Obtener_Rutas();
+            rutas = task.execute().get();
+            Log.i("ruta: ", rutas.get(0).getNombre());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routes, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        listView = (ListView) view.findViewById(android.R.id.list);
+        if(rutas.isEmpty())
+        {
+            setEmptyText("Texto Vacio");
+        }
+        else{
+            // Sets the data behind this ListView
+            this.listView.setAdapter(new ItemRuta(getActivity(),rutas));
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView adapter, View view, int position, long arg) {
+                    // Loads the given URL
+                    Ruta item = (Ruta) listView.getAdapter().getItem(position);
+                    Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
+                            , Toast.LENGTH_SHORT).show();
+                    Fragment tf = new MostrarRuta();
+                    FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+                    ft.replace(R.id.container, tf);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
+            });
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        }
 
         return view;
     }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -124,29 +138,13 @@ public class RoutesFragment extends Fragment implements AbsListView.OnItemClickL
         mListener = null;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            Toast.makeText(getActivity(), " Clicked!"
-                    , Toast.LENGTH_SHORT).show();
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-            Fragment tf = new MostrarRuta();
-            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-            ft.replace(R.id.container, tf);
-            ft.addToBackStack(null);
-            ft.commit();
-        }
-    }
-
     /**
      * The default content for this Fragment has a TextView that is shown when
      * the list is empty. If you would like to change the text, call this method
      * to supply the text it should use.
      */
     public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
+        View emptyView = listView.getEmptyView();
 
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);

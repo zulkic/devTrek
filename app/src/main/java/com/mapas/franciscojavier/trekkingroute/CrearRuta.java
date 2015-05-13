@@ -58,9 +58,6 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //rootView = inflater.inflate(R.layout.fragment_crear_ruta);
 
-        AsyncCallWS task = new AsyncCallWS();
-        task.execute();
-
         gps = new GPS(getActivity());
 
         double latitude = gps.getLatitude();
