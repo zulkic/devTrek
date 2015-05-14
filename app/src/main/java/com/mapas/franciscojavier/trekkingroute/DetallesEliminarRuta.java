@@ -1,0 +1,104 @@
+package com.mapas.franciscojavier.trekkingroute;
+
+import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
+import android.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
+import greendao.Ruta;
+import repositorios.RutaRepo;
+
+
+public class DetallesEliminarRuta extends Fragment implements View.OnClickListener{
+
+    int LARGO_NOMBRE_RUTA=1;
+    private static Long ID_RUTA=0l;
+    private static String NOMBRE="nada", TIEMPO="nada", TIPO="nada", DESCRIPCION="nada";
+    private static float KMS=0;
+
+
+    public DetallesEliminarRuta() {
+        // Required empty public constructor
+    }
+    public static DetallesEliminarRuta newInstance(Long idRuta, String nombre, String tiempo,
+                                                   float kms,String tipo, String descripcion) {
+        DetallesEliminarRuta fragment = new DetallesEliminarRuta();
+        Bundle args = new Bundle();
+        ID_RUTA=idRuta;
+        NOMBRE=nombre;
+        TIEMPO=tiempo;
+        KMS=kms;
+        TIPO=tipo;
+        DESCRIPCION=descripcion;
+        return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_detalles_eliminar_ruta, container, false);
+        Button botonAceptar = (Button) v.findViewById(R.id.button_aceptar_eliminar_ruta);
+        TextView nombreRuta = (TextView) v.findViewById(R.id.editTextEliminar_nombre_ruta);
+        TextView tiempoEstimado = (TextView) v.findViewById(R.id.editTextEliminar_tiempo_estimado);
+        TextView distanciaRecorrida = (TextView) v.findViewById(R.id.editTextEliminar_distancia_recorrida);
+        TextView tipoRecorrido = (TextView) v.findViewById(R.id.editTextEliminar_recorrido_mediante);
+        TextView descripcion = (TextView) v.findViewById(R.id.editTextEliminar_descripcion);
+
+        /**System.out.println(".setText(NOMBRE); "+NOMBRE);
+        System.out.println(".setText(TIEMPO); "+TIEMPO);
+        System.out.println(".setText(TIPO); "+TIPO);
+        System.out.println(".setText(DESCRIPCION); "+DESCRIPCION);*/
+
+        String km = Float.toString(KMS);
+
+        //System.out.println(".setText(KMS); "+km);
+
+        nombreRuta.setText(NOMBRE);
+        nombreRuta.setOnClickListener(this);
+        tiempoEstimado.setText(TIEMPO);
+        tiempoEstimado.setOnClickListener(this);
+        distanciaRecorrida.setText(km);
+        distanciaRecorrida.setOnClickListener(this);
+        tipoRecorrido.setText(TIPO);
+        tipoRecorrido.setOnClickListener(this);
+        descripcion.setText(DESCRIPCION);
+        descripcion.setOnClickListener(this);
+
+        botonAceptar.setOnClickListener(this);
+
+        return v;
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button_aceptar_eliminar_ruta:
+               // RutaRepo.deleteRutaWithId(getActivity(),ID_RUTA);
+                    Toast.makeText(getActivity().getBaseContext(),
+                            "Se elimino: "+"\n"
+                                    + NOMBRE+"\n"
+                            ,Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button_cancelar_eliminar_ruta:
+                //getActivity().onBackPressed();
+                break;
+            default:
+                return;
+        }
+    }
+
+}
