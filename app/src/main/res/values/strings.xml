@@ -10,6 +10,7 @@
     <string name="title_section2">Planificar Viaje</string>
     <string name="title_section3">Crear Ruta</string>
     <string name="title_section4">Iniciar Recorrido</string>
+    <string name="title_section5">Eliminar Ruta</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -18,7 +19,9 @@
 
     <string name="button_guardar_ruta">Guardar</string>
     <string name="button_cancelar_ruta">Cancelar</string>
-    <string name="rec_prompt">Como reocrrio la ruta?</string>
+    <string name="rec_prompt">Como recorrio la ruta?</string>
+    <string name="button_aceptar_eliminar_ruta">Aceptar</string>
+    <string name="button_cancelar_eliminar_ruta">Cancelar</string>
 <!--
     <string-array name="rec_arrays">
         <item>Caminando</item>

@@ -74,11 +74,13 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
         EditText editNombreRuta = (EditText) v.findViewById(R.id.editText_nombre_ruta);
         TextView textTiempoEstimado = (TextView)v.findViewById(R.id.editText_tiempo_estimado);
         TextView textDistanciaRecorrida = (TextView)v.findViewById(R.id.editText_distancia_recorrida);
+        EditText editDescripcion = (EditText) v.findViewById(R.id.editText_descripcion);
 
         editNombreRuta.setOnClickListener(this);
         botonGuardar.setOnClickListener(this);
         textTiempoEstimado.setText(ARG_TIEMPO_RUTA);
         textTiempoEstimado.setOnClickListener(this);
+        editDescripcion.setOnClickListener(this);
 
         textDistanciaRecorrida.setText(ARG_DISTANCIA_RUTA);
         textDistanciaRecorrida.setOnClickListener(this);
@@ -114,6 +116,7 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
                 EditText editTextNombreRuta= (EditText) getActivity().findViewById(R.id.editText_nombre_ruta);
                 TextView textTiempoEstimado = (TextView)getActivity().findViewById(R.id.editText_tiempo_estimado);
                 spinnerReco = (Spinner) getActivity().findViewById(R.id.spinner_recorrido);
+                EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
                 if(editTextNombreRuta.getText().length()<LARGO_NOMBRE_RUTA){
                     Toast.makeText(getActivity().getBaseContext(), "Ingrese un Nombre", Toast.LENGTH_SHORT).show();
                 }
@@ -123,25 +126,32 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
                     String tiempoRuta = textTiempoEstimado.getText().toString();
                     String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
                     float mtrs = Float.valueOf(ARG_DISTANCIA_RUTA);
+                    String descripcionRuta = editTextDescripcion.getText().toString();
 
                     Ruta nuevaRuta = new Ruta();
                     nuevaRuta.setNombre(nombreRuta);
                     nuevaRuta.setTiempo_estimado(tiempoRuta);
-                    nuevaRuta.setDescripcion(tipoRuta);
+                    //nuevaRuta.setTipo(tipoRuta);      FALTA AGREGAR ESTA FUNCION
+                    nuevaRuta.setDescripcion(descripcionRuta);
                     nuevaRuta.setKms(mtrs);
                     nuevaRuta.setOficial(false);    //verificar mas adelante
                     nuevaRuta.setId(1l);            //verificar mas adelante
+
 
                     Toast.makeText(getActivity().getBaseContext(),
                             "Datos: "+"\n"
                                     + nombreRuta+"\n"
                                     + tiempoRuta+"\n"
-                                    + mtrs
-                                    + tipoRuta
+                                    + mtrs+"\n"
+                                    + tipoRuta+"\n"
+                                    + descripcionRuta
                             ,Toast.LENGTH_SHORT).show();
 
                     RutaRepo.insertOrUpdate(getActivity(),nuevaRuta); //Aca lo guardo en la base de datos local.
                 }
+                break;
+            case R.id.button_cancelar_ruta:
+                //getActivity().onBackPressed();
                 break;
             default:
                 return;

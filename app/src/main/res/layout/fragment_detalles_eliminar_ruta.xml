@@ -1,95 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mapas.franciscojavier.trekkingroute.DetallesEliminarRuta">
 
+    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Nombre de la Ruta"
-        android:id="@+id/textView_nombre_ruta" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_nombre_ruta"
-        android:id="@+id/editText_nombre_ruta" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Tiempo Estimado"
-        android:layout_below="@id/editText_nombre_ruta"
-        android:id="@+id/textView_tiempo_estimado" />
-
+        android:id="@+id/textViewEliminar_nombre_ruta" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="time"
         android:text="0"
-        android:layout_below="@id/textView_tiempo_estimado"
-        android:id="@+id/editText_tiempo_estimado" />
-
+        android:layout_below="@id/textViewEliminar_nombre_ruta"
+        android:id="@+id/editTextEliminar_nombre_ruta" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Tiempo Estimado"
+        android:layout_below="@id/editTextEliminar_nombre_ruta"
+        android:id="@+id/textViewEliminar_tiempo_estimado" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:text="0"
+        android:layout_below="@id/textViewEliminar_tiempo_estimado"
+        android:id="@+id/editTextEliminar_tiempo_estimado" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Distacia recorrida (mts)"
-        android:layout_below="@id/editText_tiempo_estimado"
-        android:id="@+id/textView_distancia_recorrida" />
+        android:layout_below="@id/editTextEliminar_tiempo_estimado"
+        android:id="@+id/textViewEliminar_distancia_recorrida" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:text="0"
-        android:layout_below="@id/textView_distancia_recorrida"
-        android:id="@+id/editText_distancia_recorrida" />
-<!--
-    <Spinner
-        android:id="@+id/spinner_recorrido"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/rec_arrays"
-        android:layout_below="@id/textView_recorrido_mediante"
-        android:prompt="@string/rec_prompt" />
--->
+        android:layout_below="@id/textViewEliminar_distancia_recorrida"
+        android:id="@+id/editTextEliminar_distancia_recorrida" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Recorrido mediante"
-        android:layout_below="@id/editText_distancia_recorrida"
-        android:id="@+id/textView_recorrido_mediante" />
-    <Spinner
-        android:id="@+id/spinner_recorrido"
+        android:layout_below="@id/editTextEliminar_distancia_recorrida"
+        android:id="@+id/textViewEliminar_recorrido_mediante" />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center|center_vertical"
-        android:layout_below="@id/textView_recorrido_mediante"
-        android:prompt="@string/rec_prompt" />
+        android:inputType="number"
+        android:text="0"
+        android:layout_below="@id/textViewEliminar_recorrido_mediante"
+        android:id="@+id/editTextEliminar_recorrido_mediante" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Descripcion"
-        android:layout_below="@id/spinner_recorrido"
-        android:id="@+id/textView_descripcion" />
-    <EditText
+        android:layout_below="@id/editTextEliminar_recorrido_mediante"
+        android:id="@+id/textViewEliminar_descripcion" />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_descripcion"
-        android:id="@+id/editText_descripcion" />
-
+        android:inputType="number"
+        android:text="0"
+        android:layout_below="@id/textViewEliminar_descripcion"
+        android:id="@+id/editTextEliminar_descripcion" />
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_guardar_ruta"
-        android:id="@+id/button_guardar_ruta"
+        android:text="@string/button_aceptar_eliminar_ruta"
+        android:id="@+id/button_aceptar_eliminar_ruta"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -100,12 +89,10 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_cancelar_ruta"
-        android:id="@+id/button_cancelar_ruta"
+        android:text="@string/button_cancelar_eliminar_ruta"
+        android:id="@+id/button_cancelar_eliminar_ruta"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     />
-
-
 </RelativeLayout>

@@ -19,7 +19,7 @@ import greendao.DaoSession;
 
 
 public class MenuPrincipal extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, RoutesFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -67,6 +67,9 @@ public class MenuPrincipal extends ActionBarActivity
             case 3:
                 fragment = new CrearRuta();
                 break;
+            case 4:
+                fragment = new EliminarRuta();
+                break;
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.container,fragment)
@@ -86,6 +89,8 @@ public class MenuPrincipal extends ActionBarActivity
                 break;
             case 4:
                 mTitle = getString(R.string.title_section4);
+            case 5:
+                mTitle = getString(R.string.title_section5);
         }
     }
 
