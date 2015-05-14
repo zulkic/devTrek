@@ -1,11 +1,8 @@
 package com.mapas.franciscojavier.trekkingroute;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,10 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 
-import org.osmdroid.api.Polyline;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polygon;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -25,8 +19,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
@@ -91,7 +83,6 @@ public class MostrarRuta extends Fragment{
 
         // apply polygon style & data and add to map
         Polygon polyOverlay = new Polygon(getActivity());
-        polyOverlay.setFillColor(Color.BLUE);
         polyOverlay.setPoints(polyData);
         osm.getOverlays().add(polyOverlay);
     }
@@ -122,8 +113,8 @@ public class MostrarRuta extends Fragment{
     private void addPoiOverlay() {
 
         List<Overlay> mapOverlays = osm.getOverlays();
-        Drawable drawable = this.getResources().getDrawable(R.drawable.inicio_fin_ruta);
-        PuntosDeInteres itemizedoverlay = new PuntosDeInteres(drawable,new ResourceProxyImpl(getActivity()),getActivity());
+        Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
+        Indicador itemizedoverlay = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity());
         OverlayItem poi1 = new OverlayItem("Inicio ruta", "ruta inicio prueba 1",new GeoPoint (-34.98720064-0.0002,-71.24133825));
         OverlayItem poi2 = new OverlayItem("Fin ruta", "termino de ruta",new GeoPoint (-34.9867963-0.0002, -71.23584509));
         itemizedoverlay.addOverlay(poi1);

@@ -15,11 +15,11 @@ import java.util.ArrayList;
 /**
  * Created by FranciscoJavier on 10-05-2015.
  */
-public class PuntosDeInteres extends ItemizedOverlay {
+public class Indicador extends ItemizedOverlay {
     private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
     private Context mContext;
 
-    public PuntosDeInteres(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context) {
+    public Indicador(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context) {
         super(pDefaultMarker, pResourceProxy);
         mContext = context;
     }
