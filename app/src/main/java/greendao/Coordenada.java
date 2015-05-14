@@ -11,6 +11,7 @@ public class Coordenada {
     private Double longitud;
     private Integer altitud;
     private Integer id_ruta;
+    private Integer posicion;
 
     public Coordenada() {
     }
@@ -19,12 +20,13 @@ public class Coordenada {
         this.id = id;
     }
 
-    public Coordenada(Long id, Double latitud, Double longitud, Integer altitud, Integer id_ruta) {
+    public Coordenada(Long id, Double latitud, Double longitud, Integer altitud, Integer id_ruta, Integer posicion) {
         this.id = id;
         this.latitud = latitud;
         this.longitud = longitud;
         this.altitud = altitud;
         this.id_ruta = id_ruta;
+        this.posicion = posicion;
     }
 
     public Long getId() {
@@ -67,4 +69,11 @@ public class Coordenada {
         this.id_ruta = id_ruta;
     }
 
+    public Integer getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(Integer posicion) {
+        this.posicion = posicion;
+    }
 }

@@ -1,5 +1,8 @@
 package JSON;
 
+/**
+ * Created by juancarlosgonzalezca on 13-05-2015.
+ */
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,34 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Ruta;
-//clase para crear una nueva ruta
-public class Nueva_Ruta extends AsyncTask<Void, Void, Void> {
+
+class Modificar_Ruta extends AsyncTask<Void, Void, Void> {
 
     private Ruta ruta;
     private JSONParser jsonParser;
-    private static String url_agregar_ruta = "http://trythistrail.16mb.com/agregar_ruta.php";
+    private static String url_modificar_ruta = "http://trythistrail.16mb.com/modificar_ruta.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
 
-    public Nueva_Ruta(Ruta ruta)
+    public Modificar_Ruta(Ruta ruta)
     {
         this.ruta = ruta;
         this.jsonParser = new JSONParser();
     }
-    /**
-     * Before starting background thread Show Progress Dialog
-     * */
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
 
     /**
-     * Creating product
+     * Saving product
      * */
-    @Override
-     protected Void doInBackground(Void... args) {
+    protected Void doInBackground(Void... args) {
 
+        // getting updated data from EditTexts
+        String id_ruta = this.ruta.getId().toString();
         String nombre =  this.ruta.getNombre();
         String descripcion = this.ruta.getDescripcion();
         String kms = this.ruta.getKms().toString();
@@ -48,30 +45,28 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Void> {
 
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("id_ruta", id_ruta));
         params.add(new BasicNameValuePair("nombre", nombre));
         params.add(new BasicNameValuePair("descripcion", descripcion));
         params.add(new BasicNameValuePair("kms", kms));
         params.add(new BasicNameValuePair("tiempo_estimado", tiempo_estimado));
         params.add(new BasicNameValuePair("oficial", oficial));
 
-        // getting JSON Object
-        // Note that create product url accepts POST method
-        JSONObject json = jsonParser.makeHttpRequest(url_agregar_ruta,
+        // sending modified data through http request
+        // Notice that update product url accepts POST method
+        JSONObject json = jsonParser.makeHttpRequest(url_modificar_ruta,
                 "POST", params);
 
-        // check log cat fro response
-        Log.d("Create Response", json.toString());
-
-        // check for success tag
+        // check json success tag
         try {
             int success = json.getInt(TAG_SUCCESS);
 
             if (success == 1) {
                 // successfully created product
-                Log.i("nueva_ruta", "creada correctamente");
+                Log.i("ruta modificada", "modificada correctamente");
             } else {
                 // failed to create product
-                Log.i("nueva_ruta", "algo fallo");
+                Log.i("ruta modificada", "algo fallo");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -83,8 +78,6 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Void> {
     /**
      * After completing background task Dismiss the progress dialog
      * **/
-    protected void onPostExecute(String file_url) {
-        Log.d("post execute", "termine");
+    protected void onPostExecute(Void file_url) {
     }
-
 }

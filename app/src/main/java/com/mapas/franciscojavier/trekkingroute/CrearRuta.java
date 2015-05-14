@@ -1,6 +1,9 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,9 +12,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,11 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -32,6 +28,12 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.PathOverlay;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.ExecutionException;
+
+import JSON.Coordenadas_Ruta;
 import greendao.Coordenada;
 import repositorios.CoordenadaRepo;
 
@@ -58,8 +60,15 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //rootView = inflater.inflate(R.layout.fragment_crear_ruta);
 
-        AsyncCallWS task = new AsyncCallWS();
-        task.execute();
+        try {
+            Coordenadas_Ruta task = new Coordenadas_Ruta(1);
+            ArrayList<Coordenada> coordenadas = task.execute().get();
+            Log.i("coordenada: ", coordenadas.get(0).getLatitud() + " " + coordenadas.get(0).getLongitud());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
         gps = new GPS(getActivity());
 
