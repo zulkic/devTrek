@@ -54,7 +54,7 @@ public class MostrarRuta extends Fragment{
         GeoPoint center = new GeoPoint(-34.98604036, -71.24007225);
         mc.setCenter(center);
         //setupMyLocation();
-        addPolyOverlay();
+        //addPolyOverlay();
         addLineOverlay();
         addPoiOverlay();
         //GeoPoint center = new GeoPoint(, );
@@ -115,11 +115,19 @@ public class MostrarRuta extends Fragment{
         List<Overlay> mapOverlays = osm.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
         Indicador itemizedoverlay = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity());
-        OverlayItem poi1 = new OverlayItem("Inicio ruta", "ruta inicio prueba 1",new GeoPoint (-34.98720064-0.0002,-71.24133825));
-        OverlayItem poi2 = new OverlayItem("Fin ruta", "termino de ruta",new GeoPoint (-34.9867963-0.0002, -71.23584509));
+        Indicador aguas = new Indicador(this.getResources().getDrawable(R.drawable.ic_parque),new ResourceProxyImpl(getActivity()),getActivity());
+        Indicador parque = new Indicador(this.getResources().getDrawable(R.drawable.ic_agua),new ResourceProxyImpl(getActivity()),getActivity());
+        OverlayItem poi1 = new OverlayItem("Inicio ruta", "ruta inicio prueba 1",new GeoPoint (-34.98720064,-71.24133825));
+        OverlayItem poi2 = new OverlayItem("Fin ruta", "termino de ruta",new GeoPoint (-34.9867963, -71.23584509));
+        OverlayItem poi3 = new OverlayItem("Parque", "Parque en Argomedo con Carmen",new GeoPoint (-34.98709516, -71.2385273));
+        OverlayItem poi4 = new OverlayItem("Agua Potable", "Agua en Membrillar con Carmen",new GeoPoint (-34.98698968, -71.23715401));
         itemizedoverlay.addOverlay(poi1);
         itemizedoverlay.addOverlay(poi2);
+        parque.addOverlay(poi4);
+        aguas.addOverlay(poi3);
         mapOverlays.add(itemizedoverlay);
+        mapOverlays.add(aguas);
+        mapOverlays.add(parque);
 
 
         // use a custom POI marker by referencing the bitmap file directly,
