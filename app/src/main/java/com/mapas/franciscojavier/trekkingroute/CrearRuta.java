@@ -269,7 +269,7 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
 
                     apagarRecorrido();
 
-                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia);
+                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, id_ruta);
                     //newFragment.setTiempoTotal(tiempoTotalRecorrido);
                     FragmentManager fm1 = getFragmentManager();
                     FragmentTransaction ft1 = fm1.beginTransaction();

@@ -34,6 +34,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
     private static final String ARG_PARAM2 = "vacio";
     private static String ARG_TIEMPO_RUTA = "hollow";
     private static String ARG_DISTANCIA_RUTA;
+    private static Long ARG_ID_RUTA;
     private Spinner spinnerReco;
     private Button btnSubmit;
     private String Caminando="Caminando";
@@ -48,13 +49,14 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
     public DetallesCrearRuta() {
         // Required empty public constructor
     }
-    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta) {
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, int idRuta) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
         args.putFloat(ARG_PARAM2, distaciaRuta);
         fragment.setArguments(args);
         ARG_TIEMPO_RUTA=tiempoTotalRuta;
+        ARG_ID_RUTA = new Long(idRuta);
         //trunco la distacia con 2 decimales
         DecimalFormat df = new DecimalFormat("##.##");
         df.setRoundingMode(RoundingMode.DOWN);
@@ -136,7 +138,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                     nuevaRuta.setDescripcion(descripcionRuta);
                     nuevaRuta.setKms(mtrs);
                     nuevaRuta.setOficial(false);    //verificar mas adelante
-                    nuevaRuta.setId(1l);            //verificar mas adelante
+                    nuevaRuta.setId(ARG_ID_RUTA);            //verificar mas adelante
 
 
                     /**Toast.makeText(getActivity().getBaseContext(),
@@ -149,7 +151,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                             ,Toast.LENGTH_SHORT).show();*/
 
                     RutaRepo.insertOrUpdate(getActivity(),nuevaRuta); //Aca lo guardo en la base de datos local.
-                    Toast.makeText(getActivity().getBaseContext(),"Ruta Creada con exito", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getBaseContext(),"Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();
                 }
                 break;
