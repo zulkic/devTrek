@@ -67,7 +67,7 @@ public class ItemRuta extends BaseAdapter {
             oficial.setText("Ruta Oficial");
         }
         else {
-            oficial.setText(""+item.getOficial());
+            oficial.setText("Ruta Oficial");
         }
         return rowView;
     }

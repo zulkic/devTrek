@@ -1,7 +1,9 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
@@ -17,11 +19,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -32,9 +41,10 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.PathOverlay;
 
 import greendao.Coordenada;
+import greendao.Punto_interes;
 import repositorios.CoordenadaRepo;
 
-public class CrearRuta extends Fragment implements LocationListener, View.OnClickListener{
+public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
     View rootView;
     private MapView osm;
     private MapController mc;
@@ -43,6 +53,8 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     private Boolean encendido= false;
     private Integer contador = 1;
     private Integer id_ruta = 1;
+    private ArrayList<Punto_interes> puntos = new ArrayList<>();
+    private GridView lv;
 
     private Location localicacionA = new Location("punto A");
     private Location localicacionB = new Location("punto B");
@@ -64,9 +76,11 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
 
         View view = inflater.inflate(R.layout.fragment_crear_ruta, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
+        ImageButton botonIndicador = (ImageButton) view.findViewById(R.id.imageButton_Indicadores);
         Button inicio = (Button) view.findViewById(R.id.button_start);
         Button fin = (Button) view.findViewById(R.id.button_end);
         botonGps.setOnClickListener(this);
+        botonIndicador.setOnClickListener(this);
         inicio.setOnClickListener(this);
         fin.setOnClickListener(this);
 
@@ -95,6 +109,26 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Punto_interes punto1 = new Punto_interes(Long.parseLong("1"),"Punto 1",1,1);
+        Punto_interes punto2 = new Punto_interes(Long.parseLong("2"),"Punto 2",2,1);
+        Punto_interes punto3 = new Punto_interes(Long.parseLong("3"),"Punto 3",3,1);
+        Punto_interes punto4 = new Punto_interes(Long.parseLong("4"),"Punto 4",4,1);
+        Punto_interes punto5 = new Punto_interes(Long.parseLong("5"),"Punto 5",5,1);
+        Punto_interes punto6 = new Punto_interes(Long.parseLong("6"),"Punto 6",6,1);
+        Punto_interes punto7 = new Punto_interes(Long.parseLong("7"),"Punto 7",7,1);
+        Punto_interes punto8 = new Punto_interes(Long.parseLong("8"),"Punto 8",8,1);
+        Punto_interes punto9 = new Punto_interes(Long.parseLong("9"),"Punto 9",9,1);
+        Punto_interes punto10 = new Punto_interes(Long.parseLong("10"),"Punto 10",10,1);
+        puntos.add(punto1);
+        puntos.add(punto2);
+        puntos.add(punto3);
+        puntos.add(punto4);
+        puntos.add(punto5);
+        puntos.add(punto6);
+        puntos.add(punto7);
+        puntos.add(punto8);
+        puntos.add(punto9);
+        puntos.add(punto10);
         //setContentView(R.layout.activity_main);
 
 
@@ -166,6 +200,33 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
         }else{
             gps.showSettingsAlert();
         }
+    }
+    private void agregarIndicadorAPosicion() {
+        String names[] ={"A","B","C","D"};
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setIcon(R.drawable.ic_bicicleta);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.popup_crear_indicadores, null);
+        alertDialog.setView(convertView);
+        alertDialog.setTitle("Indicadores");
+        this.lv = (GridView) convertView.findViewById(R.id.lista_item);
+        this.lv.setAdapter(new ItemIndicador(getActivity(), puntos));
+        alertDialog.setNegativeButton("Cancelar",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView adapter, View view, int position, long arg) {
+                // Loads the given URL
+                Toast.makeText(getActivity(), "Accediendo a: "+ puntos.get(position).getDescripcion(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialog.show();
     }
 
     @Override
@@ -285,6 +346,8 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
             case R.id.imageButtonGPS:
                 activarGps();
                 break;
+            case R.id.imageButton_Indicadores:
+                agregarIndicadorAPosicion();
         }
     }
 }
