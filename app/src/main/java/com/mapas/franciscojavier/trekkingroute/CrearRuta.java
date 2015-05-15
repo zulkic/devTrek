@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -270,7 +269,7 @@ public class CrearRuta extends Fragment implements LocationListener, View.OnClic
 
                     apagarRecorrido();
 
-                    newFragment = new DetallesRuta().newInstance(tiempoTotalRecorrido, distancia);
+                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia);
                     //newFragment.setTiempoTotal(tiempoTotalRecorrido);
                     FragmentManager fm1 = getFragmentManager();
                     FragmentTransaction ft1 = fm1.beginTransaction();

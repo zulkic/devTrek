@@ -5,6 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,7 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detalles_eliminar_ruta, container, false);
         Button botonAceptar = (Button) v.findViewById(R.id.button_aceptar_eliminar_ruta);
+        Button botonCancelar = (Button) v.findViewById(R.id.button_cancelar_eliminar_ruta);
         TextView nombreRuta = (TextView) v.findViewById(R.id.editTextEliminar_nombre_ruta);
         TextView tiempoEstimado = (TextView) v.findViewById(R.id.editTextEliminar_tiempo_estimado);
         TextView distanciaRecorrida = (TextView) v.findViewById(R.id.editTextEliminar_distancia_recorrida);
@@ -80,6 +83,7 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
         descripcion.setOnClickListener(this);
 
         botonAceptar.setOnClickListener(this);
+        botonCancelar.setOnClickListener(this);
 
         return v;
     }
@@ -87,14 +91,16 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_aceptar_eliminar_ruta:
-               // RutaRepo.deleteRutaWithId(getActivity(),ID_RUTA);
+                //RutaRepo.deleteRutaWithId(getActivity(),ID_RUTA);
                     Toast.makeText(getActivity().getBaseContext(),
                             "Se elimino: "+"\n"
-                                    + NOMBRE+"\n"
+                                    + NOMBRE
                             ,Toast.LENGTH_SHORT).show();
+                getFragmentManager().popBackStack();
                 break;
             case R.id.button_cancelar_eliminar_ruta:
-                //getActivity().onBackPressed();
+                //Toast.makeText(getActivity().getBaseContext(),"Se cancelo: "+"\n"+ NOMBRE+"\n",Toast.LENGTH_SHORT).show();
+                getFragmentManager().popBackStack();
                 break;
             default:
                 return;

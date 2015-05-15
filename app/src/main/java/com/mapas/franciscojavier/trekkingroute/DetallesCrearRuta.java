@@ -18,8 +18,7 @@ import android.widget.Toast;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -27,7 +26,7 @@ import greendao.Ruta;
 import repositorios.RutaRepo;
 
 
-public class DetallesRuta extends Fragment implements View.OnClickListener{
+public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
 
     String tiempoTotal;
     int LARGO_NOMBRE_RUTA=1;
@@ -46,11 +45,11 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
 
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
-    public DetallesRuta() {
+    public DetallesCrearRuta() {
         // Required empty public constructor
     }
-    public static DetallesRuta newInstance(String tiempoTotalRuta, float distaciaRuta) {
-        DetallesRuta fragment = new DetallesRuta();
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta) {
+        DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
         args.putFloat(ARG_PARAM2, distaciaRuta);
@@ -71,6 +70,7 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detalles_ruta, container, false);
         Button botonGuardar = (Button) v.findViewById(R.id.button_guardar_ruta);
+        Button botonCancelar = (Button) v.findViewById(R.id.button_cancelar_ruta);
         EditText editNombreRuta = (EditText) v.findViewById(R.id.editText_nombre_ruta);
         TextView textTiempoEstimado = (TextView)v.findViewById(R.id.editText_tiempo_estimado);
         TextView textDistanciaRecorrida = (TextView)v.findViewById(R.id.editText_distancia_recorrida);
@@ -78,6 +78,7 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
 
         editNombreRuta.setOnClickListener(this);
         botonGuardar.setOnClickListener(this);
+        botonCancelar.setOnClickListener(this);
         textTiempoEstimado.setText(ARG_TIEMPO_RUTA);
         textTiempoEstimado.setOnClickListener(this);
         editDescripcion.setOnClickListener(this);
@@ -138,23 +139,24 @@ public class DetallesRuta extends Fragment implements View.OnClickListener{
                     nuevaRuta.setId(1l);            //verificar mas adelante
 
 
-                    Toast.makeText(getActivity().getBaseContext(),
+                    /**Toast.makeText(getActivity().getBaseContext(),
                             "Datos: "+"\n"
                                     + nombreRuta+"\n"
                                     + tiempoRuta+"\n"
                                     + mtrs+"\n"
                                     + tipoRuta+"\n"
                                     + descripcionRuta
-                            ,Toast.LENGTH_SHORT).show();
+                            ,Toast.LENGTH_SHORT).show();*/
 
                     RutaRepo.insertOrUpdate(getActivity(),nuevaRuta); //Aca lo guardo en la base de datos local.
+                    Toast.makeText(getActivity().getBaseContext(),"Ruta Creada con exito", Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStack();
                 }
                 break;
             case R.id.button_cancelar_ruta:
-                //getActivity().onBackPressed();
+                //getActivity().onBackPressed();Toast.makeText(getActivity().getBaseContext(),
+                getFragmentManager().popBackStack();
                 break;
-            default:
-                return;
         }
     }
     // Add spinner data
