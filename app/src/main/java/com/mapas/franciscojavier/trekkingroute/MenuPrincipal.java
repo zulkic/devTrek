@@ -51,6 +51,7 @@ public class MenuPrincipal extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        onSectionAttached(position);
         Fragment fragment= null;
         FragmentManager fragmentManager = getFragmentManager();
 
@@ -71,6 +72,7 @@ public class MenuPrincipal extends ActionBarActivity
                 fragment = new EliminarRuta();
                 break;
         }
+        //restoreActionBar();
         fragmentManager.beginTransaction()
                 .replace(R.id.container,fragment)
                 .commit();
@@ -78,19 +80,21 @@ public class MenuPrincipal extends ActionBarActivity
 
     public void onSectionAttached(int number) {
         switch (number) {
-            case 1:
+            case 0:
                 mTitle = getString(R.string.title_section1);
                 break;
-            case 2:
+            case 1:
                 mTitle = getString(R.string.title_section2);
                 break;
-            case 3:
+            case 2:
                 mTitle = getString(R.string.title_section3);
                 break;
-            case 4:
+            case 3:
                 mTitle = getString(R.string.title_section4);
-            case 5:
+                break;
+            case 4:
                 mTitle = getString(R.string.title_section5);
+                break;
         }
     }
 

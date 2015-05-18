@@ -6,6 +6,7 @@ package com.mapas.franciscojavier.trekkingroute;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,14 +61,19 @@ public class ItemRuta extends BaseAdapter {
 
         Ruta item = this.items.get(position);
         nombre.setText(item.getNombre());
-        distancia.setText(Float.toString(item.getKms()));
-        tiempo.setText(item.getTiempo_estimado());
+        nombre.setTextColor(Color.BLACK);
+        distancia.setText(Float.toString(item.getKms())+" "+ context.getText(R.string.text_distancia));
+        tiempo.setText(item.getTiempo_estimado()+" " +context.getText(R.string.text_tiempo));
         if(item.getOficial())
         {
-            oficial.setText("Ruta Oficial");
+            oficial.setText(R.string.text_oficial);
         }
         else {
-            oficial.setText("Ruta Oficial");
+            oficial.setText(R.string.text_no_oficial);
+        }
+        if(position%2==0)
+        {
+            rowView.setBackgroundColor(Color.LTGRAY);
         }
         return rowView;
     }

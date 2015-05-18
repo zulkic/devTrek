@@ -4,7 +4,12 @@
     <string name="button_start">Inicio</string>
     <string name="button_end">Fin</string>
     <string name="action_settings">Configuración</string>
-    <string name="title_activity_menu_principal">MenuPrincipal</string>
+    <string name="title_activity_menu_principal">Menu Principal</string>
+
+    <string name="text_distancia">kms</string>
+    <string name="text_tiempo">hrs</string>
+    <string name="text_oficial">Ruta Oficial</string>
+    <string name="text_no_oficial">No Oficial</string>
 
     <string name="title_section1">Visualizar Mapa</string>
     <string name="title_section2">Planificar Viaje</string>
