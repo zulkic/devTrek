@@ -69,13 +69,13 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                     JSONObject c = rutas.getJSONObject(i);
                     Ruta ruta = new Ruta();
                     // Storing each json item in variable
-                    ruta.setId((Long.getLong(c.getString(TAG_ID))));
+                    Integer id = Integer.parseInt(c.getString(TAG_ID));
+                    ruta.setId( Long.valueOf(id) );
                     ruta.setNombre(c.getString(TAG_NOMBRE));
                     ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
                     ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
                     ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
                     ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
-
                     this.rutasList.add(ruta);
                 }
             }

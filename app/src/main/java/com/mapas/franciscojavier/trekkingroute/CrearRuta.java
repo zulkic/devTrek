@@ -2,6 +2,9 @@ package com.mapas.franciscojavier.trekkingroute;
 
 
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -11,27 +14,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -40,9 +31,12 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.PathOverlay;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 import greendao.Coordenada;
 import greendao.Punto_interes;
-import repositorios.CoordenadaRepo;
 
 public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
     View rootView;
@@ -54,6 +48,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private Integer contador = 1;
     private Integer id_ruta = 1;
     private ArrayList<Punto_interes> puntos = new ArrayList<>();
+    private ArrayList<Coordenada> coordenadas;
     private GridView lv;
 
     private Location localicacionA = new Location("punto A");
@@ -98,7 +93,6 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
-
 
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
@@ -173,24 +167,13 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     {
         //dentro de la clase gps esta la funcion para apagarlo asiq esta puede q no sea necesaria
         initPathOverlay();
+        this.coordenadas = new ArrayList<>();
+        this.contador = 1;
         encendido = true;
     }
     public void apagarRecorrido()
     {
         encendido = false;
-        try{
-            for(Coordenada coordenada: CoordenadaRepo.getAllCoordenadas(getActivity()))
-            {
-                    Log.i("coordenada: ", coordenada.getId().toString() + " " + coordenada.getLatitud().toString() + " " + coordenada.getLongitud() + " " + coordenada.getAltitud());
-
-            }
-            contador=1;
-            id_ruta++;
-        }
-        catch (Exception e)
-        {
-            Log.i("Error fin: ", e.toString());
-        }
     }
 
     public void activarGps() {
@@ -251,40 +234,39 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         gps.setLatitude(location.getLatitude());
         gps.setLongitude(location.getLongitude());
         gps.setAltitude(location.getAltitude());
-        GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
+        GeoPoint punto = new GeoPoint(location.getLatitude(), location.getLongitude());
         //mc.animateTo(punto);
-        addMarket(punto,encendido);
-        try {
+        addMarket(punto, encendido);
+        if(encendido) {
+            try {
 
-            if(primerLocalicacion){
-                localicacionA.setLatitude(location.getLatitude());
-                localicacionA.setLongitude(location.getLongitude());
-                distancia =0;
-                primerLocalicacion=false;
+                if (primerLocalicacion) {
+                    localicacionA.setLatitude(location.getLatitude());
+                    localicacionA.setLongitude(location.getLongitude());
+                    distancia = 0;
+                    primerLocalicacion = false;
+                } else {
+                    localicacionB.setLatitude(location.getLatitude());
+                    localicacionB.setLongitude(location.getLongitude());
+
+                    distancia = distancia + localicacionA.distanceTo(localicacionB);
+
+                    localicacionA.setLatitude(location.getLatitude());
+                    localicacionA.setLongitude(location.getLongitude());
+                }
+                Coordenada nueva_coordenada = new Coordenada();
+                nueva_coordenada.setId((long) contador);
+                nueva_coordenada.setLatitud((double) punto.getLatitude());
+                nueva_coordenada.setLongitud((double) punto.getLongitude());
+                nueva_coordenada.setAltitud((int) punto.getAltitude());
+                nueva_coordenada.setId_ruta(id_ruta);
+                nueva_coordenada.setPosicion(contador);
+                this.coordenadas.add(nueva_coordenada);
+                contador++;
+            } catch (Exception e) {
+                //Log.i("Error inicio: ", e.toString());
             }
-            else{
-                localicacionB.setLatitude(location.getLatitude());
-                localicacionB.setLongitude(location.getLongitude());
-
-                distancia = distancia + localicacionA.distanceTo(localicacionB);
-
-                localicacionA.setLatitude(location.getLatitude());
-                localicacionA.setLongitude(location.getLongitude());
-            }
-            Coordenada nueva_coordenada = new Coordenada();
-            nueva_coordenada.setId((long) contador);
-            nueva_coordenada.setLatitud((double) punto.getLatitude());
-            nueva_coordenada.setLongitud((double) punto.getLongitude());
-            nueva_coordenada.setAltitud((int) punto.getAltitude());
-            nueva_coordenada.setId_ruta(id_ruta);
-            contador++;
-            CoordenadaRepo.insertOrUpdate(getActivity(), nueva_coordenada);
         }
-        catch (Exception e)
-        {
-            Log.i("Error inicio: ", e.toString());
-        }
-
     }
 
     @Override
@@ -330,7 +312,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
                     apagarRecorrido();
 
-                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, id_ruta);
+                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas);
                     //newFragment.setTiempoTotal(tiempoTotalRecorrido);
                     FragmentManager fm1 = getFragmentManager();
                     FragmentTransaction ft1 = fm1.beginTransaction();

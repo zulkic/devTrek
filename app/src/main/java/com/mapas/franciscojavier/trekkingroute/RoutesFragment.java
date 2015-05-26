@@ -1,26 +1,18 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -109,7 +101,10 @@ public class RoutesFragment extends Fragment{
                     Ruta item = (Ruta) listView.getAdapter().getItem(position);
                     Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
                             , Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id_ruta", Integer.parseInt(item.getId().toString()));
                     Fragment tf = new MostrarRuta();
+                    tf.setArguments(bundle);
                     FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
                     ft.replace(R.id.container, tf);
                     ft.addToBackStack(null);

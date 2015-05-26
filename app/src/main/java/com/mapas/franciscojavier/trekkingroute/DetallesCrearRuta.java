@@ -4,24 +4,28 @@ package com.mapas.franciscojavier.trekkingroute;
  * Created by nicolas on 10-05-2015.
  */
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
+import JSON.Nueva_Ruta;
+import JSON.Post_Coordenadas_Ruta;
+import greendao.Coordenada;
 import greendao.Ruta;
 import repositorios.RutaRepo;
 
@@ -43,26 +47,27 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
     private String Bicicleta="Bicicleta";
     private String Caballo="Caballo";
     private String Auto="Auto";
+    private static ArrayList<Coordenada> lista_coordenadas;
 
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
     public DetallesCrearRuta() {
         // Required empty public constructor
     }
-    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, int idRuta) {
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, ArrayList<Coordenada> coordenadas) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
         args.putFloat(ARG_PARAM2, distaciaRuta);
         fragment.setArguments(args);
         ARG_TIEMPO_RUTA=tiempoTotalRuta;
-        ARG_ID_RUTA = new Long(idRuta);
         //trunco la distacia con 2 decimales
         DecimalFormat df = new DecimalFormat("##.##");
         df.setRoundingMode(RoundingMode.DOWN);
         String mts = df.format(distaciaRuta);
         //float mtrs = Float.valueOf(mts);
         ARG_DISTANCIA_RUTA=mts;
+        lista_coordenadas = coordenadas;
         return fragment;
     }
 
@@ -137,9 +142,23 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                     //nuevaRuta.setTipo(tipoRuta);      FALTA AGREGAR ESTA FUNCION
                     nuevaRuta.setDescripcion(descripcionRuta);
                     nuevaRuta.setKms(mtrs);
-                    nuevaRuta.setOficial(false);    //verificar mas adelante
-                    nuevaRuta.setId(ARG_ID_RUTA);            //verificar mas adelante
+                    nuevaRuta.setOficial(true);    //verificar mas adelante
 
+                    try
+                    {
+                        Nueva_Ruta tarea_agregar_ruta = new Nueva_Ruta(nuevaRuta, getActivity());
+                        int id = tarea_agregar_ruta.execute().get();
+                        for(Coordenada coordenada : lista_coordenadas)
+                        {
+                            coordenada.setId_ruta(id);
+                        }
+                        Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas);
+                        tarea_agregar_coordenadas.execute();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Error post", e.toString());
+                    }
 
                     /**Toast.makeText(getActivity().getBaseContext(),
                             "Datos: "+"\n"
