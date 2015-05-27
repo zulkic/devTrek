@@ -57,6 +57,7 @@ public class ItemIndicador extends BaseAdapter {
 
         // Set data into the view.
         ImageView icono = (ImageView) rowView.findViewById(R.id.imageButton_Ind);
+        TextView tv = (TextView) rowView.findViewById(R.id.textView_nombre_indicador);
         Punto_interes punto = this.items.get(position);
 
         switch (punto.getId_tipo_punto_interes()){
@@ -93,6 +94,8 @@ public class ItemIndicador extends BaseAdapter {
             default:
                 break;
         }
+
+        tv.setText(punto.getDescripcion());
         return rowView;
     }
 

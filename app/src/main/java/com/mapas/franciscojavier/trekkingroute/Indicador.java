@@ -47,6 +47,7 @@ public class Indicador extends ItemizedOverlay {
         dialog.setMessage(item.getSnippet());
         dialog.show();
         return true;
+
     }
 
     @Override

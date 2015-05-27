@@ -102,7 +102,12 @@ public class RoutesFragment extends Fragment{
                     Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
                             , Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();
+
                     bundle.putInt("id_ruta", Integer.parseInt(item.getId().toString()));
+                    bundle.putString("nombre_ruta",item.getNombre());
+                    bundle.putString("descripcion_ruta",item.getDescripcion());
+                    bundle.putString("tiempo_ruta",item.getTiempo_estimado());
+                    bundle.putFloat("kms_ruta",item.getKms());
                     Fragment tf = new MostrarRuta();
                     tf.setArguments(bundle);
                     FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();

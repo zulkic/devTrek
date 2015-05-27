@@ -20,13 +20,16 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_example"> </string>
+    <string name="action_example"></string>
 
     <string name="button_guardar_ruta">Guardar</string>
     <string name="button_cancelar_ruta">Cancelar</string>
     <string name="rec_prompt">Como recorrio la ruta?</string>
     <string name="button_aceptar_eliminar_ruta">Aceptar</string>
     <string name="button_cancelar_eliminar_ruta">Cancelar</string>
+
+    <string name="action_edit">Editar</string>
+
 <!--
     <string-array name="rec_arrays">
         <item>Caminando</item>
