@@ -9,26 +9,43 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +54,7 @@ import java.util.Date;
 
 import greendao.Coordenada;
 import greendao.Punto_interes;
+import repositorios.CoordenadaRepo;
 
 public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
     View rootView;
@@ -93,6 +111,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
+
 
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
@@ -174,6 +193,19 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     public void apagarRecorrido()
     {
         encendido = false;
+        try{
+            for(Coordenada coordenada: CoordenadaRepo.getAllCoordenadas(getActivity()))
+            {
+                    Log.i("coordenada: ", coordenada.getId().toString() + " " + coordenada.getLatitud().toString() + " " + coordenada.getLongitud() + " " + coordenada.getAltitud());
+
+            }
+            contador=1;
+            id_ruta++;
+        }
+        catch (Exception e)
+        {
+            Log.i("Error fin: ", e.toString());
+        }
     }
 
     public void activarGps() {
@@ -185,7 +217,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         }
     }
     private void agregarIndicadorAPosicion() {
-        String names[] ={"A","B","C","D"};
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setIcon(R.drawable.ic_bicicleta);
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -206,10 +238,30 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
             @Override
             public void onItemClick(AdapterView adapter, View view, int position, long arg) {
                 // Loads the given URL
+                //puntos.get(position).getId_tipo_punto_interes()
                 Toast.makeText(getActivity(), "Accediendo a: "+ puntos.get(position).getDescripcion(), Toast.LENGTH_SHORT).show();
             }
         });
         alertDialog.show();
+    }
+    private void addPoiOverlay() {
+
+        List<Overlay> puntosDeInteres = osm.getOverlays();
+        Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
+        Indicador itemizedoverlay = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity());
+        Indicador aguas = new Indicador(this.getResources().getDrawable(R.drawable.ic_parque),new ResourceProxyImpl(getActivity()),getActivity());
+        Indicador parque = new Indicador(this.getResources().getDrawable(R.drawable.ic_agua),new ResourceProxyImpl(getActivity()),getActivity());
+        OverlayItem poi1 = new OverlayItem("Inicio ruta", "ruta inicio prueba 1",new GeoPoint (-34.98720064,-71.24133825));
+        OverlayItem poi2 = new OverlayItem("Fin ruta", "termino de ruta",new GeoPoint (-34.9867963, -71.23584509));
+        OverlayItem poi3 = new OverlayItem("Parque", "Parque en Argomedo con Carmen",new GeoPoint (-34.98709516, -71.2385273));
+        OverlayItem poi4 = new OverlayItem("Agua Potable", "Agua en Membrillar con Carmen",new GeoPoint (-34.98698968, -71.23715401));
+        itemizedoverlay.addOverlay(poi1);
+        itemizedoverlay.addOverlay(poi2);
+        parque.addOverlay(poi4);
+        aguas.addOverlay(poi3);
+        puntosDeInteres.add(itemizedoverlay);
+        puntosDeInteres.add(aguas);
+        puntosDeInteres.add(parque);
     }
 
     @Override

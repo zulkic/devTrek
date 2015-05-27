@@ -1,5 +1,7 @@
 package com.mapas.franciscojavier.trekkingroute;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -8,9 +10,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polygon;
@@ -43,14 +48,23 @@ public class MostrarRuta extends Fragment{
     private OverlayItem inicio;
     private OverlayItem fin;
     private Integer id;
+    private String nombre_ruta;
+    private String descripcion_ruta;
+    private String tiempo_ruta;
+    private Float kms_ruta;
+    private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.id = this.getArguments().getInt("id_ruta");
+        this.nombre_ruta = this.getArguments().getString("nombre_ruta");
+        this.descripcion_ruta = this.getArguments().getString("descripcion_ruta");
+        this.tiempo_ruta = this.getArguments().getString("tiempo_ruta");
+        this.kms_ruta= this.getArguments().getFloat("kms_ruta");
         View view = inflater.inflate(R.layout.fragment_mostrar_ruta, container, false);
 
         osm = (MapView) view.findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.CYCLEMAP);
+        osm.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
@@ -66,6 +80,7 @@ public class MostrarRuta extends Fragment{
         //GeoPoint center = new GeoPoint(, );
         //mc.animateTo(center);
         //addMarket(center);
+
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
 
@@ -82,8 +97,8 @@ public class MostrarRuta extends Fragment{
         // list of GeoPoint objects to be used to draw polygon
         List<GeoPoint> polyData = new ArrayList<GeoPoint>();
         polyData.add(new GeoPoint(-34.98489765,-71.240201));
-        polyData.add(new GeoPoint(-34.98479217,-71.23884916));
-        polyData.add(new GeoPoint(-34.98602278,-71.24007225));
+        polyData.add(new GeoPoint(-34.98479217, -71.23884916));
+        polyData.add(new GeoPoint(-34.98602278, -71.24007225));
         polyData.add(new GeoPoint(-34.98589972,-71.2386775));
 
         // apply polygon style & data and add to map
@@ -101,7 +116,6 @@ public class MostrarRuta extends Fragment{
         paint.setStrokeWidth(7);
 
         // list of GeoPoint objects to be used to draw line
-        ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
         try
         {
             Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.id);
@@ -177,9 +191,19 @@ public class MostrarRuta extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        //onCreateOptionsMenu();
         //setContentView(R.layout.activity_main);
 
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater  = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_mostrar_ruta, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     private void setupMyLocation() {
         this.myLocationOverlay = new MyLocationNewOverlay(getActivity(), osm);
         myLocationOverlay.enableMyLocation();
@@ -230,7 +254,15 @@ public class MostrarRuta extends Fragment{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit) {
+                Fragment newFragment = new DetallesCrearRuta().newInstance(this.tiempo_ruta,this.kms_ruta,this.lista_coordenadas);
+            //newFragment.setTiempoTotal(tiempoTotalRecorrido);
+                FragmentManager fm1 = getFragmentManager();
+                FragmentTransaction ft1 = fm1.beginTransaction();
+                ft1.replace(R.id.container, newFragment)
+                        .addToBackStack(null)
+                        .commit();
+
             return true;
         }
 
