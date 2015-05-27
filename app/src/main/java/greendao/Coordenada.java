@@ -76,4 +76,5 @@ public class Coordenada {
     public void setPosicion(Integer posicion) {
         this.posicion = posicion;
     }
+
 }

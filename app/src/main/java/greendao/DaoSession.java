@@ -10,6 +10,8 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import greendao.Ruta;
+import greendao.Tipo_Ruta;
+import greendao.Tipos_de_una_Ruta;
 import greendao.Coordenada;
 import greendao.Tipo_obstaculo;
 import greendao.Obstaculo;
@@ -20,6 +22,8 @@ import greendao.Estadistica;
 import greendao.Interseccion;
 
 import greendao.RutaDao;
+import greendao.Tipo_RutaDao;
+import greendao.Tipos_de_una_RutaDao;
 import greendao.CoordenadaDao;
 import greendao.Tipo_obstaculoDao;
 import greendao.ObstaculoDao;
@@ -39,6 +43,8 @@ import greendao.InterseccionDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig rutaDaoConfig;
+    private final DaoConfig tipo_RutaDaoConfig;
+    private final DaoConfig tipos_de_una_RutaDaoConfig;
     private final DaoConfig coordenadaDaoConfig;
     private final DaoConfig tipo_obstaculoDaoConfig;
     private final DaoConfig obstaculoDaoConfig;
@@ -49,6 +55,8 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig interseccionDaoConfig;
 
     private final RutaDao rutaDao;
+    private final Tipo_RutaDao tipo_RutaDao;
+    private final Tipos_de_una_RutaDao tipos_de_una_RutaDao;
     private final CoordenadaDao coordenadaDao;
     private final Tipo_obstaculoDao tipo_obstaculoDao;
     private final ObstaculoDao obstaculoDao;
@@ -64,6 +72,12 @@ public class DaoSession extends AbstractDaoSession {
 
         rutaDaoConfig = daoConfigMap.get(RutaDao.class).clone();
         rutaDaoConfig.initIdentityScope(type);
+
+        tipo_RutaDaoConfig = daoConfigMap.get(Tipo_RutaDao.class).clone();
+        tipo_RutaDaoConfig.initIdentityScope(type);
+
+        tipos_de_una_RutaDaoConfig = daoConfigMap.get(Tipos_de_una_RutaDao.class).clone();
+        tipos_de_una_RutaDaoConfig.initIdentityScope(type);
 
         coordenadaDaoConfig = daoConfigMap.get(CoordenadaDao.class).clone();
         coordenadaDaoConfig.initIdentityScope(type);
@@ -90,6 +104,8 @@ public class DaoSession extends AbstractDaoSession {
         interseccionDaoConfig.initIdentityScope(type);
 
         rutaDao = new RutaDao(rutaDaoConfig, this);
+        tipo_RutaDao = new Tipo_RutaDao(tipo_RutaDaoConfig, this);
+        tipos_de_una_RutaDao = new Tipos_de_una_RutaDao(tipos_de_una_RutaDaoConfig, this);
         coordenadaDao = new CoordenadaDao(coordenadaDaoConfig, this);
         tipo_obstaculoDao = new Tipo_obstaculoDao(tipo_obstaculoDaoConfig, this);
         obstaculoDao = new ObstaculoDao(obstaculoDaoConfig, this);
@@ -100,6 +116,8 @@ public class DaoSession extends AbstractDaoSession {
         interseccionDao = new InterseccionDao(interseccionDaoConfig, this);
 
         registerDao(Ruta.class, rutaDao);
+        registerDao(Tipo_Ruta.class, tipo_RutaDao);
+        registerDao(Tipos_de_una_Ruta.class, tipos_de_una_RutaDao);
         registerDao(Coordenada.class, coordenadaDao);
         registerDao(Tipo_obstaculo.class, tipo_obstaculoDao);
         registerDao(Obstaculo.class, obstaculoDao);
@@ -112,6 +130,8 @@ public class DaoSession extends AbstractDaoSession {
     
     public void clear() {
         rutaDaoConfig.getIdentityScope().clear();
+        tipo_RutaDaoConfig.getIdentityScope().clear();
+        tipos_de_una_RutaDaoConfig.getIdentityScope().clear();
         coordenadaDaoConfig.getIdentityScope().clear();
         tipo_obstaculoDaoConfig.getIdentityScope().clear();
         obstaculoDaoConfig.getIdentityScope().clear();
@@ -124,6 +144,14 @@ public class DaoSession extends AbstractDaoSession {
 
     public RutaDao getRutaDao() {
         return rutaDao;
+    }
+
+    public Tipo_RutaDao getTipo_RutaDao() {
+        return tipo_RutaDao;
+    }
+
+    public Tipos_de_una_RutaDao getTipos_de_una_RutaDao() {
+        return tipos_de_una_RutaDao;
     }
 
     public CoordenadaDao getCoordenadaDao() {

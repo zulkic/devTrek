@@ -26,7 +26,9 @@ public class Punto_interesDao extends AbstractDao<Punto_interes, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Descripcion = new Property(1, String.class, "descripcion", false, "DESCRIPCION");
         public final static Property Id_tipo_punto_interes = new Property(2, Integer.class, "id_tipo_punto_interes", false, "ID_TIPO_PUNTO_INTERES");
-        public final static Property Id_coordenada = new Property(3, Integer.class, "id_coordenada", false, "ID_COORDENADA");
+        public final static Property Latitud = new Property(3, Double.class, "latitud", false, "LATITUD");
+        public final static Property Longitud = new Property(4, Double.class, "longitud", false, "LONGITUD");
+        public final static Property Id_ruta = new Property(5, Integer.class, "id_ruta", false, "ID_RUTA");
     };
 
 
@@ -45,7 +47,9 @@ public class Punto_interesDao extends AbstractDao<Punto_interes, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'DESCRIPCION' TEXT," + // 1: descripcion
                 "'ID_TIPO_PUNTO_INTERES' INTEGER," + // 2: id_tipo_punto_interes
-                "'ID_COORDENADA' INTEGER);"); // 3: id_coordenada
+                "'LATITUD' REAL," + // 3: latitud
+                "'LONGITUD' REAL," + // 4: longitud
+                "'ID_RUTA' INTEGER);"); // 5: id_ruta
     }
 
     /** Drops the underlying database table. */
@@ -74,9 +78,19 @@ public class Punto_interesDao extends AbstractDao<Punto_interes, Long> {
             stmt.bindLong(3, id_tipo_punto_interes);
         }
  
-        Integer id_coordenada = entity.getId_coordenada();
-        if (id_coordenada != null) {
-            stmt.bindLong(4, id_coordenada);
+        Double latitud = entity.getLatitud();
+        if (latitud != null) {
+            stmt.bindDouble(4, latitud);
+        }
+ 
+        Double longitud = entity.getLongitud();
+        if (longitud != null) {
+            stmt.bindDouble(5, longitud);
+        }
+ 
+        Integer id_ruta = entity.getId_ruta();
+        if (id_ruta != null) {
+            stmt.bindLong(6, id_ruta);
         }
     }
 
@@ -93,7 +107,9 @@ public class Punto_interesDao extends AbstractDao<Punto_interes, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // descripcion
             cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // id_tipo_punto_interes
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3) // id_coordenada
+            cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // latitud
+            cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4), // longitud
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5) // id_ruta
         );
         return entity;
     }
@@ -104,7 +120,9 @@ public class Punto_interesDao extends AbstractDao<Punto_interes, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setDescripcion(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setId_tipo_punto_interes(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
-        entity.setId_coordenada(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setLatitud(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
+        entity.setLongitud(cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4));
+        entity.setId_ruta(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
      }
     
     /** @inheritdoc */

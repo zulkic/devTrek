@@ -9,7 +9,9 @@ public class Punto_interes {
     private Long id;
     private String descripcion;
     private Integer id_tipo_punto_interes;
-    private Integer id_coordenada;
+    private Double latitud;
+    private Double longitud;
+    private Integer id_ruta;
 
     public Punto_interes() {
     }
@@ -18,11 +20,13 @@ public class Punto_interes {
         this.id = id;
     }
 
-    public Punto_interes(Long id, String descripcion, Integer id_tipo_punto_interes, Integer id_coordenada) {
+    public Punto_interes(Long id, String descripcion, Integer id_tipo_punto_interes, Double latitud, Double longitud, Integer id_ruta) {
         this.id = id;
         this.descripcion = descripcion;
         this.id_tipo_punto_interes = id_tipo_punto_interes;
-        this.id_coordenada = id_coordenada;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.id_ruta = id_ruta;
     }
 
     public Long getId() {
@@ -49,12 +53,28 @@ public class Punto_interes {
         this.id_tipo_punto_interes = id_tipo_punto_interes;
     }
 
-    public Integer getId_coordenada() {
-        return id_coordenada;
+    public Double getLatitud() {
+        return latitud;
     }
 
-    public void setId_coordenada(Integer id_coordenada) {
-        this.id_coordenada = id_coordenada;
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
+
+    public Integer getId_ruta() {
+        return id_ruta;
+    }
+
+    public void setId_ruta(Integer id_ruta) {
+        this.id_ruta = id_ruta;
     }
 
 }
