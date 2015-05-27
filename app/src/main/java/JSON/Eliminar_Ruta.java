@@ -68,7 +68,7 @@ class Eliminar_Ruta extends AsyncTask<Void, Void, Void> {
     /**
      * After completing background task Dismiss the progress dialog
      * **/
-    protected void onPostExecute(String file_url) {
+    protected void onPostExecute(Void file_url) {
 
     }
 
