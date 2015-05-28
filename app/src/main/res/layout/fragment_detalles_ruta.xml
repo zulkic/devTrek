@@ -4,12 +4,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Recorrido mediante"
+        android:id="@+id/textView_recorrido_mediante" />
+    <Spinner
+        android:id="@+id/spinner_recorrido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|center_vertical"
+        android:layout_below="@id/textView_recorrido_mediante"
+        android:prompt="@string/rec_prompt" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Nombre de la Ruta"
+        android:layout_below="@id/spinner_recorrido"
         android:id="@+id/textView_nombre_ruta" />
 
     <EditText
@@ -57,26 +70,13 @@
         android:layout_below="@id/textView_recorrido_mediante"
         android:prompt="@string/rec_prompt" />
 -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Recorrido mediante"
-        android:layout_below="@id/editText_distancia_recorrida"
-        android:id="@+id/textView_recorrido_mediante" />
-    <Spinner
-        android:id="@+id/spinner_recorrido"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|center_vertical"
-        android:layout_below="@id/textView_recorrido_mediante"
-        android:prompt="@string/rec_prompt" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Descripcion"
-        android:layout_below="@id/spinner_recorrido"
+        android:layout_below="@id/editText_distancia_recorrida"
         android:id="@+id/textView_descripcion" />
     <EditText
         android:layout_width="match_parent"
