@@ -1,26 +1,17 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -82,7 +73,6 @@ public class EliminarRuta extends Fragment{
         try {
             Obtener_Rutas task = new Obtener_Rutas();
             rutas = task.execute().get();
-            Log.i("ruta: ", rutas.get(0).getNombre());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

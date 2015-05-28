@@ -16,7 +16,7 @@ import java.util.List;
 
 import greendao.Ruta;
 
-class Modificar_Ruta extends AsyncTask<Void, Void, Void> {
+public class Modificar_Ruta extends AsyncTask<Void, Void, Void> {
 
     private Ruta ruta;
     private JSONParser jsonParser;

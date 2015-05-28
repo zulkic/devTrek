@@ -2,7 +2,6 @@ package com.mapas.franciscojavier.trekkingroute;
 
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -16,28 +15,16 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -47,17 +34,18 @@ import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import greendao.Coordenada;
 import greendao.Punto_interes;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
+import repositorios.Tipo_Puntos_InteresRepo;
 
 public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
     View rootView;
@@ -129,11 +117,10 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Tipo_punto_interes tp = new Tipo_punto_interes(Long.parseLong("1"),"parque","ic_parque");
-        Tipo_punto_interes tp2 = new Tipo_punto_interes(Long.parseLong("2"),"Agua","ic_agua");
-        tipo_puntos.add(tp);
-        tipo_puntos.add(tp2);
-
+        for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
+        {
+            tipo_puntos.add(tipo_punto_interes);
+        }
 
         //setContentView(R.layout.activity_main);
 
@@ -247,7 +234,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
     }
     private void addPoiOverlay(GeoPoint gp, String titulo,String icono,Long id_tipo) {
-        int resID = getActivity().getResources().getIdentifier(icono.trim(),"drawable",getActivity().getPackageName());
+        int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
         Drawable drawable= this.getResources().getDrawable(resID);
         ResourceProxy rp = new ResourceProxyImpl(getActivity());
         Indicador in = new Indicador(drawable,rp,getActivity(),titulo,"descripcion",gp);
@@ -361,7 +348,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
                     apagarRecorrido();
 
-                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas);
+                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas, this.puntos);
                     //newFragment.setTiempoTotal(tiempoTotalRecorrido);
                     FragmentManager fm1 = getFragmentManager();
                     FragmentTransaction ft1 = fm1.beginTransaction();

@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import JSON.Nueva_Ruta;
 import JSON.Post_Coordenadas_Ruta;
 import greendao.Coordenada;
+import greendao.Punto_interes;
 import greendao.Ruta;
-import repositorios.RutaRepo;
 
 
 public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
@@ -48,13 +48,14 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
     private String Caballo="Caballo";
     private String Auto="Auto";
     private static ArrayList<Coordenada> lista_coordenadas;
+    private static ArrayList<Punto_interes> lista_puntos_interes;
 
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
     public DetallesCrearRuta() {
         // Required empty public constructor
     }
-    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, ArrayList<Coordenada> coordenadas) {
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, ArrayList<Coordenada> coordenadas, ArrayList<Punto_interes> puntos_interes) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
@@ -68,6 +69,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
         //float mtrs = Float.valueOf(mts);
         ARG_DISTANCIA_RUTA=mts;
         lista_coordenadas = coordenadas;
+        lista_puntos_interes = puntos_interes;
         return fragment;
     }
 
@@ -154,6 +156,16 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                         }
                         Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas);
                         tarea_agregar_coordenadas.execute();
+
+                        for(Punto_interes punto_interes : lista_puntos_interes)
+                        {
+                            punto_interes.setId_ruta(id);
+                        }
+
+                        //obstaculos
+
+                        //puntos de interes
+
                     }
                     catch (Exception e)
                     {

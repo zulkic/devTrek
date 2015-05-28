@@ -1,34 +1,20 @@
 package com.mapas.franciscojavier.trekkingroute;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-
-import greendao.Ruta;
-import repositorios.RutaRepo;
+import JSON.Eliminar_Ruta;
 
 
 public class DetallesEliminarRuta extends Fragment implements View.OnClickListener{
 
     int LARGO_NOMBRE_RUTA=1;
-    private static Long ID_RUTA=0l;
+    private static Long ID_RUTA;
     private static String NOMBRE="nada", TIEMPO="nada", TIPO="nada", DESCRIPCION="nada";
     private static float KMS=0;
 
@@ -91,6 +77,14 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_aceptar_eliminar_ruta:
+                try{
+                    Eliminar_Ruta eliminar = new Eliminar_Ruta(ID_RUTA);
+                    eliminar.execute();
+                }
+                catch (Exception e)
+                {
+
+                }
                 //RutaRepo.deleteRutaWithId(getActivity(),ID_RUTA);
                     Toast.makeText(getActivity().getBaseContext(),
                             "Se elimino: "+"\n"

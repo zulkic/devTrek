@@ -11,15 +11,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-class Eliminar_Ruta extends AsyncTask<Void, Void, Void> {
+public class Eliminar_Ruta extends AsyncTask<Void, Void, Void> {
 
-    private int id;
+    private Long id;
     private JSONParser jsonParser;
     private static String url_eliminar_ruta = "http://trythistrail.16mb.com/eliminar_ruta.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
 
-    public Eliminar_Ruta(int id)
+    public Eliminar_Ruta(Long id)
     {
         this.id = id;
         this.jsonParser = new JSONParser();
@@ -40,7 +40,7 @@ class Eliminar_Ruta extends AsyncTask<Void, Void, Void> {
         try {
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
+            params.add(new BasicNameValuePair("id_ruta", id.toString()));
 
             // getting product details by making HTTP request
             JSONObject json = jsonParser.makeHttpRequest(
