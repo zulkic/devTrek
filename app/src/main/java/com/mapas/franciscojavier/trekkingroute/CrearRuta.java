@@ -56,6 +56,7 @@ import java.util.Date;
 
 import greendao.Coordenada;
 import greendao.Punto_interes;
+import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
 
 public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
@@ -68,6 +69,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private Integer contador = 1;
     private Integer id_ruta = 1;
     private ArrayList<Punto_interes> puntos = new ArrayList<>();
+    private ArrayList<Tipo_punto_interes> tipo_puntos = new ArrayList<>();
     private ArrayList<Coordenada> coordenadas;
     private GridView lv;
     private List<Overlay> puntosDeInteres;
@@ -127,26 +129,12 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Punto_interes punto1 = new Punto_interes(Long.parseLong("1"),"Punto 1",1,1);
-        Punto_interes punto2 = new Punto_interes(Long.parseLong("2"),"Punto 2",2,1);
-        Punto_interes punto3 = new Punto_interes(Long.parseLong("3"),"Punto 3",3,1);
-        Punto_interes punto4 = new Punto_interes(Long.parseLong("4"),"Punto 4",4,1);
-        Punto_interes punto5 = new Punto_interes(Long.parseLong("5"),"Punto 5",5,1);
-        Punto_interes punto6 = new Punto_interes(Long.parseLong("6"),"Punto 6",6,1);
-        Punto_interes punto7 = new Punto_interes(Long.parseLong("7"),"Punto 7",7,1);
-        Punto_interes punto8 = new Punto_interes(Long.parseLong("8"),"Punto 8",8,1);
-        Punto_interes punto9 = new Punto_interes(Long.parseLong("9"),"Punto 9",9,1);
-        Punto_interes punto10 = new Punto_interes(Long.parseLong("10"),"Punto 10",10,1);
-        puntos.add(punto1);
-        puntos.add(punto2);
-        puntos.add(punto3);
-        puntos.add(punto4);
-        puntos.add(punto5);
-        puntos.add(punto6);
-        puntos.add(punto7);
-        puntos.add(punto8);
-        puntos.add(punto9);
-        puntos.add(punto10);
+        Tipo_punto_interes tp = new Tipo_punto_interes(Long.parseLong("1"),"parque","ic_parque");
+        Tipo_punto_interes tp2 = new Tipo_punto_interes(Long.parseLong("2"),"Agua","ic_agua");
+        tipo_puntos.add(tp);
+        tipo_puntos.add(tp2);
+
+
         //setContentView(R.layout.activity_main);
 
 
@@ -232,7 +220,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         alert.setView(convertView);
         alert.setTitle("Indicadores");
         this.lv = (GridView) convertView.findViewById(R.id.lista_item);
-        this.lv.setAdapter(new ItemIndicador(getActivity(), puntos));
+        this.lv.setAdapter(new ItemIndicador(getActivity(), tipo_puntos));
         alertDialog.setNegativeButton("Cancelar",
                 new DialogInterface.OnClickListener() {
 
@@ -246,8 +234,9 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
             public void onItemClick(AdapterView adapter, View view, int position, long arg) {
                 // Loads the given URL
                 //puntos.get(position).getId_tipo_punto_interes()
-                Toast.makeText(getActivity(), "Accediendo a: "+ puntos.get(position).getDescripcion(), Toast.LENGTH_SHORT).show();
-                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), puntos.get(position).getDescripcion(),puntos.get(position).getId_tipo_punto_interes());
+                Toast.makeText(getActivity(), "Accediendo a: "+ tipo_puntos.get(position).getNombre(), Toast.LENGTH_SHORT).show();
+                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_puntos.get(position).getNombre(),tipo_puntos.get(position).getNombre_icono(),
+                        tipo_puntos.get(position).getId());
                 alert.dismiss();
             }
         });
@@ -257,18 +246,17 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
             Toast.makeText(getActivity(), "Primero inicie un Ruta", Toast.LENGTH_SHORT).show();
 
     }
-    private void addPoiOverlay(GeoPoint gp, String titulo,int tipo) {
-        Drawable drawable= this.getResources().getDrawable(R.drawable.ic_parque);
-        switch (tipo){
-            case 1:
-                drawable = this.getResources().getDrawable(R.drawable.ic_parque);
-                break;
-            case 2:
-                drawable = this.getResources().getDrawable(R.drawable.ic_agua);
-                break;
-        }
+    private void addPoiOverlay(GeoPoint gp, String titulo,String icono,Long id_tipo) {
+        int resID = getActivity().getResources().getIdentifier(icono.trim(),"drawable",getActivity().getPackageName());
+        Drawable drawable= this.getResources().getDrawable(resID);
         ResourceProxy rp = new ResourceProxyImpl(getActivity());
         Indicador in = new Indicador(drawable,rp,getActivity(),titulo,"descripcion",gp);
+        Punto_interes pi = new Punto_interes();
+        pi.setDescripcion("opcional...");
+        pi.setId_tipo_punto_interes((int)(long) id_tipo);
+        pi.setLatitud(gp.getLatitude());
+        pi.setLongitud(gp.getLongitude());
+        puntos.add(pi);
         puntosDeInteres.add(in);
         //osm.invalidate();
     }

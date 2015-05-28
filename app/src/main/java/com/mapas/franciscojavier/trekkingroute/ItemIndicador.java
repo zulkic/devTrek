@@ -18,12 +18,14 @@ import android.widget.Toast;
 import java.util.List;
 
 import greendao.Punto_interes;
+import greendao.Tipo_punto_interes;
+
 public class ItemIndicador extends BaseAdapter {
 
     private Context context;
-    private List<Punto_interes> items;
+    private List<Tipo_punto_interes> items;
 
-    public ItemIndicador(Context context, List<Punto_interes> items) {
+    public ItemIndicador(Context context, List<Tipo_punto_interes> items) {
         this.context = context;
         this.items = items;
     }
@@ -58,44 +60,10 @@ public class ItemIndicador extends BaseAdapter {
         // Set data into the view.
         ImageView icono = (ImageView) rowView.findViewById(R.id.imageButton_Ind);
         TextView tv = (TextView) rowView.findViewById(R.id.textView_nombre_indicador);
-        Punto_interes punto = this.items.get(position);
-
-        switch (punto.getId_tipo_punto_interes()){
-            case 1:
-                icono.setImageResource(R.drawable.ic_parque);
-                break;
-            case 2:
-                icono.setImageResource(R.drawable.ic_agua);
-                break;
-            case 3:
-                icono.setImageResource(R.drawable.ic_cabaa);
-                break;
-            case 4:
-                icono.setImageResource(R.drawable.ic_info);
-                break;
-            case 5:
-                icono.setImageResource(R.drawable.ic_montaas);
-                break;
-            case 6:
-                icono.setImageResource(R.drawable.ic_nieve);
-                break;
-            case 7:
-                icono.setImageResource(R.drawable.ic_parque);
-                break;
-            case 8:
-                icono.setImageResource(R.drawable.ic_rio);
-                break;
-            case 9:
-                icono.setImageResource(R.drawable.ic_volcan);
-                break;
-            case 10:
-                icono.setImageResource(R.drawable.ic_zoo);
-                break;
-            default:
-                break;
-        }
-
-        tv.setText(punto.getDescripcion());
+        Tipo_punto_interes punto = this.items.get(position);
+        int resID = context.getResources().getIdentifier(punto.getNombre_icono().trim(),"drawable",context.getPackageName());
+        icono.setImageResource(resID);
+        tv.setText(punto.getNombre());
         return rowView;
     }
 
