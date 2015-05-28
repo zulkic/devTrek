@@ -1,5 +1,6 @@
 package com.mapas.franciscojavier.trekkingroute;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
@@ -8,15 +9,14 @@ import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polygon;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -34,7 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import JSON.Coordenadas_Ruta;
+import JSON.Puntos_Interes_Ruta;
 import greendao.Coordenada;
+import greendao.Punto_interes;
+import greendao.Tipo_punto_interes;
+import repositorios.Tipo_Puntos_InteresRepo;
 
 /**
  * Created by FranciscoJavier on 28-04-2015.
@@ -53,6 +57,8 @@ public class MostrarRuta extends Fragment{
     private String tiempo_ruta;
     private Float kms_ruta;
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
+    private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
+    private List<Overlay> puntosDeInteres;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +82,7 @@ public class MostrarRuta extends Fragment{
         //setupMyLocation();
         //addPolyOverlay();
         addLineOverlay();
+        puntosDeInteres = osm.getOverlays();
         addPoiOverlay();
         //GeoPoint center = new GeoPoint(, );
         //mc.animateTo(center);
@@ -111,7 +118,7 @@ public class MostrarRuta extends Fragment{
     private void addLineOverlay() {
         // set custom line style
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.CYAN);
+        paint.setColor(Color.MAGENTA);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(7);
 
@@ -120,6 +127,10 @@ public class MostrarRuta extends Fragment{
         {
             Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.id);
             lista_coordenadas = tarea_get_coordenadas.execute().get();
+
+            Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.id);
+            lista_puntos = tarea_get_puntos.execute().get();
+
         }
         catch (Exception e)
         {}
@@ -133,7 +144,7 @@ public class MostrarRuta extends Fragment{
         }
         // apply line style & data and add to map
 
-        PathOverlay lineOverlay = new PathOverlay(Color.CYAN,getActivity());
+        PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA,getActivity());
         lineOverlay.setPaint(paint);
         lineOverlay.addPoints(lineData);
         //lineOverlay.setData(lineData);
@@ -146,17 +157,24 @@ public class MostrarRuta extends Fragment{
         List<Overlay> mapOverlays = osm.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
         Indicador itemizedoverlay = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity());
-        //Indicador aguas = new Indicador(this.getResources().getDrawable(R.drawable.ic_parque),new ResourceProxyImpl(getActivity()),getActivity());
-        //Indicador parque = new Indicador(this.getResources().getDrawable(R.drawable.ic_agua),new ResourceProxyImpl(getActivity()),getActivity());
-        //OverlayItem poi3 = new OverlayItem("Parque", "Parque en Argomedo con Carmen",new GeoPoint (-34.98709516, -71.2385273));
-        //OverlayItem poi4 = new OverlayItem("Agua Potable", "Agua en Membrillar con Carmen",new GeoPoint (-34.98698968, -71.23715401));
         itemizedoverlay.addOverlay(this.inicio);
         itemizedoverlay.addOverlay(this.fin);
-        //parque.addOverlay(poi4);
-        //aguas.addOverlay(poi3);
         mapOverlays.add(itemizedoverlay);
-        //mapOverlays.add(aguas);
-        //mapOverlays.add(parque);
+
+        for(Punto_interes pi : lista_puntos)
+        {
+            Tipo_punto_interes tpi = Tipo_Puntos_InteresRepo.getTipo_Punto_InteresForId(getActivity(), pi.getId_tipo_punto_interes().longValue() );
+            String titulo = tpi.getNombre();
+            String icono = tpi.getNombre_icono();
+            GeoPoint gp = new GeoPoint(pi.getLatitud(), pi.getLongitud());
+            int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
+            Drawable drawablePi= this.getResources().getDrawable(resID);
+            ResourceProxy rp = new ResourceProxyImpl(getActivity());
+            Indicador in = new Indicador(drawablePi,rp,getActivity(),titulo,pi.getDescripcion(),gp);
+            puntosDeInteres.add(in);
+        }
+
+
 
 
         // use a custom POI marker by referencing the bitmap file directly,

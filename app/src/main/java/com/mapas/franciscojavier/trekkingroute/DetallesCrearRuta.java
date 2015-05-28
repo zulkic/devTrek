@@ -23,10 +23,10 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import JSON.Buscar_Ruta;
 import JSON.Modificar_Ruta;
 import JSON.Nueva_Ruta;
 import JSON.Post_Coordenadas_Ruta;
+import JSON.Post_Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Punto_interes;
 import greendao.Ruta;
@@ -42,7 +42,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
     private static String ARG_DISTANCIA_RUTA;
     private static String ARG_NOMBRE_RUTA="";
     private static String ARG_DESCRIPCION_RUTA="";
-    private static int ARG_ID_RUTA;
+    private static Integer ARG_ID_RUTA;
     private static boolean ARG_EDITAR = false;
     private Spinner spinnerReco;
     private Button btnSubmit;
@@ -79,7 +79,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
         lista_puntos_interes = puntos_interes;
         return fragment;
     }
-    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta,String nombreRuta, String descripcionRuta,int id_ruta) {
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta,String nombreRuta, String descripcionRuta,Integer id_ruta) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
@@ -169,6 +169,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                     String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
                     float mtrs = Float.valueOf(ARG_DISTANCIA_RUTA);
                     String descripcionRuta = editTextDescripcion.getText().toString();
+
                     Ruta nuevaRuta = new Ruta();
                     nuevaRuta.setNombre(nombreRuta);
                     nuevaRuta.setTiempo_estimado(tiempoRuta);
@@ -181,9 +182,14 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                     {
                         if(ARG_EDITAR)
                         {
-                            nuevaRuta.setId((long)(int)ARG_ID_RUTA);
+                            Log.i("id ruta: ", ARG_ID_RUTA.toString());
+                            nuevaRuta.setId( ARG_ID_RUTA.longValue() );
                             Modificar_Ruta tarea_modificar_ruta = new Modificar_Ruta(nuevaRuta);
                             tarea_modificar_ruta.execute();
+
+                            Toast.makeText(getActivity().getBaseContext(),"Ruta Modificada con exito ", Toast.LENGTH_SHORT).show();
+                            getFragmentManager().popBackStack();
+
                         }
                         else {
                             Nueva_Ruta tarea_agregar_ruta = new Nueva_Ruta(nuevaRuta, getActivity());
@@ -194,13 +200,19 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                             Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas);
                             tarea_agregar_coordenadas.execute();
 
-                            for (Punto_interes punto_interes : lista_puntos_interes) {
+                            for(Punto_interes punto_interes : lista_puntos_interes)
+                            {
                                 punto_interes.setId_ruta(id);
                             }
 
-                            //obstaculos
+                            Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes);
+                            tarea_agregar_puntos.execute();
 
-                            //puntos de interes
+                                //obstaculos
+
+                            Toast.makeText(getActivity().getBaseContext(),"Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
+                            getFragmentManager().popBackStack();
+
                         }
 
                     }
@@ -208,18 +220,6 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                     {
                         Log.i("Error post", e.toString());
                     }
-
-                    /**Toast.makeText(getActivity().getBaseContext(),
-                            "Datos: "+"\n"
-                                    + nombreRuta+"\n"
-                                    + tiempoRuta+"\n"
-                                    + mtrs+"\n"
-                                    + tipoRuta+"\n"
-                                    + descripcionRuta
-                            ,Toast.LENGTH_SHORT).show();*/
-
-                    Toast.makeText(getActivity().getBaseContext(),"Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
-                    getFragmentManager().popBackStack();
                 }
                 break;
             case R.id.button_cancelar_ruta:

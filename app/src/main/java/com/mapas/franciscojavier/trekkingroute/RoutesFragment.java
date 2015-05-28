@@ -108,6 +108,7 @@ public class RoutesFragment extends Fragment{
                     bundle.putString("descripcion_ruta",item.getDescripcion());
                     bundle.putString("tiempo_ruta",item.getTiempo_estimado());
                     bundle.putFloat("kms_ruta",item.getKms());
+                    bundle.putBoolean("oficial", item.getOficial());
                     Fragment tf = new MostrarRuta();
                     tf.setArguments(bundle);
                     FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();

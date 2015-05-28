@@ -75,7 +75,14 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                     ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
                     ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
                     ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
-                    ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
+                    Integer oficial = Integer.parseInt(c.getString(TAG_OFICIAL));
+                    if(oficial == 1)
+                    {
+                        ruta.setOficial(true);
+                    }
+                    else{
+                        ruta.setOficial(false);
+                    }
                     this.rutasList.add(ruta);
                 }
             }

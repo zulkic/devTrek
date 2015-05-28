@@ -82,7 +82,7 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
     private void addLineOverlay() {
         // set custom line style
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.CYAN);
+        paint.setColor(Color.MAGENTA);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(7);
 
@@ -119,12 +119,13 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
             }
             // apply line style & data and add to map
 
-            PathOverlay lineOverlay = new PathOverlay(Color.CYAN, getActivity());
+            PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA, getActivity());
             lineOverlay.setPaint(paint);
             lineOverlay.addPoints(lineData);
             //lineOverlay.setData(lineData);
             osm.getOverlays().add(lineOverlay);
             addPoiOverlay();
+
         }
     }
 
@@ -200,4 +201,10 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
     @Override
     public void onClick(View v) {
     }
+
+    public void onRoadClicked(int id)
+    {
+        Log.i("on road: ", Integer.toString(id));
+    }
+
 }

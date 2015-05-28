@@ -19,6 +19,7 @@ import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
 import greendao.DaoSession;
 import repositorios.Tipo_ObstaculoRepo;
+import repositorios.Tipo_Puntos_InteresRepo;
 
 
 public class MenuPrincipal extends ActionBarActivity
@@ -51,7 +52,7 @@ public class MenuPrincipal extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         try{
-            if(Tipo_ObstaculoRepo.getAllTipos_Obstaculos(this).size() == 0 ) {
+            if(Tipo_ObstaculoRepo.getAllTipos_Obstaculos(this).size() == 0  || Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(this).size() == 0 ) {
                 Sincronizar_Tipos_Indicadores tarea = new Sincronizar_Tipos_Indicadores(this);
                 tarea.execute();
                 Log.i("Sincrinizar tipos", " exito");
