@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
+import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import repositorios.Tipo_ObstaculoRepo;
 
 
 public class MenuPrincipal extends ActionBarActivity
@@ -46,6 +49,20 @@ public class MenuPrincipal extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        try{
+            if(Tipo_ObstaculoRepo.getAllTipos_Obstaculos(this).size() == 0 ) {
+                Sincronizar_Tipos_Indicadores tarea = new Sincronizar_Tipos_Indicadores(this);
+                tarea.execute();
+                Log.i("Sincrinizar tipos", " exito");
+            }
+
+        }
+        catch (Exception e)
+        {
+            Log.i("error: ", e.toString());
+        }
+
     }
 
     @Override

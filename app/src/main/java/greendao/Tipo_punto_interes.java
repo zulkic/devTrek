@@ -8,7 +8,7 @@ public class Tipo_punto_interes {
 
     private Long id;
     private String nombre;
-    private Integer id_icono;
+    private String nombre_icono;
 
     public Tipo_punto_interes() {
     }
@@ -17,10 +17,10 @@ public class Tipo_punto_interes {
         this.id = id;
     }
 
-    public Tipo_punto_interes(Long id, String nombre, Integer id_icono) {
+    public Tipo_punto_interes(Long id, String nombre, String nombre_icono) {
         this.id = id;
         this.nombre = nombre;
-        this.id_icono = id_icono;
+        this.nombre_icono = nombre_icono;
     }
 
     public Long getId() {
@@ -39,12 +39,12 @@ public class Tipo_punto_interes {
         this.nombre = nombre;
     }
 
-    public Integer getId_icono() {
-        return id_icono;
+    public String getNombre_icono() {
+        return nombre_icono;
     }
 
-    public void setId_icono(Integer id_icono) {
-        this.id_icono = id_icono;
+    public void setNombre_icono(String nombre_icono) {
+        this.nombre_icono = nombre_icono;
     }
 
 }
