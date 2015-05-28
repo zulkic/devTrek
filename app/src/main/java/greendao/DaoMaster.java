@@ -9,6 +9,8 @@ import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import greendao.RutaDao;
+import greendao.Tipo_RutaDao;
+import greendao.Tipos_de_una_RutaDao;
 import greendao.CoordenadaDao;
 import greendao.Tipo_obstaculoDao;
 import greendao.ObstaculoDao;
@@ -28,6 +30,8 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         RutaDao.createTable(db, ifNotExists);
+        Tipo_RutaDao.createTable(db, ifNotExists);
+        Tipos_de_una_RutaDao.createTable(db, ifNotExists);
         CoordenadaDao.createTable(db, ifNotExists);
         Tipo_obstaculoDao.createTable(db, ifNotExists);
         ObstaculoDao.createTable(db, ifNotExists);
@@ -41,6 +45,8 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         RutaDao.dropTable(db, ifExists);
+        Tipo_RutaDao.dropTable(db, ifExists);
+        Tipos_de_una_RutaDao.dropTable(db, ifExists);
         CoordenadaDao.dropTable(db, ifExists);
         Tipo_obstaculoDao.dropTable(db, ifExists);
         ObstaculoDao.dropTable(db, ifExists);
@@ -81,6 +87,8 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(RutaDao.class);
+        registerDaoClass(Tipo_RutaDao.class);
+        registerDaoClass(Tipos_de_una_RutaDao.class);
         registerDaoClass(CoordenadaDao.class);
         registerDaoClass(Tipo_obstaculoDao.class);
         registerDaoClass(ObstaculoDao.class);

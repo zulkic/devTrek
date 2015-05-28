@@ -25,6 +25,7 @@ public class Tipo_punto_interesDao extends AbstractDao<Tipo_punto_interes, Long>
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Nombre = new Property(1, String.class, "nombre", false, "NOMBRE");
+        public final static Property Id_icono = new Property(2, Integer.class, "id_icono", false, "ID_ICONO");
     };
 
 
@@ -41,7 +42,8 @@ public class Tipo_punto_interesDao extends AbstractDao<Tipo_punto_interes, Long>
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'TIPO_PUNTO_INTERES' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'NOMBRE' TEXT);"); // 1: nombre
+                "'NOMBRE' TEXT," + // 1: nombre
+                "'ID_ICONO' INTEGER);"); // 2: id_icono
     }
 
     /** Drops the underlying database table. */
@@ -64,6 +66,11 @@ public class Tipo_punto_interesDao extends AbstractDao<Tipo_punto_interes, Long>
         if (nombre != null) {
             stmt.bindString(2, nombre);
         }
+ 
+        Integer id_icono = entity.getId_icono();
+        if (id_icono != null) {
+            stmt.bindLong(3, id_icono);
+        }
     }
 
     /** @inheritdoc */
@@ -77,7 +84,8 @@ public class Tipo_punto_interesDao extends AbstractDao<Tipo_punto_interes, Long>
     public Tipo_punto_interes readEntity(Cursor cursor, int offset) {
         Tipo_punto_interes entity = new Tipo_punto_interes( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // nombre
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nombre
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2) // id_icono
         );
         return entity;
     }
@@ -87,6 +95,7 @@ public class Tipo_punto_interesDao extends AbstractDao<Tipo_punto_interes, Long>
     public void readEntity(Cursor cursor, Tipo_punto_interes entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setNombre(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setId_icono(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
      }
     
     /** @inheritdoc */
