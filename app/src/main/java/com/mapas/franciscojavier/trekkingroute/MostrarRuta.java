@@ -255,7 +255,7 @@ public class MostrarRuta extends Fragment{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-                Fragment newFragment = new DetallesCrearRuta().newInstance(this.tiempo_ruta,this.kms_ruta,this.lista_coordenadas);
+                Fragment newFragment = new DetallesCrearRuta().newInstance(this.tiempo_ruta,this.kms_ruta,this.nombre_ruta,this.descripcion_ruta,this.id);
             //newFragment.setTiempoTotal(tiempoTotalRecorrido);
                 FragmentManager fm1 = getFragmentManager();
                 FragmentTransaction ft1 = fm1.beginTransaction();
