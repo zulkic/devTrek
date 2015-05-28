@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IMapView;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
@@ -17,11 +18,20 @@ import java.util.ArrayList;
  */
 public class Indicador extends ItemizedOverlay {
     private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+    private OverlayItem overlay;
     private Context mContext;
 
     public Indicador(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context) {
         super(pDefaultMarker, pResourceProxy);
         mContext = context;
+    }
+
+    public Indicador(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context,String titulo, String descripcion, GeoPoint gp) {
+        super(pDefaultMarker, pResourceProxy);
+        mContext = context;
+        overlay = new OverlayItem(titulo,descripcion,gp);
+        addOverlay(overlay);
+        //populate();
     }
 
     public void addOverlay(OverlayItem overlay) {

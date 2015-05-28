@@ -169,7 +169,6 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                                     + descripcionRuta
                             ,Toast.LENGTH_SHORT).show();*/
 
-                    RutaRepo.insertOrUpdate(getActivity(),nuevaRuta); //Aca lo guardo en la base de datos local.
                     Toast.makeText(getActivity().getBaseContext(),"Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();
                 }

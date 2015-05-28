@@ -2,6 +2,7 @@ package com.mapas.franciscojavier.trekkingroute;
 
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -68,16 +70,18 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private ArrayList<Punto_interes> puntos = new ArrayList<>();
     private ArrayList<Coordenada> coordenadas;
     private GridView lv;
-
+    private List<Overlay> puntosDeInteres;
     private Location localicacionA = new Location("punto A");
     private Location localicacionB = new Location("punto B");
     private Boolean primerLocalicacion = true;
     private float distancia;
-
+    private Marker aux;
     Long i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     // GPSTracker class
     GPS gps;
+    private GeoPoint punto;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //rootView = inflater.inflate(R.layout.fragment_crear_ruta);
@@ -104,13 +108,14 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         mc = (MapController) osm.getController();
         mc.setZoom(15);
         initPathOverlay();
+        puntosDeInteres = osm.getOverlays();
         //GeoPoint center = new GeoPoint(-34.15691, -70.75072);
         GeoPoint center = new GeoPoint(latitude, longitude);
         mc.animateTo(center);
         //addMarket(center);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
 
         return view;
@@ -151,10 +156,10 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     {
         Marker marker = new Marker(osm);
         marker.setPosition(center);
-        marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         //marker.setIcon(getResources().getDrawable(R.drawable.zoom_in));
-
-        osm.getOverlays().clear();
+        if(osm.getOverlays().size()>0 && aux!=null)
+            osm.getOverlays().remove(aux);
         if(encendido)
         {
             osm.getOverlays().add(addPointsLine(center));
@@ -163,6 +168,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
         osm.invalidate();
+        aux = marker;
     }
 
     public void initPathOverlay(){
@@ -218,12 +224,13 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     }
     private void agregarIndicadorAPosicion() {
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setIcon(R.drawable.ic_bicicleta);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        final AlertDialog alert = alertDialog.create();
+        alert.setIcon(R.drawable.ic_bicicleta);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.popup_crear_indicadores, null);
-        alertDialog.setView(convertView);
-        alertDialog.setTitle("Indicadores");
+        alert.setView(convertView);
+        alert.setTitle("Indicadores");
         this.lv = (GridView) convertView.findViewById(R.id.lista_item);
         this.lv.setAdapter(new ItemIndicador(getActivity(), puntos));
         alertDialog.setNegativeButton("Cancelar",
@@ -240,28 +247,30 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
                 // Loads the given URL
                 //puntos.get(position).getId_tipo_punto_interes()
                 Toast.makeText(getActivity(), "Accediendo a: "+ puntos.get(position).getDescripcion(), Toast.LENGTH_SHORT).show();
+                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), puntos.get(position).getDescripcion(),puntos.get(position).getId_tipo_punto_interes());
+                alert.dismiss();
             }
         });
-        alertDialog.show();
-    }
-    private void addPoiOverlay() {
+        if(encendido)
+            alert.show();
+        else
+            Toast.makeText(getActivity(), "Primero inicie un Ruta", Toast.LENGTH_SHORT).show();
 
-        List<Overlay> puntosDeInteres = osm.getOverlays();
-        Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
-        Indicador itemizedoverlay = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity());
-        Indicador aguas = new Indicador(this.getResources().getDrawable(R.drawable.ic_parque),new ResourceProxyImpl(getActivity()),getActivity());
-        Indicador parque = new Indicador(this.getResources().getDrawable(R.drawable.ic_agua),new ResourceProxyImpl(getActivity()),getActivity());
-        OverlayItem poi1 = new OverlayItem("Inicio ruta", "ruta inicio prueba 1",new GeoPoint (-34.98720064,-71.24133825));
-        OverlayItem poi2 = new OverlayItem("Fin ruta", "termino de ruta",new GeoPoint (-34.9867963, -71.23584509));
-        OverlayItem poi3 = new OverlayItem("Parque", "Parque en Argomedo con Carmen",new GeoPoint (-34.98709516, -71.2385273));
-        OverlayItem poi4 = new OverlayItem("Agua Potable", "Agua en Membrillar con Carmen",new GeoPoint (-34.98698968, -71.23715401));
-        itemizedoverlay.addOverlay(poi1);
-        itemizedoverlay.addOverlay(poi2);
-        parque.addOverlay(poi4);
-        aguas.addOverlay(poi3);
-        puntosDeInteres.add(itemizedoverlay);
-        puntosDeInteres.add(aguas);
-        puntosDeInteres.add(parque);
+    }
+    private void addPoiOverlay(GeoPoint gp, String titulo,int tipo) {
+        Drawable drawable= this.getResources().getDrawable(R.drawable.ic_parque);
+        switch (tipo){
+            case 1:
+                drawable = this.getResources().getDrawable(R.drawable.ic_parque);
+                break;
+            case 2:
+                drawable = this.getResources().getDrawable(R.drawable.ic_agua);
+                break;
+        }
+        ResourceProxy rp = new ResourceProxyImpl(getActivity());
+        Indicador in = new Indicador(drawable,rp,getActivity(),titulo,"descripcion",gp);
+        puntosDeInteres.add(in);
+        //osm.invalidate();
     }
 
     @Override
@@ -286,7 +295,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         gps.setLatitude(location.getLatitude());
         gps.setLongitude(location.getLongitude());
         gps.setAltitude(location.getAltitude());
-        GeoPoint punto = new GeoPoint(location.getLatitude(), location.getLongitude());
+        this.punto = new GeoPoint(location.getLatitude(), location.getLongitude());
         //mc.animateTo(punto);
         addMarket(punto, encendido);
         if(encendido) {
