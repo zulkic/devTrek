@@ -47,6 +47,8 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
     private OverlayItem inicio;
     private OverlayItem fin;
     private ArrayList<Ruta> rutas = new ArrayList<>();
+    private ArrayList<OverlayItem> ind_ini = new ArrayList<>();
+    private ArrayList<OverlayItem> ind_fin = new ArrayList<>();
     // GPSTracker class
     GPS gps;
     @Override
@@ -113,7 +115,9 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
             Log.i("coordenadas:",  Integer.toString(lista_coordenadas.size()));
             List lineData = new ArrayList();
             this.inicio = new OverlayItem("Inicio ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(0).getLatitud(), lista_coordenadas.get(0).getLongitud()));
+            this.ind_ini.add(this.inicio);
             this.fin = new OverlayItem("Fin ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(lista_coordenadas.size() - 1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size() - 1).getLongitud()));
+            this.ind_fin.add(this.fin);
             for (Coordenada coordenada : lista_coordenadas) {
                 lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
             }
@@ -124,26 +128,23 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
             lineOverlay.addPoints(lineData);
             //lineOverlay.setData(lineData);
             osm.getOverlays().add(lineOverlay);
-            addPoiOverlay();
-
         }
+        addPoiOverlay();
     }
 
     private void addPoiOverlay() {
         List<Overlay> mapOverlays = osm.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
-        Indicador itemizedoverlay = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity());
-        //itemizedoverlay.addOverlay(this.inicio);
-        itemizedoverlay.addOverlay(this.inicio);
-
-        List<Overlay> mapOverlays2 = osm.getOverlays();
-        Drawable drawable2 = this.getResources().getDrawable(R.drawable.ic_fin);
-        Indicador itemizedoverlay2 = new Indicador(drawable2,new ResourceProxyImpl(getActivity()),getActivity());
-        //itemizedoverlay.addOverlay(this.inicio);
-        itemizedoverlay2.addOverlay(this.fin);
-
-        mapOverlays.add(itemizedoverlay);
-        mapOverlays2.add(itemizedoverlay2);
+        for(OverlayItem item : this.ind_ini)
+        {
+            Indicador ini = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), item.getTitle(), item.getSnippet(), item.getPoint());
+            mapOverlays.add(ini);
+        }
+        drawable = this.getResources().getDrawable(R.drawable.ic_fin);
+        for(OverlayItem item : this.ind_fin) {
+            Indicador fi = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), item.getTitle(), item.getSnippet(), item.getPoint());
+            mapOverlays.add(fi);
+        }
     }
 
 
