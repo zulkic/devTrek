@@ -4,4 +4,7 @@
     <item android:id="@+id/action_edit"
         android:title="@string/action_edit"
         app:showAsAction="withText|ifRoom" />
+    <item android:id="@+id/action_delet"
+        android:title="@string/action_delet"
+        app:showAsAction="withText|ifRoom" />
 </menu>

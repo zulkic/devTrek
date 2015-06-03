@@ -160,7 +160,7 @@ public class MostrarRuta extends Fragment{
         itemizedoverlay.addOverlay(this.inicio);
         itemizedoverlay.addOverlay(this.fin);
         mapOverlays.add(itemizedoverlay);
-
+/***++++++++++++++++++++++++++++++++++++++++++++++
         for(Punto_interes pi : lista_puntos)
         {
             Tipo_punto_interes tpi = Tipo_Puntos_InteresRepo.getTipo_Punto_InteresForId(getActivity(), pi.getId_tipo_punto_interes().longValue() );
@@ -174,7 +174,7 @@ public class MostrarRuta extends Fragment{
             puntosDeInteres.add(in);
         }
 
-
+*************************************************/
 
 
         // use a custom POI marker by referencing the bitmap file directly,
@@ -281,6 +281,18 @@ public class MostrarRuta extends Fragment{
                         .addToBackStack(null)
                         .commit();
 
+            return true;
+        }
+        if (id == R.id.action_delet) {
+            //Toast.makeText(getActivity(),"el eliminar", Toast.LENGTH_SHORT).show();
+            Long idLong = new Long(this.id);
+            Fragment tf = new DetallesEliminarRuta().newInstance(idLong,
+                    this.nombre_ruta, this.tiempo_ruta, this.kms_ruta, "tipo", this.descripcion_ruta);
+            //pendiente
+            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+            ft.replace(R.id.container, tf);
+            ft.addToBackStack(null);
+            ft.commit();
             return true;
         }
 

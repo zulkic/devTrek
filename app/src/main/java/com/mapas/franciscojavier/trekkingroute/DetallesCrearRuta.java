@@ -46,12 +46,12 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
     private static boolean ARG_EDITAR = false;
     private Spinner spinnerReco;
     private Button btnSubmit;
-    private String Caminando="Caminando";
-    private String Trotando="Trotando";
-    private String Corriendo="Corriendo";
-    private String Bicicleta="Bicicleta";
-    private String Caballo="Caballo";
-    private String Auto="Auto";
+    private String Caminando = "Caminando";//getString(R.string.trail_caminando);
+    private String Trotando="Trotando";//getString(R.string.trail_trotando);
+    private String Corriendo="Corriendo";//getString(R.string.trail_corriendo);
+    private String Bicicleta="Bicicleta";//getString(R.string.trail_bicicleta);
+    private String Caballo="Caballo";//getString(R.string.trail_caballo);
+    private String Auto="Auto";//getString(R.string.trail_auto);
     private static ArrayList<Coordenada> lista_coordenadas;
     private static ArrayList<Punto_interes> lista_puntos_interes;
 

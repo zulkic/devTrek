@@ -15,7 +15,6 @@
     <string name="title_section2">Planificar Viaje</string>
     <string name="title_section3">Crear Ruta</string>
     <string name="title_section4">Iniciar Recorrido</string>
-    <string name="title_section5">Eliminar Ruta</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -29,7 +28,14 @@
     <string name="button_cancelar_eliminar_ruta">Cancelar</string>
 
     <string name="action_edit">Editar</string>
+    <string name="action_delet">Eliminar</string>
 
+    <string name="trail_caminando">Caminando</string>
+    <string name="trail_trotando">Trotando</string>
+    <string name="trail_corriendo">Corriendo</string>
+    <string name="trail_bicicleta">Bicicleta</string>
+    <string name="trail_caballo">Caballo</string>
+    <string name="trail_auto">Auto</string>
 <!--
     <string-array name="rec_arrays">
         <item>Caminando</item>
