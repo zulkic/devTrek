@@ -86,9 +86,6 @@ public class MenuPrincipal extends ActionBarActivity
             case 3:
                 fragment = new CrearRuta();
                 break;
-            case 4:
-                fragment = new EliminarRuta();
-                break;
         }
         //restoreActionBar();
         fragmentManager.beginTransaction()
@@ -109,9 +106,6 @@ public class MenuPrincipal extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section4);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_section5);
                 break;
         }
     }

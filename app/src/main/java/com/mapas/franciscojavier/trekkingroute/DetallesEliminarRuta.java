@@ -1,6 +1,8 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,7 +92,15 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
                             "Se elimino: "+"\n"
                                     + NOMBRE
                             ,Toast.LENGTH_SHORT).show();
-                getFragmentManager().popBackStack();
+                //BUSCAR COMO RETROSEDER UNA VEZ Q SE ELIMINA----pendiete
+                //getFragmentManager().popBackStack();
+                Fragment newFragment = new RoutesFragment();
+                //newFragment.setTiempoTotal(tiempoTotalRecorrido);
+                FragmentManager fm1 = getFragmentManager();
+                FragmentTransaction ft1 = fm1.beginTransaction();
+                ft1.replace(R.id.container, newFragment)
+                        .addToBackStack(null)
+                        .commit();
                 break;
             case R.id.button_cancelar_eliminar_ruta:
                 //Toast.makeText(getActivity().getBaseContext(),"Se cancelo: "+"\n"+ NOMBRE+"\n",Toast.LENGTH_SHORT).show();

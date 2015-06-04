@@ -117,10 +117,10 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
-        {
-            tipo_puntos.add(tipo_punto_interes);
-        }
+//        for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
+//        {
+//            tipo_puntos.add(tipo_punto_interes);
+//        }
 
         //setContentView(R.layout.activity_main);
 
@@ -326,13 +326,18 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         Date c = null;
         switch (v.getId()){
             case R.id.button_start:
-                c = new Date();
-                System.out.println("getTimeInicio() => "+c.getTime());
-                i = c.getTime();
-                //System.out.println("getTimeInicio "+i);
-                String tiempoInicioRecorrido= df.format(i);
-                System.out.println("getTimeInicio "+tiempoInicioRecorrido);
-                grabarRecorrido();
+                if(encendido){
+                    Toast.makeText(v.getContext(), "La ruta ya comenzo a grabarse", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    c = new Date();
+                    System.out.println("getTimeInicio() => "+c.getTime());
+                    i = c.getTime();
+                    //System.out.println("getTimeInicio "+i);
+                    String tiempoInicioRecorrido= df.format(i);
+                    System.out.println("getTimeInicio "+tiempoInicioRecorrido);
+                    grabarRecorrido();
+                }
                 break;
             case R.id.button_end :
                 if(encendido){

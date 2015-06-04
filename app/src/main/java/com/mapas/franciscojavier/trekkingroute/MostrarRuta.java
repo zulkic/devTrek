@@ -284,6 +284,18 @@ public class MostrarRuta extends Fragment{
 
             return true;
         }
+        if (id == R.id.action_delet) {
+            //Toast.makeText(getActivity(),"el eliminar", Toast.LENGTH_SHORT).show();
+            Long idLong = new Long(this.id);
+            Fragment tf = new DetallesEliminarRuta().newInstance(idLong,
+                    this.nombre_ruta, this.tiempo_ruta, this.kms_ruta, "tipo", this.descripcion_ruta);
+            //pendiente
+            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+            ft.replace(R.id.container, tf);
+            ft.addToBackStack(null);
+            ft.commit();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
