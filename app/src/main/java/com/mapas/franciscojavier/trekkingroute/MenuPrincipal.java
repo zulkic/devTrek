@@ -1,6 +1,7 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -86,6 +87,10 @@ public class MenuPrincipal extends ActionBarActivity
             case 3:
                 fragment = new CrearRuta();
                 break;
+            case 4:
+                fragment = new LoginActivity();
+                //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
+                break;
         }
         //restoreActionBar();
         fragmentManager.beginTransaction()
@@ -106,6 +111,9 @@ public class MenuPrincipal extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section4);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_section5);
                 break;
         }
     }
