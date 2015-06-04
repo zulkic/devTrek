@@ -90,7 +90,7 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
 
         // list of GeoPoint objects to be used to draw line
         try {
-            Obtener_Rutas task = new Obtener_Rutas();
+            Obtener_Rutas task = new Obtener_Rutas(getActivity());
             this.rutas = task.execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -106,7 +106,7 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
             }
             else {*/
                 try {
-                    Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(ruta.getId().intValue());
+                    Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(ruta.getId().intValue(),getActivity());
                     lista_coordenadas = tarea_get_coordenadas.execute().get();
                 } catch (Exception e) {
                 }

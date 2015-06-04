@@ -4,6 +4,7 @@ package JSON;
  * Created by juancarlosgonzalezca on 13-05-2015.
  */
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
 
     private ArrayList<Coordenada> coordenadasList;
     private int id;
+    private Context context;
     private JSONParser jsonParser;
     private static String url_obtener_coordenadas_rutas = "http://trythistrail.16mb.com/coordenadas_ruta.php";
     // JSON Node names
@@ -39,9 +41,10 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
      * Before starting background thread Show Progress Dialog
      */
 
-    public Coordenadas_Ruta(int id)
+    public Coordenadas_Ruta(int id, Context context)
     {
         this.id = id;
+        this.context = context;
         this.coordenadasList = new ArrayList<Coordenada>();
         this.jsonParser = new JSONParser();
     }
@@ -55,43 +58,47 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
      * getting All products from url
      */
     protected ArrayList<Coordenada> doInBackground(Void... args) {
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
-        // getting JSON string from URL
-        JSONObject json = jsonParser.makeHttpRequest(url_obtener_coordenadas_rutas, "GET", params);
+        hasInternet conexion = new hasInternet(this.context);
+        Boolean internet = conexion.getInternet();
 
-        // Check your log cat for JSON reponse
-        Log.d("Coordenadas ruta: ", json.toString());
+        if(internet) {
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
+            // getting JSON string from URL
+            JSONObject json = jsonParser.makeHttpRequest(url_obtener_coordenadas_rutas, "GET", params);
 
-        try {
-            // Checking for SUCCESS TAG
-            int success = json.getInt(TAG_SUCCESS);
+            // Check your log cat for JSON reponse
+            Log.d("Coordenadas ruta: ", json.toString());
 
-            if (success == 1) {
-                // products found
-                // Getting Array of Products
-                JSONArray coordenadas = json.getJSONArray(TAG_COORDENADAS);
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
 
-                // looping through All Products
-                for (int i = 0; i < coordenadas.length(); i++) {
-                    JSONObject c = coordenadas.getJSONObject(i);
-                    Coordenada coordenada = new Coordenada();
-                    // Storing each json item in variable
-                    coordenada.setId((Long.getLong(c.getString(TAG_ID))));
-                    coordenada.setLatitud(Double.parseDouble(c.getString(TAG_LATITUD)));
-                    coordenada.setLongitud(Double.parseDouble(c.getString(TAG_LONGITUD)));
-                    coordenada.setAltitud(Integer.parseInt(c.getString(TAG_ALTITUD)));
-                    coordenada.setId_ruta(Integer.parseInt(c.getString(TAG_ID_RUTA)));
-                    coordenada.setPosicion(Integer.parseInt(c.getString(TAG_POSICION)));
+                if (success == 1) {
+                    // products found
+                    // Getting Array of Products
+                    JSONArray coordenadas = json.getJSONArray(TAG_COORDENADAS);
 
-                    this.coordenadasList.add(coordenada);
+                    // looping through All Products
+                    for (int i = 0; i < coordenadas.length(); i++) {
+                        JSONObject c = coordenadas.getJSONObject(i);
+                        Coordenada coordenada = new Coordenada();
+                        // Storing each json item in variable
+                        coordenada.setId((Long.getLong(c.getString(TAG_ID))));
+                        coordenada.setLatitud(Double.parseDouble(c.getString(TAG_LATITUD)));
+                        coordenada.setLongitud(Double.parseDouble(c.getString(TAG_LONGITUD)));
+                        coordenada.setAltitud(Integer.parseInt(c.getString(TAG_ALTITUD)));
+                        coordenada.setId_ruta(Integer.parseInt(c.getString(TAG_ID_RUTA)));
+                        coordenada.setPosicion(Integer.parseInt(c.getString(TAG_POSICION)));
+
+                        this.coordenadasList.add(coordenada);
+                    }
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
         return coordenadasList;
     }
 

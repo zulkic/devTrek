@@ -125,10 +125,10 @@ public class MostrarRuta extends Fragment{
         // list of GeoPoint objects to be used to draw line
         try
         {
-            Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.id);
+            Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.id,getActivity());
             lista_coordenadas = tarea_get_coordenadas.execute().get();
 
-            Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.id);
+            Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.id,getActivity());
             lista_puntos = tarea_get_puntos.execute().get();
 
         }
@@ -156,10 +156,13 @@ public class MostrarRuta extends Fragment{
 
         List<Overlay> mapOverlays = osm.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
-        Indicador itemizedoverlay = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity());
-        itemizedoverlay.addOverlay(this.inicio);
-        itemizedoverlay.addOverlay(this.fin);
-        mapOverlays.add(itemizedoverlay);
+        Indicador ini = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.inicio.getTitle(), this.inicio.getSnippet(), this.inicio.getPoint());
+        drawable = this.getResources().getDrawable(R.drawable.ic_fin);
+        Indicador fi = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.fin.getTitle(), this.fin.getSnippet(), this.fin.getPoint());
+        //itemizedoverlay.addOverlay(this.inicio);
+        //itemizedoverlay.addOverlay(this.fin);
+        mapOverlays.add(ini);
+        mapOverlays.add(fi);
 
         for(Punto_interes pi : lista_puntos)
         {
@@ -168,13 +171,11 @@ public class MostrarRuta extends Fragment{
             String icono = tpi.getNombre_icono();
             GeoPoint gp = new GeoPoint(pi.getLatitud(), pi.getLongitud());
             int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
-            Drawable drawablePi= this.getResources().getDrawable(resID);
+            drawable= this.getResources().getDrawable(resID);
             ResourceProxy rp = new ResourceProxyImpl(getActivity());
-            Indicador in = new Indicador(drawablePi,rp,getActivity(),titulo,pi.getDescripcion(),gp);
-            puntosDeInteres.add(in);
+            Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
+            mapOverlays.add(in);
         }
-
-
 
 
         // use a custom POI marker by referencing the bitmap file directly,

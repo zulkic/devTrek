@@ -71,7 +71,7 @@ public class EliminarRuta extends Fragment{
         }
 
         try {
-            Obtener_Rutas task = new Obtener_Rutas();
+            Obtener_Rutas task = new Obtener_Rutas(getActivity());
             rutas = task.execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();

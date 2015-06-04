@@ -12,24 +12,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import greendao.Obstaculo;
-import repositorios.ObstaculoRepo;
+import greendao.Usuario;
+import repositorios.UsuarioRepo;
 
 /**
- * Created by juancarlosgonzalezca on 27-05-2015.
+ * Created by juancarlosgonzalezca on 03-06-2015.
  */
-public class Nuevo_Obstaculo extends AsyncTask<Void, Void, Void> {
+public class Registrar_Usuario extends AsyncTask<Void, Void, Void> {
 
-    private Obstaculo obstaculo;
+    private Usuario usuario;
     private JSONParser jsonParser;
     private Context context;
-    private static String url_agregar_obstaculo = "http://trythistrail.16mb.com/agregar_obstaculo.php";
+    private static String url_registrar_usuario = "http://trythistrail.16mb.com/registrar_usuario.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
 
-    public Nuevo_Obstaculo(Obstaculo obstaculo, Context context)
+    public Registrar_Usuario(Usuario usuario, Context context)
     {
-        this.obstaculo = obstaculo;
+        this.usuario = usuario;
         this.jsonParser = new JSONParser();
         this.context = context;
     }
@@ -51,23 +51,19 @@ public class Nuevo_Obstaculo extends AsyncTask<Void, Void, Void> {
         Boolean internet = conexion.getInternet();
 
         if(internet) {
-            String descripcion = this.obstaculo.getDescripcion();
-            Integer id_tipo_obstaculo = this.obstaculo.getId_tipo_obstaculo();
-            Double latitud = this.obstaculo.getLatitud();
-            Double longitud = this.obstaculo.getLongitud();
-            Integer id_ruta = this.obstaculo.getId_ruta();
+            String nombre = this.usuario.getNombre();
+            String email = this.usuario.getEmail();
+            String contrasenia = this.usuario.getContrasenia();
 
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("descripcion", descripcion));
-            params.add(new BasicNameValuePair("id_tipo_obstaculo", id_tipo_obstaculo.toString()));
-            params.add(new BasicNameValuePair("latitud", latitud.toString()));
-            params.add(new BasicNameValuePair("longitud", longitud.toString()));
-            params.add(new BasicNameValuePair("id_ruta", id_ruta.toString()));
+            params.add(new BasicNameValuePair("email", email));
+            params.add(new BasicNameValuePair("nombre", nombre));
+            params.add(new BasicNameValuePair("contrasenia", contrasenia));
 
             // getting JSON Object
             // Note that create product url accepts POST method
-            JSONObject json = jsonParser.makeHttpRequest(url_agregar_obstaculo,
+            JSONObject json = jsonParser.makeHttpRequest(url_registrar_usuario,
                     "POST", params);
 
             // check log cat fro response
@@ -76,19 +72,19 @@ public class Nuevo_Obstaculo extends AsyncTask<Void, Void, Void> {
             // check for success tag
             try {
                 int success = json.getInt(TAG_SUCCESS);
-                if (success == 1) {
+                if (success != 0) {
                     // successfully created product
-                    Log.i("nuev obstaculo", "creado correctamente");
+                    Log.i("nuevo usuario", "creada correctamente");
                 } else {
                     // failed to create product
-                    Log.i("nuevo obstaculo", "algo fallo");
+                    Log.i("nuevo usuario", "algo fallo");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         else {
-            ObstaculoRepo.insertOrUpdate(this.context, obstaculo);
+            UsuarioRepo.insertOrUpdate(this.context, usuario);
         }
         return null;
     }

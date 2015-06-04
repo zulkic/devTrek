@@ -184,7 +184,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                         {
                             Log.i("id ruta: ", ARG_ID_RUTA.toString());
                             nuevaRuta.setId( ARG_ID_RUTA.longValue() );
-                            Modificar_Ruta tarea_modificar_ruta = new Modificar_Ruta(nuevaRuta);
+                            Modificar_Ruta tarea_modificar_ruta = new Modificar_Ruta(nuevaRuta, getActivity());
                             tarea_modificar_ruta.execute();
 
                             Toast.makeText(getActivity().getBaseContext(),"Ruta Modificada con exito ", Toast.LENGTH_SHORT).show();
@@ -197,7 +197,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                             for (Coordenada coordenada : lista_coordenadas) {
                                 coordenada.setId_ruta(id);
                             }
-                            Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas);
+                            Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas, getActivity());
                             tarea_agregar_coordenadas.execute();
 
                             for(Punto_interes punto_interes : lista_puntos_interes)
@@ -205,7 +205,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                                 punto_interes.setId_ruta(id);
                             }
 
-                            Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes);
+                            Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes, getActivity());
                             tarea_agregar_puntos.execute();
 
                                 //obstaculos

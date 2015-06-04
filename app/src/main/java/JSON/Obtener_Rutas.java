@@ -1,5 +1,6 @@
 package JSON;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import greendao.Ruta;
 public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
 
     private ArrayList<Ruta> rutasList;
+    private Context context;
     private JSONParser jsonParser;
     private static String url_obtener_rutas = "http://trythistrail.16mb.com/obtener_rutas.php";
     // JSON Node names
@@ -32,8 +34,9 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
      * Before starting background thread Show Progress Dialog
      */
 
-    public Obtener_Rutas()
+    public Obtener_Rutas(Context context)
     {
+        this.context = context;
         this.rutasList = new ArrayList<Ruta>();
         this.jsonParser = new JSONParser();
     }
@@ -47,49 +50,53 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
      * getting All products from url
      */
     protected ArrayList<Ruta> doInBackground(Void... args) {
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        // getting JSON string from URL
-        JSONObject json = jsonParser.makeHttpRequest(url_obtener_rutas, "GET", params);
+        hasInternet conexion = new hasInternet(this.context);
+        Boolean internet = conexion.getInternet();
 
-        // Check your log cat for JSON reponse
-        Log.d("All Rutas: ", json.toString());
+        if(internet) {
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            // getting JSON string from URL
+            JSONObject json = jsonParser.makeHttpRequest(url_obtener_rutas, "GET", params);
 
-        try {
-            // Checking for SUCCESS TAG
-            int success = json.getInt(TAG_SUCCESS);
+            // Check your log cat for JSON reponse
+            Log.d("All Rutas: ", json.toString());
 
-            if (success == 1) {
-                // products found
-                // Getting Array of Products
-                JSONArray rutas = json.getJSONArray(TAG_RUTAS);
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
 
-                // looping through All Products
-                for (int i = 0; i < rutas.length(); i++) {
-                    JSONObject c = rutas.getJSONObject(i);
-                    Ruta ruta = new Ruta();
-                    // Storing each json item in variable
-                    Integer id = Integer.parseInt(c.getString(TAG_ID));
-                    ruta.setId( Long.valueOf(id) );
-                    ruta.setNombre(c.getString(TAG_NOMBRE));
-                    ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
-                    ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
-                    ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
-                    Integer oficial = Integer.parseInt(c.getString(TAG_OFICIAL));
-                    if(oficial == 1)
-                    {
-                        ruta.setOficial(true);
+                if (success == 1) {
+                    // products found
+                    // Getting Array of Products
+                    JSONArray rutas = json.getJSONArray(TAG_RUTAS);
+
+                    // looping through All Products
+                    for (int i = 0; i < rutas.length(); i++) {
+                        JSONObject c = rutas.getJSONObject(i);
+                        Ruta ruta = new Ruta();
+                        // Storing each json item in variable
+                        Integer id = Integer.parseInt(c.getString(TAG_ID));
+                        ruta.setId( Long.valueOf(id) );
+                        ruta.setNombre(c.getString(TAG_NOMBRE));
+                        ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
+                        ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
+                        ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
+                        Integer oficial = Integer.parseInt(c.getString(TAG_OFICIAL));
+                        if(oficial == 1)
+                        {
+                            ruta.setOficial(true);
+                        }
+                        else{
+                            ruta.setOficial(false);
+                        }
+                        this.rutasList.add(ruta);
                     }
-                    else{
-                        ruta.setOficial(false);
-                    }
-                    this.rutasList.add(ruta);
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
         return rutasList;
     }
 

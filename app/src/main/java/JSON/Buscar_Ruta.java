@@ -1,5 +1,6 @@
 package JSON;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
 
     private int id;
     private Ruta ruta;
+    private Context context;
     private JSONParser jsonParser;
     private static String url_buscar_ruta = "http://trythistrail.16mb.com/buscar_ruta.php";
     // JSON Node names
@@ -33,9 +35,10 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
      * Before starting background thread Show Progress Dialog
      */
 
-    public Buscar_Ruta(int id) {
+    public Buscar_Ruta(int id, Context context) {
         this.id = id;
         this.ruta = new Ruta();
+        this.context = context;
         this.jsonParser = new JSONParser();
     }
 
@@ -48,34 +51,39 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
      * getting All products from url
      */
     protected Ruta doInBackground(Void... args) {
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
-        // getting JSON string from URL
-        JSONObject json = jsonParser.makeHttpRequest(url_buscar_ruta, "GET", params);
+        hasInternet conexion = new hasInternet(this.context);
+        Boolean internet = conexion.getInternet();
 
-        // Check your log cat for JSON reponse
-        Log.d("Ruta: ", json.toString());
+        if(internet) {
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
+            // getting JSON string from URL
+            JSONObject json = jsonParser.makeHttpRequest(url_buscar_ruta, "GET", params);
 
-        try {
-            // Checking for SUCCESS TAG
-            int success = json.getInt(TAG_SUCCESS);
+            // Check your log cat for JSON reponse
+            Log.d("Ruta: ", json.toString());
 
-            if (success == 1) {
-                // products found
-                // Getting Array of Products
-                JSONArray result = json.getJSONArray(TAG_RUTA);
-                JSONObject c = result.getJSONObject(0);
-                // Storing each json item in variable
-                ruta.setId((Long.getLong(c.getString(TAG_ID))));
-                ruta.setNombre(c.getString(TAG_NOMBRE));
-                ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
-                ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
-                ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
-                ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
+
+                if (success == 1) {
+                    // products found
+                    // Getting Array of Products
+                    JSONArray result = json.getJSONArray(TAG_RUTA);
+                    JSONObject c = result.getJSONObject(0);
+                    // Storing each json item in variable
+                    ruta.setId((Long.getLong(c.getString(TAG_ID))));
+                    ruta.setNombre(c.getString(TAG_NOMBRE));
+                    ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
+                    ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
+                    ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
+                    ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         return ruta;
     }
