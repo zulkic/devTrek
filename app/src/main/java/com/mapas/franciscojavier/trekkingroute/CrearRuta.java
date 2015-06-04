@@ -105,7 +105,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         //addMarket(center);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
 
 
         return view;
