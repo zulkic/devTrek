@@ -13,7 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@+id/label"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="18sp">
         </TextView>
         <TextView
             android:id="@+id/kms_ruta"
