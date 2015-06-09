@@ -4,11 +4,13 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +40,7 @@ import JSON.Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Punto_interes;
 import greendao.Tipo_punto_interes;
+import repositorios.CoordenadaRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
 /**
@@ -56,6 +59,7 @@ public class MostrarRuta extends Fragment{
     private String descripcion_ruta;
     private String tiempo_ruta;
     private Float kms_ruta;
+    private Boolean sincronizada;
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
     private List<Overlay> puntosDeInteres;
@@ -67,6 +71,7 @@ public class MostrarRuta extends Fragment{
         this.descripcion_ruta = this.getArguments().getString("descripcion_ruta");
         this.tiempo_ruta = this.getArguments().getString("tiempo_ruta");
         this.kms_ruta= this.getArguments().getFloat("kms_ruta");
+        this.sincronizada = this.getArguments().getBoolean("sincronizada");
         View view = inflater.inflate(R.layout.fragment_mostrar_ruta, container, false);
 
         osm = (MapView) view.findViewById(R.id.mapview);
@@ -77,13 +82,10 @@ public class MostrarRuta extends Fragment{
         mc.setZoom(20);
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
-        GeoPoint center = new GeoPoint(-34.98604036, -71.24007225);
-        mc.setCenter(center);
         //setupMyLocation();
         //addPolyOverlay();
         addLineOverlay();
         puntosDeInteres = osm.getOverlays();
-        addPoiOverlay();
         //GeoPoint center = new GeoPoint(, );
         //mc.animateTo(center);
         //addMarket(center);
@@ -100,6 +102,8 @@ public class MostrarRuta extends Fragment{
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
         paint.setAlpha(30);
+        paint.setPathEffect(new CornerPathEffect(10));
+        paint.setAntiAlias(true);
 
         // list of GeoPoint objects to be used to draw polygon
         List<GeoPoint> polyData = new ArrayList<GeoPoint>();
@@ -123,32 +127,56 @@ public class MostrarRuta extends Fragment{
         paint.setStrokeWidth(7);
 
         // list of GeoPoint objects to be used to draw line
-        try
+        if(sincronizada)
         {
-            Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.id,getActivity());
-            lista_coordenadas = tarea_get_coordenadas.execute().get();
+            try
+            {
+                Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.id,getActivity());
+                lista_coordenadas = tarea_get_coordenadas.execute().get();
 
-            Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.id,getActivity());
-            lista_puntos = tarea_get_puntos.execute().get();
+                Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.id,getActivity());
+                lista_puntos = tarea_get_puntos.execute().get();
 
+            }
+            catch (Exception e)
+            {
+                Log.i("Error: ", "Imposible obtener las coordenadas y puntos");
+            }
         }
-        catch (Exception e)
-        {}
-
-        List lineData = new ArrayList();
-        this.inicio = new OverlayItem("Inicio ruta", "ruta inicio prueba 1",new GeoPoint (lista_coordenadas.get(0).getLatitud(),lista_coordenadas.get(0).getLongitud()));
-        this.fin = new OverlayItem("Fin ruta", "termino de ruta",new GeoPoint (lista_coordenadas.get(lista_coordenadas.size()-1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size()-1).getLongitud()));
-        for( Coordenada coordenada : lista_coordenadas)
+        else
         {
-            lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
+            for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(this.id, getActivity()))
+            {
+                lista_coordenadas.add(coordenada);
+            }
+            Log.i("coordenadas offline: ", "obtiene coordenadas offline");
         }
-        // apply line style & data and add to map
 
-        PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA,getActivity());
-        lineOverlay.setPaint(paint);
-        lineOverlay.addPoints(lineData);
-        //lineOverlay.setData(lineData);
-        osm.getOverlays().add(lineOverlay);
+        if(lista_coordenadas.size() > 0)
+        {
+            List lineData = new ArrayList();
+            this.inicio = new OverlayItem("Inicio " + nombre_ruta, descripcion_ruta ,new GeoPoint (lista_coordenadas.get(0).getLatitud(),lista_coordenadas.get(0).getLongitud()));
+            this.fin = new OverlayItem("Fin ruta " + nombre_ruta, "termino de ruta",new GeoPoint (lista_coordenadas.get(lista_coordenadas.size()-1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size()-1).getLongitud()));
+            for( Coordenada coordenada : lista_coordenadas)
+            {
+                lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
+            }
+            // apply line style & data and add to map
+
+            PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA,getActivity());
+            lineOverlay.setPaint(paint);
+            lineOverlay.addPoints(lineData);
+            //lineOverlay.setData(lineData);
+            GeoPoint point = new GeoPoint(lista_coordenadas.get(0).getLatitud(),lista_coordenadas.get(0).getLongitud());
+            mc.setCenter(point);
+            osm.getOverlays().add(lineOverlay);
+            addPoiOverlay();
+        }
+        else
+        {
+            Log.i("error: ", "error al obtener los datos de la ruta");
+        }
+
     }
 
     // add an itemized overlay to map
@@ -159,8 +187,6 @@ public class MostrarRuta extends Fragment{
         Indicador ini = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.inicio.getTitle(), this.inicio.getSnippet(), this.inicio.getPoint());
         drawable = this.getResources().getDrawable(R.drawable.ic_fin);
         Indicador fi = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.fin.getTitle(), this.fin.getSnippet(), this.fin.getPoint());
-        //itemizedoverlay.addOverlay(this.inicio);
-        //itemizedoverlay.addOverlay(this.fin);
         mapOverlays.add(ini);
         mapOverlays.add(fi);
 
@@ -176,34 +202,6 @@ public class MostrarRuta extends Fragment{
             Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
             mapOverlays.add(in);
         }
-
-
-        // use a custom POI marker by referencing the bitmap file directly,
-        // using the filename as the resource ID
-        /*Drawable icon = getResources().getDrawable(R.drawable.location_marker);
-        ItemizedOverlay poiOverlay = new ItemizedIconOverlay(icon,,getActivity());
-
-        // set GeoPoints and title/snippet to be used in the annotation view
-        OverlayItem poi1 = new OverlayItem("Denver, Colorado", "MapQuest Headquarters",new GeoPoint (39.739983,-104.984727));
-        poiOverlay.addItem(poi1);
-        OverlayItem poi2 = new OverlayItem("Palo Alto, California", "AOL Offices",new GeoPoint (37.441903,-122.141895));
-        poiOverlay.addItem(poi2);
-
-        // add a tap listener for the POI overlay
-        poiOverlay.onSingleTapConfirmed()
-        poiOverlay.setTapListener(new ItemizedOverlay.OverlayTapListener() {
-            @Override
-            public void onTap(GeoPoint pt, MapView mapView) {
-                // when tapped, show the annotation for the overlayItem
-                int lastTouchedIndex = poiOverlay.getLastFocusedIndex();
-                if(lastTouchedIndex>-1){
-                    OverlayItem tapped = poiOverlay.getItem(lastTouchedIndex);
-                    annotation.showAnnotationView(tapped);
-                }
-            }
-        });
-
-        osm.getOverlays().add(poiOverlay);*/
     }
 
 

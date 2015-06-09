@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Punto_interes;
+import repositorios.Punto_interesRepo;
 
 /**
  * Created by juancarlosgonzalezca on 28-05-2015.
@@ -94,6 +95,13 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+        }
+        else
+        {
+            for(Punto_interes punto_interes : Punto_interesRepo.punto_intereses_ruta(id, context))
+            {
+                this.puntos_interesList.add(punto_interes);
             }
         }
         return puntos_interesList;

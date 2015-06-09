@@ -34,6 +34,7 @@ import JSON.Coordenadas_Ruta;
 import JSON.Obtener_Rutas;
 import greendao.Coordenada;
 import greendao.Ruta;
+import repositorios.CoordenadaRepo;
 
 /**
  * Created by FranciscoJavier on 28-04-2015.
@@ -100,17 +101,26 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         Log.i("rutas:",  Integer.toString(rutas.size()));
         for(Ruta ruta : rutas) {
             ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
-            /*if(RutaRepo.getRutaForId(getActivity(),ruta.getId().intValue()) != null)
+            if(ruta.getSincronizada())
             {
-                lista_coordenadas = CoordenadaRepo.coordenadas_ruta(ruta.getId().intValue());
-            }
-            else {*/
-                try {
+                try
+                {
                     Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(ruta.getId().intValue(),getActivity());
                     lista_coordenadas = tarea_get_coordenadas.execute().get();
-                } catch (Exception e) {
                 }
-            //}
+                catch (Exception e)
+                {
+                    Log.i("Error: ", "Imposible obtener las coordenadas y puntos");
+                }
+            }
+            else
+            {
+                for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(ruta.getId().intValue(), getActivity()))
+                {
+                    lista_coordenadas.add(coordenada);
+                }
+                Log.i("coordenadas offline: ", "obtiene coordenadas offline");
+            }
             Log.i("ruta id:", ruta.getNombre());
             Log.i("coordenadas:",  Integer.toString(lista_coordenadas.size()));
             List lineData = new ArrayList();

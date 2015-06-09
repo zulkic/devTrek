@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Coordenada;
+import repositorios.CoordenadaRepo;
+
 //clase para crear una nueva ruta
 public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
 
@@ -77,6 +79,13 @@ public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
                 }
             }
         }
+        else
+        {
+            for(Coordenada coordenada : this.coordenadas)
+            {
+                CoordenadaRepo.insertOrUpdate(context,coordenada);
+            }
+        }
         return null;
     }
 
@@ -84,7 +93,7 @@ public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
      * After completing background task Dismiss the progress dialog
      * **/
     protected void onPostExecute(String file_url) {
-        Log.d("post execute", "termine");
+
     }
 
 }

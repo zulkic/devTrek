@@ -29,6 +29,7 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
         public final static Property Kms = new Property(3, Float.class, "kms", false, "KMS");
         public final static Property Tiempo_estimado = new Property(4, String.class, "tiempo_estimado", false, "TIEMPO_ESTIMADO");
         public final static Property Oficial = new Property(5, Boolean.class, "oficial", false, "OFICIAL");
+        public final static Property Sincronizada = new Property(6, Boolean.class, "sincronizada", false, "SINCRONIZADA");
     };
 
 
@@ -49,7 +50,8 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
                 "'DESCRIPCION' TEXT," + // 2: descripcion
                 "'KMS' REAL," + // 3: kms
                 "'TIEMPO_ESTIMADO' TEXT," + // 4: tiempo_estimado
-                "'OFICIAL' INTEGER);"); // 5: oficial
+                "'OFICIAL' INTEGER," + // 5: oficial
+                "'SINCRONIZADA' INTEGER);"); // 6: sincronizada
     }
 
     /** Drops the underlying database table. */
@@ -92,6 +94,11 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
         if (oficial != null) {
             stmt.bindLong(6, oficial ? 1l: 0l);
         }
+ 
+        Boolean sincronizada = entity.getSincronizada();
+        if (sincronizada != null) {
+            stmt.bindLong(7, sincronizada ? 1l: 0l);
+        }
     }
 
     /** @inheritdoc */
@@ -109,7 +116,8 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // descripcion
             cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // kms
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // tiempo_estimado
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0 // oficial
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // oficial
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0 // sincronizada
         );
         return entity;
     }
@@ -123,6 +131,7 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
         entity.setKms(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
         entity.setTiempo_estimado(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setOficial(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setSincronizada(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
      }
     
     /** @inheritdoc */

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Punto_interes;
+import repositorios.Punto_interesRepo;
 
 /**
  * Created by juancarlosgonzalezca on 28-05-2015.
@@ -79,6 +80,13 @@ public class Post_Puntos_Interes_Ruta extends AsyncTask<Void, Void, Void> {
                 }
             }
         }
+        else
+        {
+            for(Punto_interes punto_interes : this.puntos_interes)
+            {
+                Punto_interesRepo.insertOrUpdate(context, punto_interes);
+            }
+        }
         return null;
     }
 
@@ -86,7 +94,7 @@ public class Post_Puntos_Interes_Ruta extends AsyncTask<Void, Void, Void> {
      * After completing background task Dismiss the progress dialog
      * **/
     protected void onPostExecute(String file_url) {
-        Log.d("post execute", "termine");
+
     }
 
 }

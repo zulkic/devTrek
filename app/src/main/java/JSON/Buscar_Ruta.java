@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Ruta;
+import repositorios.RutaRepo;
+
 public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
 
-    private int id;
+    private Integer id;
     private Ruta ruta;
     private Context context;
     private JSONParser jsonParser;
@@ -35,7 +37,7 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
      * Before starting background thread Show Progress Dialog
      */
 
-    public Buscar_Ruta(int id, Context context) {
+    public Buscar_Ruta(Integer id, Context context) {
         this.id = id;
         this.ruta = new Ruta();
         this.context = context;
@@ -74,16 +76,20 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
                     JSONArray result = json.getJSONArray(TAG_RUTA);
                     JSONObject c = result.getJSONObject(0);
                     // Storing each json item in variable
-                    ruta.setId((Long.getLong(c.getString(TAG_ID))));
-                    ruta.setNombre(c.getString(TAG_NOMBRE));
-                    ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
-                    ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
-                    ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
-                    ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
+                    this.ruta.setId((Long.getLong(c.getString(TAG_ID))));
+                    this.ruta.setNombre(c.getString(TAG_NOMBRE));
+                    this.ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
+                    this.ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
+                    this.ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
+                    this.ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        else
+        {
+            this.ruta = RutaRepo.getRutaForId(context, id.longValue());
         }
         return ruta;
     }

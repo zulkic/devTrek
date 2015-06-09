@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Ruta;
+import repositorios.RutaRepo;
+
 //clase para obtener rutas
 public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
 
@@ -90,11 +92,23 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                         else{
                             ruta.setOficial(false);
                         }
+                        ruta.setSincronizada(true);
+                        this.rutasList.add(ruta);
+                    }
+                }
+                for(Ruta ruta : RutaRepo.getAllRutas(context)) {
+                    if(!ruta.getSincronizada()) {
                         this.rutasList.add(ruta);
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+        }
+        else
+        {
+            for(Ruta ruta : RutaRepo.getAllRutas(context)) {
+                this.rutasList.add(ruta);
             }
         }
         return rutasList;

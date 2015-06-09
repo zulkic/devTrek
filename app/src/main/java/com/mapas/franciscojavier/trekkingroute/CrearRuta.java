@@ -117,10 +117,10 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
-//        {
-//            tipo_puntos.add(tipo_punto_interes);
-//        }
+        for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
+        {
+            tipo_puntos.add(tipo_punto_interes);
+        }
 
         //setContentView(R.layout.activity_main);
 

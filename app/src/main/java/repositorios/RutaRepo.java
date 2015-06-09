@@ -1,6 +1,7 @@
 package repositorios;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
 
@@ -13,8 +14,9 @@ import greendao.RutaDao;
  */
 
 public class RutaRepo {
-    public static void insertOrUpdate(Context context, Ruta ruta) {
+    public static int insertOrUpdate(Context context, Ruta ruta) {
         getRutaDao(context).insertOrReplace(ruta);
+        return ruta.getId().intValue();
     }
 
     public static void clearRutas(Context context) {
@@ -35,6 +37,22 @@ public class RutaRepo {
 
     private static RutaDao getRutaDao(Context c) {
         return ((MenuPrincipal) c).getDaoSession().getRutaDao();
+    }
+
+    public static boolean isValid(Context context, Long id) {
+        Ruta ruta = getRutaForId(context, id);
+        if(ruta != null)
+        {
+            if(ruta.getSincronizada())
+            {
+                Log.i("valid: ", "is valid");
+                return true;
+            }
+            Log.i("valid: ", "is not valid");
+            return false;
+        }
+        Log.i("valid: ", "is null");
+        return false;
     }
 }
 
