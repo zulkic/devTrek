@@ -61,7 +61,6 @@ public class ItemRuta extends BaseAdapter {
 
         Ruta item = this.items.get(position);
         nombre.setText(item.getNombre());
-        nombre.setTextColor(Color.BLACK);
         distancia.setText(Float.toString(item.getKms())+" "+ context.getText(R.string.text_distancia));
         tiempo.setText(item.getTiempo_estimado()+" " +context.getText(R.string.text_tiempo));
         if(item.getOficial())
@@ -73,7 +72,19 @@ public class ItemRuta extends BaseAdapter {
         }
         if(position%2==0)
         {
-            rowView.setBackgroundColor(Color.LTGRAY);
+            rowView.setBackgroundColor(context.getResources().getColor(R.color.background_pair_list));
+            nombre.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+            distancia.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+            tiempo.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+            oficial.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+
+        }
+        else{
+            rowView.setBackgroundColor(context.getResources().getColor(R.color.background_odd_list));
+            nombre.setTextColor(context.getResources().getColor(R.color.white));
+            distancia.setTextColor(context.getResources().getColor(R.color.white));
+            tiempo.setTextColor(context.getResources().getColor(R.color.white));
+            oficial.setTextColor(context.getResources().getColor(R.color.white));
         }
         return rowView;
     }

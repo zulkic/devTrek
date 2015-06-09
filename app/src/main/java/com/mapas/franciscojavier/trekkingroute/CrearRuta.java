@@ -45,7 +45,6 @@ import greendao.Coordenada;
 import greendao.Punto_interes;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
-import repositorios.Tipo_Puntos_InteresRepo;
 
 public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
     View rootView;
@@ -66,6 +65,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private Boolean primerLocalicacion = true;
     private float distancia;
     private Marker aux;
+    private Indicador indicador;
     Long i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     // GPSTracker class
@@ -92,7 +92,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         fin.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        osm.setTileSource(TileSourceFactory.MAPNIK);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
@@ -117,6 +117,8 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ResourceProxy rp = new ResourceProxyImpl(getActivity());
+        this.indicador = new Indicador(this.getResources().getDrawable(R.drawable.abc_ab_share_pack_mtrl_alpha),rp,getActivity());
         for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
         {
             tipo_puntos.add(tipo_punto_interes);
@@ -200,14 +202,6 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private void agregarIndicadorAPosicion() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        final AlertDialog alert = alertDialog.create();
-        alert.setIcon(R.drawable.ic_bicicleta);
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.popup_crear_indicadores, null);
-        alert.setView(convertView);
-        alert.setTitle("Indicadores");
-        this.lv = (GridView) convertView.findViewById(R.id.lista_item);
-        this.lv.setAdapter(new ItemIndicador(getActivity(), tipo_puntos));
         alertDialog.setNegativeButton("Cancelar",
                 new DialogInterface.OnClickListener() {
 
@@ -216,6 +210,15 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
                         dialog.dismiss();
                     }
                 });
+        final AlertDialog alert = alertDialog.create();
+        alert.setIcon(R.drawable.ic_bicicleta);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.popup_crear_indicadores, null);
+        alert.setView(convertView);
+        alert.setTitle("Indicadores");
+        this.lv = (GridView) convertView.findViewById(R.id.lista_item);
+        this.lv.setAdapter(new ItemIndicador(getActivity(), tipo_puntos));
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapter, View view, int position, long arg) {
@@ -236,15 +239,17 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private void addPoiOverlay(GeoPoint gp, String titulo,String icono,Long id_tipo) {
         int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
         Drawable drawable= this.getResources().getDrawable(resID);
-        ResourceProxy rp = new ResourceProxyImpl(getActivity());
-        Indicador in = new Indicador(drawable,rp,getActivity(),titulo,"descripcion",gp);
-        Punto_interes pi = new Punto_interes();
-        pi.setDescripcion("opcional...");
-        pi.setId_tipo_punto_interes((int)(long) id_tipo);
-        pi.setLatitud(gp.getLatitude());
-        pi.setLongitud(gp.getLongitude());
-        puntos.add(pi);
-        puntosDeInteres.add(in);
+        //ResourceProxy rp = new ResourceProxyImpl(getActivity());
+        this.indicador.createIndicador(drawable,titulo,titulo,gp,id_tipo);
+        //Indicador in = new Indicador(drawable,rp,getActivity(),titulo,"descripcion",gp);
+//        Punto_interes pi = new Punto_interes();
+//        pi.setDescripcion("opcional...");
+//        pi.setId_tipo_punto_interes((int) (long) id_tipo);
+//        pi.setLatitud(gp.getLatitude());
+//        pi.setLongitud(gp.getLongitude());
+//        puntos.add(pi);
+        puntosDeInteres.clear();
+        puntosDeInteres.add(this.indicador);
         //osm.invalidate();
     }
 
@@ -353,7 +358,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
                     apagarRecorrido();
 
-                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas, this.puntos);
+                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos());
                     //newFragment.setTiempoTotal(tiempoTotalRecorrido);
                     FragmentManager fm1 = getFragmentManager();
                     FragmentTransaction ft1 = fm1.beginTransaction();
