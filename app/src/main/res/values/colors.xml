@@ -19,6 +19,9 @@
     <color name="txt_title_i">#fffffde5</color>
     <color name="txt_title_ii">#ff817f73</color>
     <color name="txt_title_register">#fffffde5</color>
+    <color name="text_pair_list">#ffff8402</color>
+    <color name="background_pair_list">#ff151515</color>
+    <color name="background_odd_list">#ff282828</color>
 
 
 </resources>
