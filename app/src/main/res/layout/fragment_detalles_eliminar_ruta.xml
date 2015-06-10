@@ -1,79 +1,102 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mapas.franciscojavier.trekkingroute.DetallesEliminarRuta"
+    android:orientation="horizontal"
+    android:background="@color/gray"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="com.mapas.franciscojavier.trekkingroute.DetallesEliminarRuta">
+    android:padding="10dp">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Nombre de la Ruta"
-        android:id="@+id/textViewEliminar_nombre_ruta" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:text="0"
-        android:layout_below="@id/textViewEliminar_nombre_ruta"
-        android:id="@+id/editTextEliminar_nombre_ruta" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Tiempo Estimado"
-        android:layout_below="@id/editTextEliminar_nombre_ruta"
-        android:id="@+id/textViewEliminar_tiempo_estimado" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:text="0"
-        android:layout_below="@id/textViewEliminar_tiempo_estimado"
-        android:id="@+id/editTextEliminar_tiempo_estimado" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Distacia recorrida (mts)"
-        android:layout_below="@id/editTextEliminar_tiempo_estimado"
-        android:id="@+id/textViewEliminar_distancia_recorrida" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:text="0"
-        android:layout_below="@id/textViewEliminar_distancia_recorrida"
-        android:id="@+id/editTextEliminar_distancia_recorrida" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Recorrido mediante"
-        android:layout_below="@id/editTextEliminar_distancia_recorrida"
-        android:id="@+id/textViewEliminar_recorrido_mediante" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:text="0"
-        android:layout_below="@id/textViewEliminar_recorrido_mediante"
-        android:id="@+id/editTextEliminar_recorrido_mediante" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Descripcion"
-        android:layout_below="@id/editTextEliminar_recorrido_mediante"
-        android:id="@+id/textViewEliminar_descripcion" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:text="0"
-        android:layout_below="@id/textViewEliminar_descripcion"
-        android:id="@+id/editTextEliminar_descripcion" />
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:id="@+id/linearLayoutEliminar">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_eliminar_ruta"
+            android:id="@+id/textViewName"
+            android:gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dip"
+            android:textSize="30sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Nombre de la Ruta"
+            android:id="@+id/textViewEliminar_nombre_ruta" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:text="0"
+            android:layout_below="@id/textViewEliminar_nombre_ruta"
+            android:id="@+id/editTextEliminar_nombre_ruta" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Tiempo Estimado"
+            android:layout_below="@id/editTextEliminar_nombre_ruta"
+            android:id="@+id/textViewEliminar_tiempo_estimado" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:text="0"
+            android:layout_below="@id/textViewEliminar_tiempo_estimado"
+            android:id="@+id/editTextEliminar_tiempo_estimado" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Distacia recorrida (mts)"
+            android:layout_below="@id/editTextEliminar_tiempo_estimado"
+            android:id="@+id/textViewEliminar_distancia_recorrida" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"
+            android:layout_below="@id/textViewEliminar_distancia_recorrida"
+            android:id="@+id/editTextEliminar_distancia_recorrida" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Recorrido mediante"
+            android:layout_below="@id/editTextEliminar_distancia_recorrida"
+            android:id="@+id/textViewEliminar_recorrido_mediante" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"
+            android:layout_below="@id/textViewEliminar_recorrido_mediante"
+            android:id="@+id/editTextEliminar_recorrido_mediante" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Descripcion"
+            android:layout_below="@id/editTextEliminar_recorrido_mediante"
+            android:id="@+id/textViewEliminar_descripcion" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="0"
+            android:layout_below="@id/textViewEliminar_descripcion"
+            android:id="@+id/editTextEliminar_descripcion" />
+
+    </LinearLayout>
+
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
