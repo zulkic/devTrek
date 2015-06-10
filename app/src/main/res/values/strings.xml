@@ -3,7 +3,6 @@
 
     <string name="button_start">Inicio</string>
     <string name="button_end">Fin</string>
-    <string name="button_eliminar">Eliminar</string>
     <string name="action_settings">Configuración</string>
     <string name="title_activity_menu_principal">Menu Principal</string>
 
@@ -23,8 +22,6 @@
 
     <string name="action_example"></string>
 
-    <string name="button_guardar_ruta">Guardar</string>
-    <string name="button_cancelar_ruta">Cancelar</string>
     <string name="rec_prompt">Como recorrio la ruta?</string>
     <string name="button_aceptar_eliminar_ruta">Aceptar</string>
     <string name="button_cancelar_eliminar_ruta">Cancelar</string>
@@ -38,32 +35,42 @@
     <string name="trail_bicicleta">Bicicleta</string>
     <string name="trail_caballo">Caballo</string>
     <string name="trail_auto">Auto</string>
-<!--
-    <string-array name="rec_arrays">
-        <item>Caminando</item>
-        <item>Trotando</item>
-        <item>Corriendo</item>
-        <item>En Bicicleta</item>
-        <item>A Caballo</item>
-        <item>En Auto</item>
-    </string-array>
--->
-
-    <!-- Login String-->
+<!-- Login String-->
     <string name="title_Login">Login</string>
     <string name="title_Try_This_Trail">Try This Trail</string>
     <string name="title_register">Registro</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_password_confirmation">Confirmar Password</string>
     <string name="hint_name">Nombre de usuario</string>
     <string name="btn_login">Login</string>
     <string name="btn_register">Registrarse</string>
     <string name="btn_link_to_register">No tienes cuenta?</string>
+    <string name="btn_link_to_remember">No recuerdas tu cuenta?</string>
     <string name="btn_link_to_login">Ya estas registrado!? ve al Login.</string>
     <string name="welcome">Bienvenido</string>
     <string name="btn_logout">Cerrar Sesion</string>
     <string name="name">Nombre</string>
     <string name="attempts_Left">Intentos restantes</string>
+<!--Crear Ruta-->
+    <string name="title_crear_ruta">Datos para crear ruta</string>
+    <string name="recorrido_mediante">Recorrido mediante</string>
+    <string name="nombre_ruta">Nombre de la Ruta</string>
+    <string name="tiempo_estimado">Tiempo Estimado</string>
+    <string name="distacia_recorrida">Distacia Recorrida (mts)</string>
+    <string name="descripcion_ruta">Descripcion</string>
+    <string name="button_guardar_ruta">Guardar</string>
+    <string name="button_cancelar_ruta">Cancelar</string>
+<!--Eliminar ruta-->
+    <string name="title_eliminar_ruta">Datos para crear ruta</string>
+
+
+    <string name="errorEmpty">No puede ser vacío</string>
+    <string name="errorSpaces">No puede tener espacios</string>
+    <string name="errorFormat">No tiene un formato válido</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="passwordError">La contraseña debe ser de al menos 6 caracteres y contener al menos 1 número y una letra</string>
+    <string name="passwordConfirmationError">La contraseña debe ser iguales</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
