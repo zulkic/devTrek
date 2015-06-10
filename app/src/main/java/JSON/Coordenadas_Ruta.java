@@ -64,9 +64,10 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
         Boolean internet = conexion.getInternet();
 
         if(internet) {
-            if(RutaRepo.isValid(context, id.longValue()))
+            List<Coordenada> aux = CoordenadaRepo.coordenadas_ruta(context, id.longValue());
+            if(RutaRepo.isValid(context, id.longValue()) == 1 && !aux.isEmpty())
             {
-                for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(id, context))
+                for(Coordenada coordenada : aux)
                 {
                     this.coordenadasList.add(coordenada);
                 }
@@ -104,6 +105,8 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
 
                             this.coordenadasList.add(coordenada);
                         }
+                        Guardar_Coordenadas task_guardar = new Guardar_Coordenadas(this.coordenadasList,context, id.longValue());
+                        task_guardar.execute();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -112,7 +115,7 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
         }
         else
         {
-            for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(id, context))
+            for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(context, id.longValue()))
             {
                 this.coordenadasList.add(coordenada);
             }

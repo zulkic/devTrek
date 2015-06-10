@@ -42,7 +42,7 @@ public class RoutesFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
 
     private ListView listView;
-    ArrayList<Ruta> rutas = null;
+    ArrayList<Ruta> rutas = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     public static RoutesFragment newInstance(String param1, String param2) {

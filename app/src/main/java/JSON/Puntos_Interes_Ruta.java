@@ -23,7 +23,7 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
 
     private ArrayList<Punto_interes> puntos_interesList;
     private Context context;
-    private int id;
+    private Integer id;
     private JSONParser jsonParser;
     private static String url_obtener_puntos_interes_ruta = "http://trythistrail.16mb.com/puntos_interes_ruta.php";
     // JSON Node names
@@ -40,7 +40,7 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
      * Before starting background thread Show Progress Dialog
      */
 
-    public Puntos_Interes_Ruta(int id, Context context)
+    public Puntos_Interes_Ruta(Integer id, Context context)
     {
         this.id = id;
         this.context = context;
@@ -99,7 +99,7 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
         }
         else
         {
-            for(Punto_interes punto_interes : Punto_interesRepo.punto_intereses_ruta(id, context))
+            for(Punto_interes punto_interes : Punto_interesRepo.punto_intereses_ruta(context, id.longValue()))
             {
                 this.puntos_interesList.add(punto_interes);
             }

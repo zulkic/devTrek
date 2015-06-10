@@ -1,24 +1,25 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
 
 import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import greendao.Sync;
+import repositorios.SyncRepo;
 import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
@@ -51,6 +52,20 @@ public class MenuPrincipal extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        if(SyncRepo.getSyncForId(this, (long) 1) == null)
+        {
+            Sync sync = new Sync();
+            sync.setId((long) 1);
+            sync.setTabla("rutas");
+            sync.setTiempo("inicializado");
+            SyncRepo.insertOrUpdate(this, sync);
+            Log.i("Sync ini", "sync");
+        }
+        else
+        {
+            Log.i("Sync ini", "else");
+        }
 
         try{
             if(Tipo_ObstaculoRepo.getAllTipos_Obstaculos(this).size() == 0  || Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(this).size() == 0 ) {

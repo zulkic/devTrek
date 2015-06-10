@@ -145,7 +145,7 @@ public class MostrarRuta extends Fragment{
         }
         else
         {
-            for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(this.id, getActivity()))
+            for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(getActivity(), this.id.longValue()))
             {
                 lista_coordenadas.add(coordenada);
             }

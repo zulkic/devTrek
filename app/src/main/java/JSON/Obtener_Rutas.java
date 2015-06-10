@@ -11,9 +11,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import greendao.Ruta;
+import greendao.Sync;
 import repositorios.RutaRepo;
+import repositorios.SyncRepo;
 
 //clase para obtener rutas
 public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
@@ -21,9 +24,11 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
     private ArrayList<Ruta> rutasList;
     private Context context;
     private JSONParser jsonParser;
+    private String tiempo;
     private static String url_obtener_rutas = "http://trythistrail.16mb.com/obtener_rutas.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private static final String TAG_TIEMPO_SYNC = "tiempo";
     private static final String TAG_RUTAS = "rutas";
     private static final String TAG_ID = "id_ruta";
     private static final String TAG_NOMBRE = "nombre";
@@ -31,6 +36,8 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
     private static final String TAG_KMS = "kms";
     private static final String TAG_TIEMPO_ESTIMADO = "tiempo_estimado";
     private static final String TAG_OFICIAL = "oficial";
+    private String tiempo_sync;
+    private Sync sync;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -41,6 +48,16 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
         this.context = context;
         this.rutasList = new ArrayList<Ruta>();
         this.jsonParser = new JSONParser();
+        this.sync = SyncRepo.getSyncForId(context, (long) 1);
+        Tiempo_Sync task_tiempo = new Tiempo_Sync(context);
+        try {
+            tiempo_sync = task_tiempo.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        Log.i("tiempo: ", tiempo_sync);
     }
 
     @Override
@@ -54,8 +71,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
     protected ArrayList<Ruta> doInBackground(Void... args) {
         hasInternet conexion = new hasInternet(this.context);
         Boolean internet = conexion.getInternet();
-
-        if(internet) {
+        if(internet && !tiempo_sync.equals(this.sync.getTiempo())){
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             // getting JSON string from URL
@@ -67,7 +83,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
             try {
                 // Checking for SUCCESS TAG
                 int success = json.getInt(TAG_SUCCESS);
-
+                this.tiempo = json.getString(TAG_TIEMPO_SYNC);
                 if (success == 1) {
                     // products found
                     // Getting Array of Products
@@ -95,6 +111,11 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                         ruta.setSincronizada(true);
                         this.rutasList.add(ruta);
                     }
+                    Log.i("Vamos a guardar: ", "guardaremos las rutas en sqlite");
+                    Guardar_Rutas guardar_rutas = new Guardar_Rutas(this.rutasList, context);
+                    guardar_rutas.execute();
+                    this.sync.setTiempo(tiempo);
+                    SyncRepo.insertOrUpdate(context, this.sync);
                 }
                 for(Ruta ruta : RutaRepo.getAllRutas(context)) {
                     if(!ruta.getSincronizada()) {
@@ -107,6 +128,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
         }
         else
         {
+            Log.i("ELse: ", "Me fui por el else");
             for(Ruta ruta : RutaRepo.getAllRutas(context)) {
                 this.rutasList.add(ruta);
             }

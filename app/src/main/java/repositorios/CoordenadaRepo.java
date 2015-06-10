@@ -38,7 +38,7 @@ public class CoordenadaRepo {
         return ((MenuPrincipal) c).getDaoSession().getCoordenadaDao();
     }
 
-    public static List<Coordenada> coordenadas_ruta(int id, Context context) {
-        return getCoordenadaDao(context).queryBuilder().where(CoordenadaDao.Properties.Id_ruta.eq(id)).list();
+    public static List<Coordenada> coordenadas_ruta(Context context, Long id) {
+        return getCoordenadaDao(context).queryBuilder().where(CoordenadaDao.Properties.Id_ruta.eq(id.intValue())).list();
     }
 }

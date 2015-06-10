@@ -42,9 +42,9 @@ import java.util.Date;
 import java.util.List;
 
 import greendao.Coordenada;
-import greendao.Punto_interes;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
+import repositorios.Tipo_Puntos_InteresRepo;
 
 public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
     View rootView;
@@ -55,7 +55,6 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private Boolean encendido= false;
     private Integer contador = 1;
     private Integer id_ruta = 1;
-    private ArrayList<Punto_interes> puntos = new ArrayList<>();
     private ArrayList<Tipo_punto_interes> tipo_puntos = new ArrayList<>();
     private ArrayList<Coordenada> coordenadas;
     private GridView lv;

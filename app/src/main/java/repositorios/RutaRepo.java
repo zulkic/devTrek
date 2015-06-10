@@ -39,20 +39,25 @@ public class RutaRepo {
         return ((MenuPrincipal) c).getDaoSession().getRutaDao();
     }
 
-    public static boolean isValid(Context context, Long id) {
+    public static Integer isValid(Context context, Long id) {
         Ruta ruta = getRutaForId(context, id);
         if(ruta != null)
         {
             if(ruta.getSincronizada())
             {
                 Log.i("valid: ", "is valid");
-                return true;
+                return 1;
             }
             Log.i("valid: ", "is not valid");
-            return false;
+            return 0;
         }
         Log.i("valid: ", "is null");
-        return false;
+        return -1;
+    }
+
+    public static List<Ruta> noSincronizadas(Context context)
+    {
+        return getRutaDao(context).queryBuilder().where(RutaDao.Properties.Sincronizada.eq(false)).list();
     }
 }
 

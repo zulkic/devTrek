@@ -115,14 +115,12 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
             }
             else
             {
-                for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(ruta.getId().intValue(), getActivity()))
+                for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(getActivity(), ruta.getId()))
                 {
                     lista_coordenadas.add(coordenada);
                 }
                 Log.i("coordenadas offline: ", "obtiene coordenadas offline");
             }
-            Log.i("ruta id:", ruta.getNombre());
-            Log.i("coordenadas:",  Integer.toString(lista_coordenadas.size()));
             List lineData = new ArrayList();
             this.inicio = new OverlayItem("Inicio ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(0).getLatitud(), lista_coordenadas.get(0).getLongitud()));
             this.ind_ini.add(this.inicio);
