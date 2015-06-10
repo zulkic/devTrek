@@ -20,7 +20,7 @@ public class Verificar_Usuario extends AsyncTask<Void, Void, Boolean> {
     private String email;
     private JSONParser jsonParser;
     private Context context;
-    private static String url_registrar_usuario = "http://trythistrail.16mb.com/registrar_usuario.php";
+    private static String url_registrar_usuario = "http://trythistrail.16mb.com/validar_usuario.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_AUTENT = "existe";
@@ -57,7 +57,7 @@ public class Verificar_Usuario extends AsyncTask<Void, Void, Boolean> {
             // getting JSON Object
             // Note that create product url accepts POST method
             JSONObject json = jsonParser.makeHttpRequest(url_registrar_usuario,
-                    "POST", params);
+                    "GET", params);
 
             // check log cat fro response
             Log.d("Create Response", json.toString());
@@ -65,13 +65,15 @@ public class Verificar_Usuario extends AsyncTask<Void, Void, Boolean> {
             // check for success tag
             try {
                 int success = json.getInt(TAG_SUCCESS);
-                existe = json.getBoolean(TAG_AUTENT);
+                String aux = json.getString(TAG_AUTENT);
+                if(aux.equals("1"))
+                    existe=true;
                 if (success != 0) {
                     // successfully created product
-                    Log.i("nuevo usuario", "creada correctamente");
+                    Log.i("verificar usuario", "creada correctamente");
                 } else {
                     // failed to create product
-                    Log.i("nuevo usuario", "algo fallo");
+                    Log.i("verificar usuario", "algo fallo");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

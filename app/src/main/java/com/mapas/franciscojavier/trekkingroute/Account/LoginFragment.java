@@ -22,6 +22,8 @@ import com.mapas.franciscojavier.trekkingroute.R;
 import com.mapas.franciscojavier.trekkingroute.SessionManager;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
+import JSON.Autentificar_Usuario;
+
 
 /**
  * A login screen that offers login via email/password and via Google+ sign in.
@@ -162,12 +164,15 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
         return view;
     }
     private boolean  checkLogin(final String email, final String password) {
-
-        Toast.makeText(getActivity(),
-                "busco en la db", Toast.LENGTH_LONG)
-                .show();
-
-        return true;
+        Autentificar_Usuario autentificar_usuario = new Autentificar_Usuario(email, password, getActivity());
+        Boolean autentificado = false;
+        try {
+            autentificado = autentificar_usuario.execute().get();
+        }
+        catch (Exception e)
+        {
+        }
+        return autentificado;
     }
     @Override
     public void onClick(View v) {

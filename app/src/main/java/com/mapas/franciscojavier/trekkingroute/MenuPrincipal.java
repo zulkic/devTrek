@@ -1,13 +1,9 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
 import com.mapas.franciscojavier.trekkingroute.Account.LoginFragment;
@@ -29,6 +24,9 @@ import com.mapas.franciscojavier.trekkingroute.Account.RegisterFragment;
 import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import greendao.Sync;
+import greendao.Usuario;
+import repositorios.SyncRepo;
 import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 

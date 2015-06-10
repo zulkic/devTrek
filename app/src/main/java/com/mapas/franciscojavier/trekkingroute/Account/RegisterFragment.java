@@ -19,7 +19,10 @@ import android.widget.Toast;
 import com.mapas.franciscojavier.trekkingroute.R;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
-import JSON.Nuevo_Usuario;
+import java.util.concurrent.ExecutionException;
+
+import JSON.Registrar_Usuario;
+import JSON.Verificar_Usuario;
 import greendao.Usuario;
 
 /**
@@ -93,7 +96,9 @@ public class RegisterFragment extends Fragment implements AdapterView.OnClickLis
                             Toast.makeText(getActivity().getBaseContext(), "El email ya existe", Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Nuevo_Usuario nuevoUsuario = new Nuevo_Usuario(client, getActivity());
+                            //Nuevo_Usuario nuevoUsuario = new Nuevo_Usuario(client, getActivity())
+                            Registrar_Usuario registar_usuario = new Registrar_Usuario(client, getActivity());
+                            registar_usuario.execute();
                             Toast.makeText(getActivity().getBaseContext(), "Ya estas Resgistrado!!!", Toast.LENGTH_SHORT).show();
                         }
                         mListener.signup(client);
@@ -110,9 +115,11 @@ public class RegisterFragment extends Fragment implements AdapterView.OnClickLis
         }
     }
 
-    private boolean verificarEmailDB(String newEmail) {
-        //insert here
-        return false;
+    private Boolean verificarEmailDB(String newEmail) throws ExecutionException, InterruptedException {
+        Verificar_Usuario verificar_usuario = new Verificar_Usuario(newEmail, getActivity());
+        Boolean verificar = verificar_usuario.execute().get();
+        Log.i("verificar: ", verificar.toString());
+        return verificar;
 
     }
     @Override
