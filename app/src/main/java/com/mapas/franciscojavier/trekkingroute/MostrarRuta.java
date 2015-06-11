@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polygon;
@@ -75,11 +77,11 @@ public class MostrarRuta extends Fragment{
         View view = inflater.inflate(R.layout.fragment_mostrar_ruta, container, false);
 
         osm = (MapView) view.findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        osm.setTileSource(Globals.MAPQUESTOSM);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
-        mc.setZoom(20);
+        mc.setZoom(16);
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
         //setupMyLocation();

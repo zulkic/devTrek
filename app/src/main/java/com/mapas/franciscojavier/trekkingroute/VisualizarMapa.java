@@ -1,19 +1,28 @@
 package com.mapas.franciscojavier.trekkingroute;
 
+import android.app.DownloadManager;
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -56,9 +65,10 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_visualizar_mapa, container, false);
-
+        ImageButton botonDescarga = (ImageButton) view.findViewById(R.id.imageButton_download);
+        botonDescarga.setOnClickListener(this);
         osm = (MapView) view.findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.CYCLEMAP);
+        osm.setTileSource(Globals.MAPQUESTOSM);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
@@ -67,7 +77,6 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         this.osm.getOverlays().add(myScaleBarOverlay);
         GeoPoint center = new GeoPoint(-34.98604036, -71.24007225);
         mc.setCenter(center);
-
         addLineOverlay();
 
         return view;
@@ -82,6 +91,59 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         //setContentView(R.layout.activity_main);
     }
 
+    public void descargarMapa() {
+
+        boolean sdDisponible = false;
+        boolean sdAccesoEscritura = false;
+
+        //Comprobamos el estado de la memoria externa (tarjeta SD)
+        String estado = Environment.getExternalStorageState();
+
+        if (estado.equals(Environment.MEDIA_MOUNTED)) {
+            sdDisponible = true;
+            sdAccesoEscritura = true;
+        } else if (estado.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+            sdDisponible = true;
+            sdAccesoEscritura = false;
+        } else {
+            sdDisponible = false;
+            sdAccesoEscritura = false;
+        }
+        String url = "http://trythistrail.16mb.com/Maps/cco.zip";
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setDescription("Descargando mapa offline");
+        request.setTitle("TryThisTrail");
+        // in order for this if to run, you must use the android 3.2 to compile your app
+        String ruta_sd = Environment.getExternalStorageDirectory() + "/osmdroid";
+        Log.d("Directorio:", ruta_sd);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        }
+        request.setDestinationInExternalPublicDir("/osmdroid", "2.zip");
+
+        // get download service and enqueue file
+        DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+        /*try
+        {
+            ruta_sd = Environment.getExternalStorageDirectory()+"/osmdroid";
+            Log.d("Directorio:",ruta_sd);
+
+            File f = new File(ruta_sd, "prueba_sd.txt");
+
+            OutputStreamWriter fout =
+                    new OutputStreamWriter(
+                            new FileOutputStream(f));
+
+            fout.write("Texto de prueba.");
+            fout.close();
+        }
+        catch (Exception ex)
+        {
+            Log.e("Ficheros", "Error al escribir fichero a tarjeta SD");
+        }*/
+    }
     private void addLineOverlay() {
         // set custom line style
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -209,6 +271,11 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imageButton_download:
+                descargarMapa();
+                break;
+        }
     }
 
     public void onRoadClicked(int id)

@@ -2,6 +2,7 @@ package com.mapas.franciscojavier.trekkingroute;
 
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,7 +14,10 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,16 +30,21 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.PathOverlay;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,6 +74,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     private float distancia;
     private Marker aux;
     private Indicador indicador;
+    private DownloadManager mgr=null;
     Long i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     // GPSTracker class
@@ -73,7 +83,6 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //rootView = inflater.inflate(R.layout.fragment_crear_ruta);
 
         gps = new GPS(getActivity());
 
@@ -91,27 +100,27 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         fin.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.MAPNIK);
+        osm.setTileSource(Globals.MAPQUESTOSM);
+        osm.setUseDataConnection(false);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
         mc.setZoom(15);
+        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
+        this.osm.getOverlays().add(myScaleBarOverlay);
         initPathOverlay();
         puntosDeInteres = osm.getOverlays();
-        //GeoPoint center = new GeoPoint(-34.15691, -70.75072);
         GeoPoint center = new GeoPoint(latitude, longitude);
         mc.animateTo(center);
-        //addMarket(center);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
-
-
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
 
 
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
