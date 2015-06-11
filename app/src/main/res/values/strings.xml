@@ -76,6 +76,8 @@
     <string name="errorFormat">No tiene un formato válido</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="passwordError">La contraseña debe ser de al menos 6 caracteres y contener al menos 1 número y una letra</string>
+    <string name="passwordErrorLogin">Recuerda que el MINIMO eran 6 caracreres</string>
+
     <string name="passwordConfirmationError">La contraseña debe ser iguales</string>
 
 <!-- TODO: Remove or change this placeholder text -->

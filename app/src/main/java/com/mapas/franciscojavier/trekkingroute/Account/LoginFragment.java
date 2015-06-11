@@ -89,21 +89,20 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
         return view;
     }
 
-    public void authenticateLogin() {
+    public Boolean authenticateLogin() {
         String email = editUserEmail.getText().toString();
         String pass = editPassword.getText().toString();
+        Boolean existe = false;
         if (email.equals("admin") &&
                 pass.equals("admin")) {
-            Toast.makeText(getActivity(), "Hello admin!",
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Hello admin!",Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(getActivity(), "Seems like you are not admin!",
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Seems like you are not admin!",Toast.LENGTH_SHORT).show();
 
-            boolean existe = checkLogin(email, pass);
-
-            if (existe){
+            existe = checkLogin(email, pass);
+//Toast.makeText(getActivity(), (existe),Toast.LENGTH_SHORT).show();
+            if (!existe){
                 numberOfRemainingLoginAttempts--;
                 attemptsLeft.setVisibility(View.VISIBLE);
                 numberOfRemainingLogin.setVisibility(View.VISIBLE);
@@ -118,6 +117,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
             }
 
         }
+        return existe;
 
     }
 
@@ -165,10 +165,11 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
 
                 if (!formHaveErrors()) {
 
-                    Toast.makeText(getActivity(), "no error",
-                            Toast.LENGTH_SHORT).show();
-                    authenticateLogin();
-                    //mListener.loginGoBack(editUserEmail.getText().toString(), editPassword.getText().toString());
+                    //Toast.makeText(getActivity(), "no error",Toast.LENGTH_SHORT).show();
+                    Boolean existe = authenticateLogin();
+                    if (existe){
+                        mListener.goToHome();
+                    }
                 }
                 break;
             case R.id.btnLinkToRegisterScreen:
@@ -213,7 +214,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
             haveErrors = true;
         }
         if (!editPassword.getText().toString().matches(Globals.PASSWORD_REGEX)){
-            editPassword.setError(getString(R.string.passwordError));
+            editPassword.setError(getString(R.string.passwordErrorLogin));
             editPassword.startAnimation(shake);
             haveErrors = true;
         }

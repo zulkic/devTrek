@@ -301,11 +301,6 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
             editTextNombreRuta.startAnimation(shake);
             haveErrors = true;
         }
-        if (editTextNombreRuta.getText().toString().contains(" ") ) {
-            editTextNombreRuta.setError(getString(R.string.errorSpaces));
-            editTextNombreRuta.startAnimation(shake);
-            haveErrors = true;
-        }
 
         return haveErrors;
     }
