@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -159,10 +163,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                 EditText textTiempoEstimado = (EditText)getActivity().findViewById(R.id.editTextiempo_estimado);
                 spinnerReco = (Spinner) getActivity().findViewById(R.id.spinner_recorrido);
                 EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
-                if(editTextNombreRuta.getText().length()<LARGO_NOMBRE_RUTA){
-                    Toast.makeText(getActivity().getBaseContext(), "Ingrese un Nombre", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                if(!formHaveErrors(editTextNombreRuta)) {
                     //Toast.makeText(getActivity().getBaseContext(), editTextNombreRuta.getText()+" \n "+ ARG_PARAM3, Toast.LENGTH_SHORT).show();
                     String nombreRuta = editTextNombreRuta.getText().toString();
                     String tiempoRuta = textTiempoEstimado.getText().toString();
@@ -291,5 +292,23 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
             return row;
         }
     }
+    private boolean formHaveErrors(EditText editTextNombreRuta) {
+        boolean haveErrors = false;
+        Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+
+        if (editTextNombreRuta.getText().toString().matches("")){
+            editTextNombreRuta.setError(getString(R.string.errorEmpty));
+            editTextNombreRuta.startAnimation(shake);
+            haveErrors = true;
+        }
+        if (editTextNombreRuta.getText().toString().contains(" ") ) {
+            editTextNombreRuta.setError(getString(R.string.errorSpaces));
+            editTextNombreRuta.startAnimation(shake);
+            haveErrors = true;
+        }
+
+        return haveErrors;
+    }
+
 
 }

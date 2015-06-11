@@ -68,7 +68,7 @@
     <string name="button_guardar_ruta">Guardar</string>
     <string name="button_cancelar_ruta">Cancelar</string>
 <!--Eliminar ruta-->
-    <string name="title_eliminar_ruta">Datos para crear ruta</string>
+    <string name="title_eliminar_ruta">Datos para de la ruta</string>
 
 
     <string name="errorEmpty">No puede ser vacío</string>

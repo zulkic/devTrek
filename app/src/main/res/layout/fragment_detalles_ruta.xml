@@ -147,7 +147,6 @@
             android:background="@color/btn_orange"
             android:textColor="@color/white"
             android:text="@string/button_cancelar_ruta"
-            android:layout_marginLeft="2dip"
             android:id="@+id/button_cancelar_ruta"
             android:layout_weight="1" />
     </LinearLayout>
