@@ -3,19 +3,25 @@
 
     <color name="bg_login">#c3ff9400</color>
     <color name="bg_register">#2e3237</color>
+    <color name="bg_ruta">#2e3237</color>
     <color name="bg_main">#428bca</color>
     <color name="white">#ffffff</color>
     <color name="gray">#999999</color>
+    <color name="black">#ff000000</color>
+    <color name="red">#ffff000f</color>
     <color name="input_login">#222222</color>
     <color name="input_login_hint">#999999</color>
     <color name="input_register">#888888</color>
+    <color name="into_edit_text">#888888</color>
     <color name="input_register_bg">#3b4148</color>
+    <color name="bg_edit_text">#3b4148</color>
     <color name="input_register_hint">#5e6266</color>
     <color name="btn_login">#ff02060a</color>
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
     <color name="btn_register">#ffff5b0c</color>
+    <color name="btn_orange">#ffff5b0c</color>
     <color name="txt_title_i">#fffffde5</color>
     <color name="txt_title_ii">#ff817f73</color>
     <color name="txt_title_register">#fffffde5</color>

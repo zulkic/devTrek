@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
-     android:orientation="horizontal">
+     android:orientation="horizontal"
+     android:background="@color/bg_edit_text">
     <ImageView
      android:id="@+id/icon"
      android:layout_width="wrap_content"
@@ -13,6 +14,8 @@
      android:id="@+id/tipo_recorrido"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
+     android:textColor="@color/input_register"
+        android:background="@color/bg_edit_text"
      android:textSize="20sp"
      android:paddingTop="8sp"
      />

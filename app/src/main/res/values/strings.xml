@@ -11,6 +11,7 @@
     <string name="text_oficial">Ruta Oficial</string>
     <string name="text_no_oficial">No Oficial</string>
 
+    <string name="title_section0">Inicio</string>
     <string name="title_section1">Visualizar Mapa</string>
     <string name="title_section2">Planificar Viaje</string>
     <string name="title_section3">Crear Ruta</string>
@@ -35,6 +36,8 @@
     <string name="trail_bicicleta">Bicicleta</string>
     <string name="trail_caballo">Caballo</string>
     <string name="trail_auto">Auto</string>
+    <string name="title_home_i">Bienvenido</string>
+    <string name="title_home_ii">a</string>
 <!-- Login String-->
     <string name="title_Login">Login</string>
     <string name="title_Try_This_Trail">Try This Trail</string>
@@ -48,10 +51,13 @@
     <string name="btn_link_to_register">No tienes cuenta?</string>
     <string name="btn_link_to_remember">No recuerdas tu cuenta?</string>
     <string name="btn_link_to_login">Ya estas registrado!? ve al Login.</string>
+    <string name="btn_invitado">Ingresar como invitado</string>
     <string name="welcome">Bienvenido</string>
     <string name="btn_logout">Cerrar Sesion</string>
     <string name="name">Nombre</string>
     <string name="attempts_Left">Intentos restantes</string>
+    <string name="alert_btn_login_bloqued">LOGIN BLOCKEADO!!!</string>
+
 <!--Crear Ruta-->
     <string name="title_crear_ruta">Datos para crear ruta</string>
     <string name="recorrido_mediante">Recorrido mediante</string>

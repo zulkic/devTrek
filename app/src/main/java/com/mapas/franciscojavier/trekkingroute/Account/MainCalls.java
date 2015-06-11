@@ -12,4 +12,6 @@ public interface MainCalls {
     public void signup(Usuario client);
 
     public void login(String email, String password);
+
+    public void goToHome();
 }

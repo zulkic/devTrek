@@ -32,7 +32,8 @@ import repositorios.Tipo_Puntos_InteresRepo;
 
 
 public class MenuPrincipal extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener, MainCalls {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener, MainCalls {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -98,18 +99,21 @@ public class MenuPrincipal extends ActionBarActivity
 
         switch (position){
             case 0:
-                fragment = new VisualizarMapa();
+                fragment = new PantallaInicio();
                 break;
             case 1:
-                fragment = new RoutesFragment();
+                fragment = new VisualizarMapa();
                 break;
             case 2:
-                fragment = new CrearRuta();
+                fragment = new RoutesFragment();
                 break;
             case 3:
                 fragment = new CrearRuta();
                 break;
             case 4:
+                fragment = new CrearRuta();
+                break;
+            case 5:
                 fragment = new LoginFragment();
                 //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
                 break;
@@ -123,18 +127,21 @@ public class MenuPrincipal extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 0:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_section0);
                 break;
             case 1:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.title_section1);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_section2);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section4);
+                mTitle = getString(R.string.title_section3);
                 break;
             case 4:
+                mTitle = getString(R.string.title_section4);
+                break;
+            case 5:
                 mTitle = getString(R.string.title_section5);
                 break;
         }
@@ -247,7 +254,27 @@ public class MenuPrincipal extends ActionBarActivity
 
     @Override
     public void login(String email, String password) {
-        Toast.makeText(getApplicationContext(), "Iniciar sesión", Toast.LENGTH_LONG).show();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.container, LoginFragment.newInstance(email, password));
+        ft.addToBackStack("LOGIN");
+        ft.commit();
+
+    }
+    @Override
+    public void goToHome() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.container, PantallaInicio.newInstance());
+        ft.addToBackStack("HOME");
+        ft.commit();
+
+    }
+    @Override
+      public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            this.finish();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 
 }

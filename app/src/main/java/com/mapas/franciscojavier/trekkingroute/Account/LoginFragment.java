@@ -4,7 +4,6 @@ package com.mapas.franciscojavier.trekkingroute.Account;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -40,16 +39,37 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
     private EditText editPassword;
     private Button btnLogin;
     private Button btnRegister;
+    private Button btnInvite;
     private TextView loginLocked;
     private TextView attemptsLeft;
     private TextView numberOfRemainingLogin;
     int numberOfRemainingLoginAttempts = 3;
     private ProgressDialog pDialog;
     private SessionManager session;
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private String logEmail;
+    private String logPassword;
 
     private MainCalls mListener;
 
+    public static LoginFragment newInstance(String param1, String param2) {
+        LoginFragment fragment = new LoginFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            logEmail = getArguments().getString(ARG_PARAM1);
+            logPassword = getArguments().getString(ARG_PARAM2);
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,47 +86,6 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
             //finish();
 
         }
-/*
-        // Login button Click Event
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                String email = editUserEmail.getText().toString();
-                String password = editPassword.getText().toString();
-
-                // Check for empty data in the form
-                if (email.trim().length() > 0 && password.trim().length() > 0) {
-                    // login user
-                    authenticateLogin(email,password);
-
-                } else {
-                    // Prompt user to enter credentials
-                    Toast.makeText(getActivity(),
-                            "Please enter the credentials!", Toast.LENGTH_LONG)
-                            .show();
-                }
-            }
-
-        });
-
-       // Link to Register Screen
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "go to register",
-                        Toast.LENGTH_SHORT).show();
-                //Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
-                //startActivity(i);
-                //finish();
-                Fragment newFragment = new RegisterActivity();
-                //newFragment.setTiempoTotal(tiempoTotalRecorrido);
-                FragmentManager fm1 = getFragmentManager();
-                FragmentTransaction ft1 = fm1.beginTransaction();
-                ft1.replace(R.id.container, newFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });*/
         return view;
     }
 
@@ -133,8 +112,8 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
                 if (numberOfRemainingLoginAttempts == 0) {
                     btnLogin.setEnabled(false);
                     loginLocked.setVisibility(View.VISIBLE);
-                    loginLocked.setBackgroundColor(Color.RED);
-                    loginLocked.setText("LOGIN BLOCKED!!!");
+                    //loginLocked.setBackgroundColor(Color.RED);
+                    //loginLocked.setText("LOGIN BLOCKED!!!");
                 }
             }
 
@@ -148,6 +127,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
         editPassword = (EditText) view.findViewById(R.id.password);
         btnLogin = (Button) view.findViewById(R.id.loginBtn);
         btnRegister = (Button) view.findViewById(R.id.btnLinkToRegisterScreen);
+        btnInvite = (Button) view.findViewById(R.id.btnInvitado);
         loginLocked = (TextView) view.findViewById(R.id.loginLocked);
         attemptsLeft = (TextView) view.findViewById(R.id.attemptsLeft);
         numberOfRemainingLogin = (TextView) view.findViewById(R.id.numberOfRemainingLogin);
@@ -156,8 +136,12 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
 
+        editUserEmail.setText(logEmail, TextView.BufferType.EDITABLE);
+        editPassword.setText(logPassword, TextView.BufferType.EDITABLE);
+
         btnLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
+        btnInvite.setOnClickListener(this);
 
         // Session manager
         session = new SessionManager(getActivity());
@@ -189,6 +173,9 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
                 break;
             case R.id.btnLinkToRegisterScreen:
                 mListener.goToRegister(editUserEmail.getText().toString(), editPassword.getText().toString());
+                break;
+            case R.id.btnInvitado:
+                mListener.goToHome();
                 break;
             default:
                 break;

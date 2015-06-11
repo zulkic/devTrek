@@ -93,15 +93,15 @@ public class RegisterFragment extends Fragment implements AdapterView.OnClickLis
                     client.setContrasenia(etPassword.getText().toString());
                     try {
                         if (verificarEmailDB(etEmail.getText().toString())){
-                            Toast.makeText(getActivity().getBaseContext(), "El email ya existe", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getBaseContext(), "El email ya existe, prueba otra vez", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             //Nuevo_Usuario nuevoUsuario = new Nuevo_Usuario(client, getActivity())
                             Registrar_Usuario registar_usuario = new Registrar_Usuario(client, getActivity());
                             registar_usuario.execute();
-                            Toast.makeText(getActivity().getBaseContext(), "Ya estas Resgistrado!!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getBaseContext(), "En hora buena, Ya estas Resgistrado!!!", Toast.LENGTH_SHORT).show();
+                            mListener.login(etEmail.getText().toString(), etPassword.getText().toString());
                         }
-                        mListener.signup(client);
                     }catch (Exception e){
                         Log.i("Error post", e.toString());
                     }
