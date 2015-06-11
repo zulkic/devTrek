@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -57,7 +58,7 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         View view = inflater.inflate(R.layout.fragment_visualizar_mapa, container, false);
 
         osm = (MapView) view.findViewById(R.id.mapview);
-        osm.setTileSource(TileSourceFactory.CYCLEMAP);
+        osm.setTileSource(TileSourceFactory.MAPQUESTOSM);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
@@ -66,7 +67,6 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         this.osm.getOverlays().add(myScaleBarOverlay);
         GeoPoint center = new GeoPoint(-34.98604036, -71.24007225);
         mc.setCenter(center);
-
         addLineOverlay();
 
         return view;
