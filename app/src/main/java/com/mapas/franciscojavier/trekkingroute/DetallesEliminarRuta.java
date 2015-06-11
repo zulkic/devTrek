@@ -80,7 +80,7 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
         switch (v.getId()){
             case R.id.button_aceptar_eliminar_ruta:
                 try{
-                    Eliminar_Ruta eliminar = new Eliminar_Ruta(ID_RUTA);
+                    Eliminar_Ruta eliminar = new Eliminar_Ruta(ID_RUTA, getActivity());
                     eliminar.execute();
                 }
                 catch (Exception e)

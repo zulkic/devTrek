@@ -35,6 +35,7 @@ import JSON.Coordenadas_Ruta;
 import JSON.Obtener_Rutas;
 import greendao.Coordenada;
 import greendao.Ruta;
+import repositorios.CoordenadaRepo;
 
 /**
  * Created by FranciscoJavier on 28-04-2015.
@@ -90,7 +91,7 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
 
         // list of GeoPoint objects to be used to draw line
         try {
-            Obtener_Rutas task = new Obtener_Rutas();
+            Obtener_Rutas task = new Obtener_Rutas(getActivity());
             this.rutas = task.execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -100,19 +101,26 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         Log.i("rutas:",  Integer.toString(rutas.size()));
         for(Ruta ruta : rutas) {
             ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
-            /*if(RutaRepo.getRutaForId(getActivity(),ruta.getId().intValue()) != null)
+            if(ruta.getSincronizada())
             {
-                lista_coordenadas = CoordenadaRepo.coordenadas_ruta(ruta.getId().intValue());
-            }
-            else {*/
-                try {
-                    Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(ruta.getId().intValue());
+                try
+                {
+                    Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(ruta.getId().intValue(),getActivity());
                     lista_coordenadas = tarea_get_coordenadas.execute().get();
-                } catch (Exception e) {
                 }
-            //}
-            Log.i("ruta id:", ruta.getNombre());
-            Log.i("coordenadas:",  Integer.toString(lista_coordenadas.size()));
+                catch (Exception e)
+                {
+                    Log.i("Error: ", "Imposible obtener las coordenadas y puntos");
+                }
+            }
+            else
+            {
+                for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(getActivity(), ruta.getId()))
+                {
+                    lista_coordenadas.add(coordenada);
+                }
+                Log.i("coordenadas offline: ", "obtiene coordenadas offline");
+            }
             List lineData = new ArrayList();
             this.inicio = new OverlayItem("Inicio ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(0).getLatitud(), lista_coordenadas.get(0).getLongitud()));
             this.ind_ini.add(this.inicio);

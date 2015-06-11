@@ -77,7 +77,7 @@ public class Indicador extends ItemizedOverlay {
         OverlayItem item = mOverlays.get(index);
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
         dialog.setTitle(item.getTitle());
-        dialog.setNeutralButton(R.string.button_eliminar,
+        dialog.setNeutralButton(R.string.action_delet,
                 new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which)

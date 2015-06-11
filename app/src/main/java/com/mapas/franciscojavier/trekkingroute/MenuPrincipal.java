@@ -1,30 +1,38 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
+
+import com.mapas.franciscojavier.trekkingroute.Account.LoginFragment;
+import com.mapas.franciscojavier.trekkingroute.Account.MainCalls;
+import com.mapas.franciscojavier.trekkingroute.Account.RegisterFragment;
 
 import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import greendao.Sync;
+import greendao.Usuario;
+import repositorios.SyncRepo;
 import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
 
 public class MenuPrincipal extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener, MainCalls {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -51,6 +59,20 @@ public class MenuPrincipal extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        if(SyncRepo.getSyncForId(this, (long) 1) == null)
+        {
+            Sync sync = new Sync();
+            sync.setId((long) 1);
+            sync.setTabla("rutas");
+            sync.setTiempo("inicializado");
+            SyncRepo.insertOrUpdate(this, sync);
+            Log.i("Sync ini", "sync");
+        }
+        else
+        {
+            Log.i("Sync ini", "else");
+        }
 
         try{
             if(Tipo_ObstaculoRepo.getAllTipos_Obstaculos(this).size() == 0  || Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(this).size() == 0 ) {
@@ -88,7 +110,7 @@ public class MenuPrincipal extends ActionBarActivity
                 fragment = new CrearRuta();
                 break;
             case 4:
-                fragment = new LoginActivity();
+                fragment = new LoginFragment();
                 //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
                 break;
         }
@@ -208,6 +230,24 @@ public class MenuPrincipal extends ActionBarActivity
 
     public DaoSession getDaoSession() {
         return daoSession;
+    }
+
+    @Override
+    public void goToRegister(String email, String password) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.container, RegisterFragment.newInstance(email, password));
+        ft.addToBackStack("LOGIN");
+        ft.commit();
+    }
+
+    @Override
+    public void signup(Usuario client) {
+        Toast.makeText(getApplicationContext(), "Crear cuenta", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void login(String email, String password) {
+        Toast.makeText(getApplicationContext(), "Iniciar sesión", Toast.LENGTH_LONG).show();
     }
 
 }

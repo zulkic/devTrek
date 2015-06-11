@@ -3,6 +3,8 @@ package JSON;
 /**
  * Created by juancarlosgonzalezca on 13-05-2015.
  */
+
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -19,14 +21,16 @@ import greendao.Ruta;
 public class Modificar_Ruta extends AsyncTask<Void, Void, Void> {
 
     private Ruta ruta;
+    private Context context;
     private JSONParser jsonParser;
     private static String url_modificar_ruta = "http://trythistrail.16mb.com/modificar_ruta.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
 
-    public Modificar_Ruta(Ruta ruta)
+    public Modificar_Ruta(Ruta ruta, Context context)
     {
         this.ruta = ruta;
+        this.context = context;
         this.jsonParser = new JSONParser();
     }
 
@@ -35,43 +39,47 @@ public class Modificar_Ruta extends AsyncTask<Void, Void, Void> {
      * */
     protected Void doInBackground(Void... args) {
 
-        // getting updated data from EditTexts
-        String id_ruta = this.ruta.getId().toString();
-        String nombre =  this.ruta.getNombre();
-        String descripcion = this.ruta.getDescripcion();
-        String kms = this.ruta.getKms().toString();
-        String tiempo_estimado = this.ruta.getTiempo_estimado();
-        String oficial = this.ruta.getOficial().toString();
+        hasInternet conexion = new hasInternet(this.context);
+        Boolean internet = conexion.getInternet();
 
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("id_ruta", id_ruta));
-        params.add(new BasicNameValuePair("nombre", nombre));
-        params.add(new BasicNameValuePair("descripcion", descripcion));
-        params.add(new BasicNameValuePair("kms", kms));
-        params.add(new BasicNameValuePair("tiempo_estimado", tiempo_estimado));
-        params.add(new BasicNameValuePair("oficial", oficial));
+        if(internet) {
+            // getting updated data from EditTexts
+            String id_ruta = this.ruta.getId().toString();
+            String nombre =  this.ruta.getNombre();
+            String descripcion = this.ruta.getDescripcion();
+            String kms = this.ruta.getKms().toString();
+            String tiempo_estimado = this.ruta.getTiempo_estimado();
+            String oficial = this.ruta.getOficial().toString();
 
-        // sending modified data through http request
-        // Notice that update product url accepts POST method
-        JSONObject json = jsonParser.makeHttpRequest(url_modificar_ruta,
-                "POST", params);
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("id_ruta", id_ruta));
+            params.add(new BasicNameValuePair("nombre", nombre));
+            params.add(new BasicNameValuePair("descripcion", descripcion));
+            params.add(new BasicNameValuePair("kms", kms));
+            params.add(new BasicNameValuePair("tiempo_estimado", tiempo_estimado));
+            params.add(new BasicNameValuePair("oficial", oficial));
 
-        // check json success tag
-        try {
-            int success = json.getInt(TAG_SUCCESS);
+            // sending modified data through http request
+            // Notice that update product url accepts POST method
+            JSONObject json = jsonParser.makeHttpRequest(url_modificar_ruta,
+                    "POST", params);
 
-            if (success == 1) {
-                // successfully created product
-                Log.i("ruta modificada", "modificada correctamente");
-            } else {
-                // failed to create product
-                Log.i("ruta modificada", "algo fallo");
+            // check json success tag
+            try {
+                int success = json.getInt(TAG_SUCCESS);
+
+                if (success == 1) {
+                    // successfully created product
+                    Log.i("ruta modificada", "modificada correctamente");
+                } else {
+                    // failed to create product
+                    Log.i("ruta modificada", "algo fallo");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
         return null;
     }
 

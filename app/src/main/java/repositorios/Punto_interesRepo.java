@@ -36,4 +36,8 @@ public class Punto_interesRepo {
     private static Punto_interesDao getPunto_interesDao(Context c) {
         return ((MenuPrincipal) c).getDaoSession().getPunto_interesDao();
     }
+
+    public static List<Punto_interes> punto_intereses_ruta(Context context, Long id) {
+        return getPunto_interesDao(context).queryBuilder().where(Punto_interesDao.Properties.Id_ruta.eq(id.intValue())).list();
+    }
 }

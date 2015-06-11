@@ -1,5 +1,6 @@
 package JSON;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
 
     private ArrayList<Obstaculo> obstaculosList;
     private int id;
+    private Context context;
     private JSONParser jsonParser;
     private static String url_obtener_obstaculos_ruta = "http://trythistrail.16mb.com/obstaculos_ruta.php";
     // JSON Node names
@@ -37,9 +39,10 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
      * Before starting background thread Show Progress Dialog
      */
 
-    public Obstaculos_Ruta(int id)
+    public Obstaculos_Ruta(int id, Context context)
     {
         this.id = id;
+        this.context = context;
         this.obstaculosList = new ArrayList<Obstaculo>();
         this.jsonParser = new JSONParser();
     }
@@ -53,43 +56,47 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
      * getting All products from url
      */
     protected ArrayList<Obstaculo> doInBackground(Void... args) {
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
-        // getting JSON string from URL
-        JSONObject json = jsonParser.makeHttpRequest(url_obtener_obstaculos_ruta, "GET", params);
+        hasInternet conexion = new hasInternet(this.context);
+        Boolean internet = conexion.getInternet();
 
-        // Check your log cat for JSON reponse
-        Log.d("CObstaculos ruta: ", json.toString());
+        if(internet) {
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
+            // getting JSON string from URL
+            JSONObject json = jsonParser.makeHttpRequest(url_obtener_obstaculos_ruta, "GET", params);
 
-        try {
-            // Checking for SUCCESS TAG
-            int success = json.getInt(TAG_SUCCESS);
+            // Check your log cat for JSON reponse
+            Log.d("CObstaculos ruta: ", json.toString());
 
-            if (success == 1) {
-                // products found
-                // Getting Array of Products
-                JSONArray obstaculos = json.getJSONArray(TAG_OBSTACULOS);
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
 
-                // looping through All Products
-                for (int i = 0; i < obstaculos.length(); i++) {
-                    JSONObject c = obstaculos.getJSONObject(i);
-                    Obstaculo obstaculo = new Obstaculo();
-                    // Storing each json item in variable
-                    obstaculo.setId((Long.getLong(c.getString(TAG_ID))));
-                    obstaculo.setDescripcion(c.getString(TAG_DESCRIPCION));
-                    obstaculo.setId_tipo_obstaculo(Integer.getInteger(c.getString(TAG_ID_TIPO_OBSTACULO)));
-                    obstaculo.setLatitud(Double.parseDouble(c.getString(TAG_LATITUD)));
-                    obstaculo.setLongitud(Double.parseDouble(c.getString(TAG_LONGITUD)));
-                    obstaculo.setId_ruta(Integer.parseInt(c.getString(TAG_ID_RUTA)));
+                if (success == 1) {
+                    // products found
+                    // Getting Array of Products
+                    JSONArray obstaculos = json.getJSONArray(TAG_OBSTACULOS);
 
-                    this.obstaculosList.add(obstaculo);
+                    // looping through All Products
+                    for (int i = 0; i < obstaculos.length(); i++) {
+                        JSONObject c = obstaculos.getJSONObject(i);
+                        Obstaculo obstaculo = new Obstaculo();
+                        // Storing each json item in variable
+                        obstaculo.setId((Long.getLong(c.getString(TAG_ID))));
+                        obstaculo.setDescripcion(c.getString(TAG_DESCRIPCION));
+                        obstaculo.setId_tipo_obstaculo(Integer.getInteger(c.getString(TAG_ID_TIPO_OBSTACULO)));
+                        obstaculo.setLatitud(Double.parseDouble(c.getString(TAG_LATITUD)));
+                        obstaculo.setLongitud(Double.parseDouble(c.getString(TAG_LONGITUD)));
+                        obstaculo.setId_ruta(Integer.parseInt(c.getString(TAG_ID_RUTA)));
+
+                        this.obstaculosList.add(obstaculo);
+                    }
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
         return obstaculosList;
     }
 

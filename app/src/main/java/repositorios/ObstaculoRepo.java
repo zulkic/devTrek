@@ -37,4 +37,8 @@ public class ObstaculoRepo {
     private static ObstaculoDao getObstaculoDao(Context c) {
         return ((MenuPrincipal) c).getDaoSession().getObstaculoDao();
     }
+
+    public static List<Obstaculo> obstaculos_ruta(int id, Context context) {
+        return getObstaculoDao(context).queryBuilder().where(ObstaculoDao.Properties.Id_ruta.eq(id)).list();
+    }
 }

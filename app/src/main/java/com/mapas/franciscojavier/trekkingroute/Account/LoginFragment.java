@@ -1,22 +1,28 @@
-package com.mapas.franciscojavier.trekkingroute;
+package com.mapas.franciscojavier.trekkingroute.Account;
 
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mapas.franciscojavier.trekkingroute.R;
+import com.mapas.franciscojavier.trekkingroute.SessionManager;
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+
+import JSON.Autentificar_Usuario;
 
 
 /**
@@ -27,10 +33,10 @@ import android.widget.Toast;
  * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
-public class LoginActivity extends Fragment {
+public class LoginFragment extends Fragment implements AdapterView.OnClickListener {
 
     //private static final String TAG = RegisterActivity.class.getSimpleName();
-    private EditText editUsername;
+    private EditText editUserEmail;
     private EditText editPassword;
     private Button btnLogin;
     private Button btnRegister;
@@ -40,6 +46,9 @@ public class LoginActivity extends Fragment {
     int numberOfRemainingLoginAttempts = 3;
     private ProgressDialog pDialog;
     private SessionManager session;
+
+    private MainCalls mListener;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,12 +66,12 @@ public class LoginActivity extends Fragment {
             //finish();
 
         }
-
+/*
         // Login button Click Event
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                String email = editUsername.getText().toString();
+                String email = editUserEmail.getText().toString();
                 String password = editPassword.getText().toString();
 
                 // Check for empty data in the form
@@ -80,7 +89,7 @@ public class LoginActivity extends Fragment {
 
         });
 
-        // Link to Register Screen
+       // Link to Register Screen
         btnRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -97,14 +106,15 @@ public class LoginActivity extends Fragment {
                         .addToBackStack(null)
                         .commit();
             }
-        });
+        });*/
         return view;
     }
 
-    public void authenticateLogin(String email, String password) {
-
-        if (editUsername.getText().toString().equals("admin") &&
-                editPassword.getText().toString().equals("admin")) {
+    public void authenticateLogin() {
+        String email = editUserEmail.getText().toString();
+        String pass = editPassword.getText().toString();
+        if (email.equals("admin") &&
+                pass.equals("admin")) {
             Toast.makeText(getActivity(), "Hello admin!",
                     Toast.LENGTH_SHORT).show();
         }
@@ -112,9 +122,9 @@ public class LoginActivity extends Fragment {
             Toast.makeText(getActivity(), "Seems like you are not admin!",
                     Toast.LENGTH_SHORT).show();
 
-            boolean existe = checkLogin(email, password);
+            boolean existe = checkLogin(email, pass);
 
-            if (!existe){
+            if (existe){
                 numberOfRemainingLoginAttempts--;
                 attemptsLeft.setVisibility(View.VISIBLE);
                 numberOfRemainingLogin.setVisibility(View.VISIBLE);
@@ -134,7 +144,7 @@ public class LoginActivity extends Fragment {
 
     private View setupVariables(LayoutInflater inflater,@Nullable ViewGroup container) {
         View view = inflater.inflate(R.layout.activity_login, container, false);
-        editUsername = (EditText) view.findViewById(R.id.username);
+        editUserEmail = (EditText) view.findViewById(R.id.userEmail);
         editPassword = (EditText) view.findViewById(R.id.password);
         btnLogin = (Button) view.findViewById(R.id.loginBtn);
         btnRegister = (Button) view.findViewById(R.id.btnLinkToRegisterScreen);
@@ -146,97 +156,101 @@ public class LoginActivity extends Fragment {
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
 
+        btnLogin.setOnClickListener(this);
+        btnRegister.setOnClickListener(this);
+
         // Session manager
         session = new SessionManager(getActivity());
         return view;
     }
     private boolean  checkLogin(final String email, final String password) {
+        Autentificar_Usuario autentificar_usuario = new Autentificar_Usuario(email, password, getActivity());
+        Boolean autentificado = false;
+        try {
+            autentificado = autentificar_usuario.execute().get();
+        }
+        catch (Exception e)
+        {
+        }
+        return autentificado;
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.loginBtn:
 
-        Toast.makeText(getActivity(),
-                "busco en la db", Toast.LENGTH_LONG)
-                .show();
+                if (!formHaveErrors()) {
 
-        return true;
-        /**
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-
-        pDialog.setMessage("Logging in ...");
-        showDialog();
-
-        StringRequest strReq = new StringRequest(Method.POST,
-                AppConfig.URL_REGISTER, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response.toString());
-                hideDialog();
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-
-                    // Check for error node in json
-                    if (!error) {
-                        // user successfully logged in
-                        // Create login session
-                        session.setLogin(true);
-
-                        // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                dbActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    // JSON error
-                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "no error",
+                            Toast.LENGTH_SHORT).show();
+                    authenticateLogin();
+                    //mListener.loginGoBack(editUserEmail.getText().toString(), editPassword.getText().toString());
                 }
+                break;
+            case R.id.btnLinkToRegisterScreen:
+                mListener.goToRegister(editUserEmail.getText().toString(), editPassword.getText().toString());
+                break;
+            default:
+                break;
+        }
 
-            }
-        }, new Response.ErrorListener() {
+    }
+    private boolean formHaveErrors() {
+        boolean haveErrors = false;
+        Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        }) {
+        if (editUserEmail.getText().toString().matches("") ) {
+            editUserEmail.setError(getString(R.string.errorEmpty));
+            editUserEmail.startAnimation(shake);
+            haveErrors = true;
+        }
+        if (editUserEmail.getText().toString().contains(" ") ) {
+            editUserEmail.setError(getString(R.string.errorSpaces));
+            editUserEmail.startAnimation(shake);
+            haveErrors = true;
+        }
 
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("tag", "login");
-                params.put("email", email);
-                params.put("password", password);
+        if (!editUserEmail.getText().toString().matches(Globals.EMAIL_REGEX)) {
+            editUserEmail.setError(getString(R.string.errorFormat));
+            editUserEmail.startAnimation(shake);
+            haveErrors = true;
+        }
+        if (editPassword.getText().toString().matches("")) {
+            editPassword.setError(getString(R.string.errorEmpty));
+            editPassword.startAnimation(shake);
+            haveErrors = true;
+        }
+        if ( editPassword.getText().toString().contains(" ") ) {
+            editPassword.setError(getString(R.string.errorSpaces));
+            editPassword.startAnimation(shake);
+            haveErrors = true;
+        }
+        if (!editPassword.getText().toString().matches(Globals.PASSWORD_REGEX)){
+            editPassword.setError(getString(R.string.passwordError));
+            editPassword.startAnimation(shake);
+            haveErrors = true;
+        }
 
-                return params;
-            }
 
-        };
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        */
+        return haveErrors;
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (MainCalls) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement MainCallbacks");
+        }
     }
 
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
 
 }
 

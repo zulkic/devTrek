@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.mapas.franciscojavier.trekkingroute.MenuPrincipal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Coordenada;
@@ -39,7 +38,7 @@ public class CoordenadaRepo {
         return ((MenuPrincipal) c).getDaoSession().getCoordenadaDao();
     }
 
-    public static ArrayList<Coordenada> coordenadas_ruta(int id) {
-        return null;
+    public static List<Coordenada> coordenadas_ruta(Context context, Long id) {
+        return getCoordenadaDao(context).queryBuilder().where(CoordenadaDao.Properties.Id_ruta.eq(id.intValue())).list();
     }
 }

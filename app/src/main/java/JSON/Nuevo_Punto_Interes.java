@@ -49,7 +49,6 @@ public class Nuevo_Punto_Interes extends AsyncTask<Void, Void, Void> {
 
         hasInternet conexion = new hasInternet(this.context);
         Boolean internet = conexion.getInternet();
-        Integer id = 0;
 
         if(internet) {
             String descripcion = this.punto_interes.getDescripcion();

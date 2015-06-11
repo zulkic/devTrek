@@ -109,8 +109,8 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
         Button botonGuardar = (Button) v.findViewById(R.id.button_guardar_ruta);
         Button botonCancelar = (Button) v.findViewById(R.id.button_cancelar_ruta);
         EditText editNombreRuta = (EditText) v.findViewById(R.id.editText_nombre_ruta);
-        TextView textTiempoEstimado = (TextView)v.findViewById(R.id.editText_tiempo_estimado);
-        TextView textDistanciaRecorrida = (TextView)v.findViewById(R.id.editText_distancia_recorrida);
+        EditText textTiempoEstimado = (EditText)v.findViewById(R.id.editTextiempo_estimado);
+        EditText textDistanciaRecorrida = (EditText)v.findViewById(R.id.editText_distancia_recorrida);
         EditText editDescripcion = (EditText) v.findViewById(R.id.editText_descripcion);
 
         editNombreRuta.setOnClickListener(this);
@@ -142,7 +142,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
         //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //spinnerReco.setAdapter(dataAdapter);
-        spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row, listRecorido));
+        spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, listRecorido));
 
         // Spinner item selection Listener
         addListenerOnSpinnerItemSelection();
@@ -156,7 +156,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.button_guardar_ruta:
                 EditText editTextNombreRuta= (EditText) getActivity().findViewById(R.id.editText_nombre_ruta);
-                TextView textTiempoEstimado = (TextView)getActivity().findViewById(R.id.editText_tiempo_estimado);
+                EditText textTiempoEstimado = (EditText)getActivity().findViewById(R.id.editTextiempo_estimado);
                 spinnerReco = (Spinner) getActivity().findViewById(R.id.spinner_recorrido);
                 EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
                 if(editTextNombreRuta.getText().length()<LARGO_NOMBRE_RUTA){
@@ -184,7 +184,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                         {
                             Log.i("id ruta: ", ARG_ID_RUTA.toString());
                             nuevaRuta.setId( ARG_ID_RUTA.longValue() );
-                            Modificar_Ruta tarea_modificar_ruta = new Modificar_Ruta(nuevaRuta);
+                            Modificar_Ruta tarea_modificar_ruta = new Modificar_Ruta(nuevaRuta, getActivity());
                             tarea_modificar_ruta.execute();
 
                             Toast.makeText(getActivity().getBaseContext(),"Ruta Modificada con exito ", Toast.LENGTH_SHORT).show();
@@ -197,7 +197,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                             for (Coordenada coordenada : lista_coordenadas) {
                                 coordenada.setId_ruta(id);
                             }
-                            Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas);
+                            Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas, getActivity());
                             tarea_agregar_coordenadas.execute();
 
                             for(Punto_interes punto_interes : lista_puntos_interes)
@@ -205,7 +205,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                                 punto_interes.setId_ruta(id);
                             }
 
-                            Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes);
+                            Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes, getActivity());
                             tarea_agregar_puntos.execute();
 
                                 //obstaculos
@@ -260,7 +260,7 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
             //return super.getView(position, convertView, parent);
 
             LayoutInflater inflater=getActivity().getLayoutInflater();
-            View row=inflater.inflate(R.layout.row, parent, false);
+            View row=inflater.inflate(R.layout.row_spinner, parent, false);
             TextView label=(TextView)row.findViewById(R.id.tipo_recorrido);
             label.setText(listRecorido[position]);
 

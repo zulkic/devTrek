@@ -42,7 +42,7 @@ public class RoutesFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
 
     private ListView listView;
-    ArrayList<Ruta> rutas = null;
+    ArrayList<Ruta> rutas = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     public static RoutesFragment newInstance(String param1, String param2) {
@@ -71,13 +71,16 @@ public class RoutesFragment extends Fragment{
         }
 
         try {
-            Obtener_Rutas task = new Obtener_Rutas();
+            Obtener_Rutas task = new Obtener_Rutas(getActivity());
             rutas = task.execute().get();
-            Log.i("ruta: ", rutas.get(0).getNombre());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            Log.i("Error: ", "no hay rutas para mostrar");
         }
     }
     @Override
@@ -109,6 +112,7 @@ public class RoutesFragment extends Fragment{
                     bundle.putString("tiempo_ruta",item.getTiempo_estimado());
                     bundle.putFloat("kms_ruta",item.getKms());
                     bundle.putBoolean("oficial", item.getOficial());
+                    bundle.putBoolean("sincronizada", item.getSincronizada());
                     Fragment tf = new MostrarRuta();
                     tf.setArguments(bundle);
                     FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
