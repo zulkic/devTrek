@@ -154,13 +154,13 @@ public class RegisterFragment extends Fragment implements AdapterView.OnClickLis
             etEmail.startAnimation(shake);
             haveErrors = true;
         }
-        if (etEmail.getText().toString().contains(" ") ) {
+        else if (etEmail.getText().toString().contains(" ") ) {
             etEmail.setError(getString(R.string.errorSpaces));
             etEmail.startAnimation(shake);
             haveErrors = true;
         }
 
-        if (!etEmail.getText().toString().matches(Globals.EMAIL_REGEX)) {
+        else if (!etEmail.getText().toString().matches(Globals.EMAIL_REGEX)) {
             etEmail.setError(getString(R.string.errorFormat));
             etEmail.startAnimation(shake);
             haveErrors = true;
@@ -171,7 +171,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnClickLis
             haveErrors = true;
         }
 
-        if (etPassword.getText().toString().contains(" ") ) {
+        else if (etPassword.getText().toString().contains(" ") ) {
             etPassword.setError(getString(R.string.errorSpaces));
             etPassword.startAnimation(shake);
             haveErrors = true;

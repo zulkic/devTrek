@@ -192,13 +192,13 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
             editUserEmail.startAnimation(shake);
             haveErrors = true;
         }
-        if (editUserEmail.getText().toString().contains(" ") ) {
+        else if (editUserEmail.getText().toString().contains(" ") ) {
             editUserEmail.setError(getString(R.string.errorSpaces));
             editUserEmail.startAnimation(shake);
             haveErrors = true;
         }
 
-        if (!editUserEmail.getText().toString().matches(Globals.EMAIL_REGEX)) {
+        else if (!editUserEmail.getText().toString().matches(Globals.EMAIL_REGEX)) {
             editUserEmail.setError(getString(R.string.errorFormat));
             editUserEmail.startAnimation(shake);
             haveErrors = true;
@@ -208,13 +208,8 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
             editPassword.startAnimation(shake);
             haveErrors = true;
         }
-        if ( editPassword.getText().toString().contains(" ") ) {
+        else if ( editPassword.getText().toString().contains(" ") ) {
             editPassword.setError(getString(R.string.errorSpaces));
-            editPassword.startAnimation(shake);
-            haveErrors = true;
-        }
-        if (!editPassword.getText().toString().matches(Globals.PASSWORD_REGEX)){
-            editPassword.setError(getString(R.string.passwordErrorLogin));
             editPassword.startAnimation(shake);
             haveErrors = true;
         }
