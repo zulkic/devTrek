@@ -114,6 +114,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
                     //loginLocked.setBackgroundColor(Color.RED);
                     //loginLocked.setText("LOGIN BLOCKED!!!");
                 }
+                Toast.makeText(getActivity(), "Ese usuario no existe",Toast.LENGTH_SHORT).show();
             }
 
         }
