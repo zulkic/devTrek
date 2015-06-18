@@ -30,6 +30,7 @@
 
     <string name="action_edit">Editar</string>
     <string name="action_delet">Eliminar</string>
+    <string name="action_fav">Favorita</string>
 
     <string name="trail_caminando">Caminando</string>
     <string name="trail_trotando">Trotando</string>

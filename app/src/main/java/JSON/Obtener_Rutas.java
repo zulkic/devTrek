@@ -109,6 +109,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                             ruta.setOficial(false);
                         }
                         ruta.setSincronizada(true);
+                        ruta.setFavorita(false);
                         this.rutasList.add(ruta);
                     }
                     Log.i("Vamos a guardar: ", "guardaremos las rutas en sqlite");

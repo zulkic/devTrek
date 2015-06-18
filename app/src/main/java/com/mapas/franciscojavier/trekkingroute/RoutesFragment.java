@@ -113,6 +113,7 @@ public class RoutesFragment extends Fragment{
                     bundle.putFloat("kms_ruta",item.getKms());
                     bundle.putBoolean("oficial", item.getOficial());
                     bundle.putBoolean("sincronizada", item.getSincronizada());
+                    bundle.putBoolean("favorita", item.getFavorita());
                     Fragment tf = new MostrarRuta();
                     tf.setArguments(bundle);
                     FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();

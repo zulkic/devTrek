@@ -59,6 +59,11 @@ public class RutaRepo {
     {
         return getRutaDao(context).queryBuilder().where(RutaDao.Properties.Sincronizada.eq(false)).list();
     }
+
+    public static List<Ruta> favoritas(Context context)
+    {
+        return getRutaDao(context).queryBuilder().where(RutaDao.Properties.Favorita.eq(true)).list();
+    }
 }
 
 
