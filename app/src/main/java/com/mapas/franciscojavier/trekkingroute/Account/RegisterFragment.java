@@ -91,6 +91,7 @@ public class RegisterFragment extends Fragment implements AdapterView.OnClickLis
                     client.setEmail(etEmail.getText().toString());
                     client.setNombre(etName.getText().toString());
                     client.setContrasenia(etPassword.getText().toString());
+                    client.setRol(Globals.CLIENTE);
                     try {
                         if (verificarEmailDB(etEmail.getText().toString())){
                             Toast.makeText(getActivity().getBaseContext(), "El email ya existe, prueba otra vez", Toast.LENGTH_SHORT).show();

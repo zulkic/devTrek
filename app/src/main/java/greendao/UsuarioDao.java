@@ -27,6 +27,7 @@ public class UsuarioDao extends AbstractDao<Usuario, Long> {
         public final static Property Email = new Property(1, String.class, "email", false, "EMAIL");
         public final static Property Nombre = new Property(2, String.class, "nombre", false, "NOMBRE");
         public final static Property Contrasenia = new Property(3, String.class, "contrasenia", false, "CONTRASENIA");
+        public final static Property Rol = new Property(4, String.class, "rol", false, "ROL");
     };
 
 
@@ -45,7 +46,8 @@ public class UsuarioDao extends AbstractDao<Usuario, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'EMAIL' TEXT," + // 1: email
                 "'NOMBRE' TEXT," + // 2: nombre
-                "'CONTRASENIA' TEXT);"); // 3: contrasenia
+                "'CONTRASENIA' TEXT," + // 3: contrasenia
+                "'ROL' TEXT);"); // 4: rol
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +80,11 @@ public class UsuarioDao extends AbstractDao<Usuario, Long> {
         if (contrasenia != null) {
             stmt.bindString(4, contrasenia);
         }
+ 
+        String rol = entity.getRol();
+        if (rol != null) {
+            stmt.bindString(5, rol);
+        }
     }
 
     /** @inheritdoc */
@@ -93,7 +100,8 @@ public class UsuarioDao extends AbstractDao<Usuario, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // email
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // nombre
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // contrasenia
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // contrasenia
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // rol
         );
         return entity;
     }
@@ -105,6 +113,7 @@ public class UsuarioDao extends AbstractDao<Usuario, Long> {
         entity.setEmail(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setNombre(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setContrasenia(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setRol(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     /** @inheritdoc */

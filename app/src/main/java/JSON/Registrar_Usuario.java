@@ -54,12 +54,14 @@ public class Registrar_Usuario extends AsyncTask<Void, Void, Void> {
             String nombre = this.usuario.getNombre();
             String email = this.usuario.getEmail();
             String contrasenia = this.usuario.getContrasenia();
+            String rol = this.usuario.getRol();
 
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("email", email));
             params.add(new BasicNameValuePair("nombre", nombre));
             params.add(new BasicNameValuePair("contrasenia", contrasenia));
+            params.add(new BasicNameValuePair("rol", rol));
 
             // getting JSON Object
             // Note that create product url accepts POST method

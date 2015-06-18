@@ -14,10 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,9 +39,6 @@ import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,7 +95,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
         osm = (MapView) view.findViewById(R.id.mapview);
         osm.setTileSource(Globals.MAPQUESTOSM);
-        osm.setUseDataConnection(false);
+        osm.setUseDataConnection(true);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
@@ -283,7 +277,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
         gps.setLatitude(location.getLatitude());
         gps.setLongitude(location.getLongitude());
         gps.setAltitude(location.getAltitude());
-        this.punto = new GeoPoint(location.getLatitude(), location.getLongitude());
+        this.punto = new GeoPoint(location.getLatitude(), location.getLongitude(), location.getAltitude());
         //mc.animateTo(punto);
         addMarket(punto, encendido);
         if(encendido) {

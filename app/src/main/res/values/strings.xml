@@ -17,6 +17,7 @@
     <string name="title_section3">Crear Ruta</string>
     <string name="title_section4">Iniciar Recorrido</string>
     <string name="title_section5">Login</string>
+    <string name="title_section6">Perfil</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

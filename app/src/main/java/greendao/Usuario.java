@@ -10,6 +10,7 @@ public class Usuario {
     private String email;
     private String nombre;
     private String contrasenia;
+    private String rol;
 
     public Usuario() {
     }
@@ -18,11 +19,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public Usuario(Long id, String email, String nombre, String contrasenia) {
+    public Usuario(Long id, String email, String nombre, String contrasenia, String rol) {
         this.id = id;
         this.email = email;
         this.nombre = nombre;
         this.contrasenia = contrasenia;
+        this.rol = rol;
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class Usuario {
 
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
 }

@@ -71,6 +71,7 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
                 {
                     this.coordenadasList.add(coordenada);
                 }
+                Log.i("coordenadas: ", "obtenidas de manera local");
             }
             else {
                 // Building Parameters
@@ -108,6 +109,7 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
                         Guardar_Coordenadas task_guardar = new Guardar_Coordenadas(this.coordenadasList,context, id.longValue());
                         task_guardar.execute();
                     }
+                    Log.i("coordenadas: ", "obtenidas de manera externa");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -119,6 +121,7 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
             {
                 this.coordenadasList.add(coordenada);
             }
+            Log.i("coordenadas: ", "obtenidas de manera local");
         }
         return coordenadasList;
     }
