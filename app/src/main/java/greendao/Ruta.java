@@ -13,6 +13,7 @@ public class Ruta {
     private String tiempo_estimado;
     private Boolean oficial;
     private Boolean sincronizada;
+    private Boolean favorita;
 
     public Ruta() {
     }
@@ -21,7 +22,7 @@ public class Ruta {
         this.id = id;
     }
 
-    public Ruta(Long id, String nombre, String descripcion, Float kms, String tiempo_estimado, Boolean oficial, Boolean sincronizada) {
+    public Ruta(Long id, String nombre, String descripcion, Float kms, String tiempo_estimado, Boolean oficial, Boolean sincronizada, Boolean favorita) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -29,6 +30,7 @@ public class Ruta {
         this.tiempo_estimado = tiempo_estimado;
         this.oficial = oficial;
         this.sincronizada = sincronizada;
+        this.favorita = favorita;
     }
 
     public Long getId() {
@@ -85,6 +87,14 @@ public class Ruta {
 
     public void setSincronizada(Boolean sincronizada) {
         this.sincronizada = sincronizada;
+    }
+
+    public Boolean getFavorita() {
+        return favorita;
+    }
+
+    public void setFavorita(Boolean favorita) {
+        this.favorita = favorita;
     }
 
 }

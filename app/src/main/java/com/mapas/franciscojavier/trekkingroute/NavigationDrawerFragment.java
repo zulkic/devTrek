@@ -1,5 +1,6 @@
 package com.mapas.franciscojavier.trekkingroute;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -97,18 +100,47 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
+        SharedPreferences pref = getActivity().getSharedPreferences(Globals.PREF, Context.MODE_PRIVATE);;
+        String rol = pref.getString(Globals.ROL, "invitado");
+        String [] elementos;
+        if(rol.equals(Globals.ADMIN))
+        {
+            elementos = new String[]{
+                    getString(R.string.title_section0),
+                    getString(R.string.title_section1),
+                    getString(R.string.title_section2),
+                    getString(R.string.title_section3),
+                    getString(R.string.title_section4),
+                    getString(R.string.title_section6),
+                    getString(R.string.btn_logout),
+            };
+        }
+        else if(rol.equals(Globals.CLIENTE))
+        {
+            elementos = new String[]{
+                    getString(R.string.title_section0),
+                    getString(R.string.title_section1),
+                    getString(R.string.title_section2),
+                    getString(R.string.title_section3),
+                    getString(R.string.title_section4),
+                    getString(R.string.title_section6),
+                    "Histograma",
+                    getString(R.string.btn_logout),
+            };
+        }
+        else
+        {
+            elementos = new String[]{
+                    getString(R.string.title_section0),
+                    getString(R.string.title_section1),
+                    getString(R.string.title_section5),
+            };
+        }
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section0),
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                        getString(R.string.title_section4),
-                        getString(R.string.title_section5),
-                }));
+                elementos));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }

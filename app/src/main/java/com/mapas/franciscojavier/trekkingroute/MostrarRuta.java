@@ -17,13 +17,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polygon;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapController;
@@ -41,8 +41,10 @@ import JSON.Coordenadas_Ruta;
 import JSON.Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Punto_interes;
+import greendao.Ruta;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
+import repositorios.RutaRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
 /**
@@ -62,6 +64,8 @@ public class MostrarRuta extends Fragment{
     private String tiempo_ruta;
     private Float kms_ruta;
     private Boolean sincronizada;
+    private Boolean favorita;
+    private Ruta ruta = new Ruta();
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
     private List<Overlay> puntosDeInteres;
@@ -74,6 +78,16 @@ public class MostrarRuta extends Fragment{
         this.tiempo_ruta = this.getArguments().getString("tiempo_ruta");
         this.kms_ruta= this.getArguments().getFloat("kms_ruta");
         this.sincronizada = this.getArguments().getBoolean("sincronizada");
+        this.favorita = this.getArguments().getBoolean("favorita");
+
+        this.ruta.setId(this.id.longValue());
+        this.ruta.setNombre(this.nombre_ruta);
+        this.ruta.setDescripcion(this.descripcion_ruta);
+        this.ruta.setTiempo_estimado(this.tiempo_ruta);
+        this.ruta.setKms(this.kms_ruta);
+        this.ruta.setSincronizada(this.sincronizada);
+        this.ruta.setFavorita(this.favorita);
+
         View view = inflater.inflate(R.layout.fragment_mostrar_ruta, container, false);
 
         osm = (MapView) view.findViewById(R.id.mapview);
@@ -295,6 +309,15 @@ public class MostrarRuta extends Fragment{
             ft.addToBackStack(null);
             ft.commit();
             return true;
+        }
+
+        if (id == R.id.action_fav)
+        {
+            this.ruta.setFavorita(true);
+            RutaRepo.insertOrUpdate(getActivity(), this.ruta);
+            Toast.makeText(getActivity(),
+                    "Ruta agregada a favoritos", Toast.LENGTH_LONG)
+                    .show();
         }
 
         return super.onOptionsItemSelected(item);

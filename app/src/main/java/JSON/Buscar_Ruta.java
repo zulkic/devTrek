@@ -82,6 +82,12 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
                     this.ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
                     this.ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
                     this.ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
+                    this.ruta.setFavorita(false);
+                    int valid = RutaRepo.isValid(context, ruta.getId());
+                    if(valid == -1 )
+                    {
+                        RutaRepo.insertOrUpdate(context,this.ruta);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

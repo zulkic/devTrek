@@ -22,6 +22,7 @@ import com.mapas.franciscojavier.trekkingroute.SessionManager;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import JSON.Autentificar_Usuario;
+import JSON.Buscar_Usuario;
 
 
 /**
@@ -50,7 +51,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
     private static final String ARG_PARAM2 = "param2";
     private String logEmail;
     private String logPassword;
-
+    public String email;
     private MainCalls mListener;
 
     public static LoginFragment newInstance(String param1, String param2) {
@@ -90,7 +91,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
     }
 
     public Boolean authenticateLogin() {
-        String email = editUserEmail.getText().toString();
+        email = editUserEmail.getText().toString();
         String pass = editPassword.getText().toString();
         Boolean existe = false;
         if (email.equals("admin") &&
@@ -161,6 +162,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
     }
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.loginBtn:
 
@@ -169,7 +171,12 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
                     //Toast.makeText(getActivity(), "no error",Toast.LENGTH_SHORT).show();
                     Boolean existe = authenticateLogin();
                     if (existe){
-                        mListener.goToHome();
+                        try {
+                            Buscar_Usuario buscar = new Buscar_Usuario(this.email,getActivity(), mListener);
+                            buscar.execute();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 break;
@@ -234,8 +241,6 @@ public class LoginFragment extends Fragment implements AdapterView.OnClickListen
         super.onDetach();
         mListener = null;
     }
-
-
 }
 
 
