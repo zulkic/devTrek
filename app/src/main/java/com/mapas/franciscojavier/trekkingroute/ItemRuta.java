@@ -3,16 +3,14 @@ package com.mapas.franciscojavier.trekkingroute;
 /**
  * Created by FranciscoJavier on 12-05-2015.
  */
-import java.util.List;
-
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
 
 import greendao.Ruta;
 

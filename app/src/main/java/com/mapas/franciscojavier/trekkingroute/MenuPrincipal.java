@@ -37,7 +37,7 @@ import repositorios.Tipo_Puntos_InteresRepo;
 
 public class MenuPrincipal extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener, MainCalls {
+        RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener, MainCalls, Favoritas.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -121,7 +121,7 @@ public class MenuPrincipal extends ActionBarActivity
                     fragment = new CrearRuta();
                     break;
                 case 4:
-                    fragment = new CrearRuta();
+                    fragment = new Favoritas();
                     break;
                 case 5:
                     fragment = new LoginFragment();
@@ -148,14 +148,14 @@ public class MenuPrincipal extends ActionBarActivity
                     fragment = new CrearRuta();
                     break;
                 case 4:
-                    fragment = new CrearRuta();
+                    fragment = new Favoritas();
                     break;
                 case 5:
                     fragment = new LoginFragment();
                     //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
                     break;
                 case 6:
-                    fragment = new Histograma();
+                    fragment = new HistogramaV2();
                     //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
                     break;
                 case 7:

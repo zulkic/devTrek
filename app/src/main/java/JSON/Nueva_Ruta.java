@@ -90,6 +90,7 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
         }
         else {
             ruta.setSincronizada(false);
+            ruta.setFavorita(false);
             id = RutaRepo.insertOrUpdate(this.context,ruta);
             Log.i("id ruta offnet: ", id.toString());
         }

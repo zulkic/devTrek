@@ -73,6 +73,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
         Boolean internet = conexion.getInternet();
         if(internet && !tiempo_sync.equals(this.sync.getTiempo())){
             // Building Parameters
+            Log.i("obtener rutas online: ", "rutas obtenidas online");
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             // getting JSON string from URL
             JSONObject json = jsonParser.makeHttpRequest(url_obtener_rutas, "GET", params);
@@ -129,8 +130,9 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
         }
         else
         {
-            Log.i("ELse: ", "Me fui por el else");
+            Log.i("obtener rutas offline: ", "rutas obtenidas offline");
             for(Ruta ruta : RutaRepo.getAllRutas(context)) {
+                Log.i("oficial", ruta.getOficial().toString());
                 this.rutasList.add(ruta);
             }
         }
