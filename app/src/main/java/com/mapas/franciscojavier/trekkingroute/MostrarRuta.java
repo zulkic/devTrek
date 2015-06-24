@@ -3,8 +3,8 @@ package com.mapas.franciscojavier.trekkingroute;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
@@ -23,7 +23,6 @@ import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.bonuspack.overlays.Polygon;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapController;
@@ -73,20 +72,8 @@ public class MostrarRuta extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.id = this.getArguments().getInt("id_ruta");
-        this.nombre_ruta = this.getArguments().getString("nombre_ruta");
-        this.descripcion_ruta = this.getArguments().getString("descripcion_ruta");
-        this.tiempo_ruta = this.getArguments().getString("tiempo_ruta");
-        this.kms_ruta= this.getArguments().getFloat("kms_ruta");
-        this.sincronizada = this.getArguments().getBoolean("sincronizada");
-        this.favorita = this.getArguments().getBoolean("favorita");
 
-        this.ruta.setId(this.id.longValue());
-        this.ruta.setNombre(this.nombre_ruta);
-        this.ruta.setDescripcion(this.descripcion_ruta);
-        this.ruta.setTiempo_estimado(this.tiempo_ruta);
-        this.ruta.setKms(this.kms_ruta);
-        this.ruta.setSincronizada(this.sincronizada);
-        this.ruta.setFavorita(this.favorita);
+        this.ruta = RutaRepo.getRutaForId(getActivity(),this.id.longValue());
 
         View view = inflater.inflate(R.layout.fragment_mostrar_ruta, container, false);
 
@@ -111,29 +98,6 @@ public class MostrarRuta extends Fragment{
 
 
     }
-    // add polygon overlay to map
-    private void addPolyOverlay() {
-        // set custom polygon style
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.BLUE);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setAlpha(30);
-        paint.setPathEffect(new CornerPathEffect(10));
-        paint.setAntiAlias(true);
-
-        // list of GeoPoint objects to be used to draw polygon
-        List<GeoPoint> polyData = new ArrayList<GeoPoint>();
-        polyData.add(new GeoPoint(-34.98489765,-71.240201));
-        polyData.add(new GeoPoint(-34.98479217, -71.23884916));
-        polyData.add(new GeoPoint(-34.98602278, -71.24007225));
-        polyData.add(new GeoPoint(-34.98589972,-71.2386775));
-
-        // apply polygon style & data and add to map
-        Polygon polyOverlay = new Polygon(getActivity());
-        polyOverlay.setPoints(polyData);
-        osm.getOverlays().add(polyOverlay);
-    }
-
     // add line overlay to map
     private void addLineOverlay() {
         // set custom line style
@@ -143,7 +107,7 @@ public class MostrarRuta extends Fragment{
         paint.setStrokeWidth(7);
 
         // list of GeoPoint objects to be used to draw line
-        if(sincronizada)
+        if(this.ruta.getSincronizada())
         {
             try
             {
@@ -320,6 +284,14 @@ public class MostrarRuta extends Fragment{
                     .show();
         }
 
+        if (id == R.id.action_ini)
+        {
+            Toast.makeText(getActivity(), "Iniciando recorrido : " + ruta.getNombre()
+                    , Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getActivity(), FgmAcInicioRecorrido.class);
+            i.putExtra("id_ruta",ruta.getId());
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 }

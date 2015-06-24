@@ -1,5 +1,7 @@
 package com.mapas.franciscojavier.trekkingroute.Utility;
 
+import android.content.Context;
+
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
@@ -27,4 +29,5 @@ public class Globals {
     public static final String INVITADO = "invitado";
     public static final String CLIENTE = "cliente";
     public static final String ADMIN = "admin";
+    public static Context context;
 }

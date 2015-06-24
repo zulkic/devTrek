@@ -111,6 +111,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                         }
                         ruta.setSincronizada(true);
                         ruta.setFavorita(false);
+                        Log.i("obtener ruta: ", ruta.getOficial().toString());
                         this.rutasList.add(ruta);
                     }
                     Log.i("Vamos a guardar: ", "guardaremos las rutas en sqlite");
@@ -132,6 +133,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
         {
             Log.i("obtener rutas offline: ", "rutas obtenidas offline");
             for(Ruta ruta : RutaRepo.getAllRutas(context)) {
+                Log.i("nombre: ", ruta.getNombre());
                 Log.i("oficial", ruta.getOficial().toString());
                 this.rutasList.add(ruta);
             }

@@ -2,7 +2,7 @@ package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +35,7 @@ public class Favoritas extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ListView listView;
-    private ArrayList<Ruta> rutas = new ArrayList<>();
+    ArrayList<Ruta> rutas = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     public static Favoritas newInstance(String param1, String param2) {
@@ -97,22 +97,9 @@ public class Favoritas extends Fragment {
                     Ruta item = (Ruta) listView.getAdapter().getItem(position);
                     Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
                             , Toast.LENGTH_SHORT).show();
-                    Bundle bundle = new Bundle();
-
-                    bundle.putInt("id_ruta", Integer.parseInt(item.getId().toString()));
-                    bundle.putString("nombre_ruta",item.getNombre());
-                    bundle.putString("descripcion_ruta",item.getDescripcion());
-                    bundle.putString("tiempo_ruta",item.getTiempo_estimado());
-                    bundle.putFloat("kms_ruta",item.getKms());
-                    bundle.putBoolean("oficial", item.getOficial());
-                    bundle.putBoolean("sincronizada", item.getSincronizada());
-                    bundle.putBoolean("favorita", item.getFavorita());
-                    Fragment tf = new MostrarRuta();
-                    tf.setArguments(bundle);
-                    FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-                    ft.replace(R.id.container, tf);
-                    ft.addToBackStack(null);
-                    ft.commit();
+                    Intent i = new Intent(getActivity(), FgmAcInicioRecorrido.class);
+                    i.putExtra("id_ruta",item.getId());
+                    startActivity(i);
                 }
             });
 

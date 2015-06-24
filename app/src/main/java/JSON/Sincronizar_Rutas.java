@@ -17,7 +17,7 @@ import repositorios.RutaRepo;
 /**
  * Created by juancarlosgonzalezca on 10-06-2015.
  */
-public class Sincronizar_Rutas extends AsyncTask<Void, Void, Void> {
+public class Sincronizar_Rutas extends AsyncTask<Void, Void, Boolean> {
 
     private Context context;
 
@@ -27,7 +27,12 @@ public class Sincronizar_Rutas extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
 
         hasInternet conexion = new hasInternet(this.context);
         Boolean internet = conexion.getInternet();
@@ -57,12 +62,16 @@ public class Sincronizar_Rutas extends AsyncTask<Void, Void, Void> {
                     Log.i("Error al sincronizar: ", "no se pudo sincronizar");
                 }
             }
+            return true;
         }
         else
         {
             Log.i("no hay internet: ", "no se puede sincronizar sin internet");
+            return false;
         }
-        return null;
+    }
+    protected void onPostExecute(Boolean result) {
+        super.onPostExecute(result);
     }
 }
 
