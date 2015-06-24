@@ -51,6 +51,7 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
         Integer id = 0;
 
         if(internet) {
+            Log.i("nueva ruta: ", "agregando una nueva ruta");
             String nombre = this.ruta.getNombre();
             String descripcion = this.ruta.getDescripcion();
             String kms = this.ruta.getKms().toString();

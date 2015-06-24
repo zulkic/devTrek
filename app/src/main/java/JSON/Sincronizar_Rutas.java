@@ -1,8 +1,8 @@
 package JSON;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +17,17 @@ import repositorios.RutaRepo;
 /**
  * Created by juancarlosgonzalezca on 10-06-2015.
  */
-public class Sincronizar_Rutas extends AsyncTask<Void, Void, Boolean> {
+public class Sincronizar_Rutas {
 
     private Context context;
 
     public Sincronizar_Rutas(Context context)
     {
         this.context = context;
+        this.doInBackground();
     }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @Override
-    protected Boolean doInBackground(Void... params) {
+    protected void doInBackground() {
 
         hasInternet conexion = new hasInternet(this.context);
         Boolean internet = conexion.getInternet();
@@ -41,9 +36,12 @@ public class Sincronizar_Rutas extends AsyncTask<Void, Void, Boolean> {
 
             List<Ruta> rutas = RutaRepo.noSincronizadas(context);
             for(Ruta ruta : rutas) {
-                Nueva_Ruta tarea_agregar_ruta = new Nueva_Ruta(ruta, context);
                 try {
+                    Nueva_Ruta tarea_agregar_ruta = new Nueva_Ruta(ruta, context);
                     Integer id = tarea_agregar_ruta.execute().get();
+                    ruta.setId(id.longValue());
+                    ruta.setSincronizada(true);
+                    RutaRepo.insertOrUpdate(context,ruta);
                     ArrayList<Coordenada> lista_coordenadas = (ArrayList<Coordenada>) CoordenadaRepo.coordenadas_ruta(context, id.longValue());
                     for (Coordenada coordenada : lista_coordenadas) {
                         coordenada.setId_ruta(id);
@@ -62,16 +60,13 @@ public class Sincronizar_Rutas extends AsyncTask<Void, Void, Boolean> {
                     Log.i("Error al sincronizar: ", "no se pudo sincronizar");
                 }
             }
-            return true;
         }
         else
         {
             Log.i("no hay internet: ", "no se puede sincronizar sin internet");
-            return false;
+
         }
-    }
-    protected void onPostExecute(Boolean result) {
-        super.onPostExecute(result);
+        Toast.makeText(context, "Rutas sincronizadas", Toast.LENGTH_LONG).show();
     }
 }
 

@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
-public class FgmAcInicioRecorrido extends FragmentActivity implements ActionBar.TabListener{
+public class FgmAcInicioRecorrido extends FragmentActivity implements ActionBar.TabListener, FIRDetalles.OnFragmentInteractionListener {
     private ActionBar actionbar;
     private ViewPager viewpager;
     private FragmentPageAdapter ft;
@@ -66,5 +66,10 @@ public class FgmAcInicioRecorrido extends FragmentActivity implements ActionBar.
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onFragmentInteraction(String id) {
+
     }
 }

@@ -21,8 +21,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -178,6 +176,8 @@ public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
                     nuevaRuta.setDescripcion(descripcionRuta);
                     nuevaRuta.setKms(mtrs);
                     nuevaRuta.setOficial(true);    //verificar mas adelante
+                    nuevaRuta.setSincronizada(false);
+                    nuevaRuta.setFavorita(false);
 
                     try
                     {

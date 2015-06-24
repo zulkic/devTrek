@@ -235,7 +235,7 @@ public class FIRMapa extends Fragment implements LocationListener, AdapterView.O
 
         for(Punto_interes pi : lista_puntos)
         {
-            Tipo_punto_interes tpi = Tipo_Puntos_InteresRepo.getTipo_Punto_InteresForId(getActivity(), pi.getId_tipo_punto_interes().longValue());
+            Tipo_punto_interes tpi = Tipo_Puntos_InteresRepo.getTipo_Punto_InteresForId(Globals.context, pi.getId_tipo_punto_interes().longValue());
             String titulo = tpi.getNombre();
             String icono = tpi.getNombre_icono();
             GeoPoint gp = new GeoPoint(pi.getLatitud(), pi.getLongitud());

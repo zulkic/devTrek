@@ -44,7 +44,7 @@ import repositorios.Tipo_Puntos_InteresRepo;
 
 public class MenuPrincipal extends Activity
         implements //NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener,DetalleIndicadorFragment.OnFragmentInteractionListener, MainCalls,Favoritas.OnFragmentInteractionListener {
+        RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener, MainCalls,Favoritas.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -121,7 +121,7 @@ public class MenuPrincipal extends Activity
         drawerList.setAdapter(new DrawerListAdapter(this, items));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        // Habilitar el icono de la app por si hay algun estilo que lo deshabilito
+        // Habilitar el icono de la app por si hay algún estilo que lo deshabilitó
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
@@ -136,7 +136,7 @@ public class MenuPrincipal extends Activity
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(itemTitle);
 
-                /*Usa este metodo si vas a modificar la action bar
+                /*Usa este método si vas a modificar la action bar
                 con cada fragmento
                  */
                 //invalidateOptionsMenu();
@@ -145,7 +145,7 @@ public class MenuPrincipal extends Activity
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(activityTitle);
 
-                /*Usa este metodo si vas a modificar la action bar
+                /*Usa este método si vas a modificar la action bar
                 con cada fragmento
                  */
                 //invalidateOptionsMenu();
@@ -206,25 +206,18 @@ public class MenuPrincipal extends Activity
             return true;
         }
         if (drawerToggle.onOptionsItemSelected(item)) {
-            // Toma los eventos de seleccion del toggle aqui
+            // Toma los eventos de selección del toggle aquí
             return true;
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sync) {
-            Boolean sync = false;
-            Sincronizar_Rutas sincronizar_rutas = new Sincronizar_Rutas(this);
             try {
-                sync = sincronizar_rutas.execute().get();
+                new Sincronizar_Rutas(this);
             }
             catch (Exception e)
             {
                 Toast.makeText(getApplicationContext(), "Error al sincronizar", Toast.LENGTH_LONG).show();
             }
-            if(sync)
-                Toast.makeText(getApplicationContext(), "Rutas sincronizadas", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(getApplicationContext(), "Sincronizacion fallida", Toast.LENGTH_LONG).show();
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -447,13 +440,13 @@ public class MenuPrincipal extends Activity
                 fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
 
-        // Se actualiza el item seleccionado y el titulo, despues de cerrar el drawer
+        // Se actualiza el item seleccionado y el título, después de cerrar el drawer
         drawerList.setItemChecked(position, true);
         setTitle(tagTitles[position]);
         drawerLayout.closeDrawer(drawerList);
     }
 
-    /* Metodo auxiliar para setear el titulo de la action bar */
+    /* Método auxiliar para setear el titulo de la action bar */
     @Override
     public void setTitle(CharSequence title) {
         itemTitle = title;
