@@ -95,7 +95,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
         osm = (MapView) view.findViewById(R.id.mapview);
         osm.setTileSource(Globals.MAPQUESTOSM);
-        osm.setUseDataConnection(true);
+        //osm.setUseDataConnection(false);
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();

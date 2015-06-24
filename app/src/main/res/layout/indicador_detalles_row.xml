@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="5">
+        <ImageView
+            android:id="@+id/imageView_indicador"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:text="@+id/label">
+        </ImageView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/textView_nombre_indicador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@+id/label"
+            android:layout_weight="1"
+            android:textSize="20sp">
+        </TextView>
+        <TextView
+            android:id="@+id/textView_descripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@+id/label"
+            android:layout_weight="1">
+        </TextView>
+        <TextView
+            android:id="@+id/textView_distancia_al_punto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@+id/label"
+            android:layout_weight="1"
+            android:gravity="right">
+        </TextView>
+    </LinearLayout>
+
+</LinearLayout>

@@ -72,7 +72,7 @@ public class VisualizarMapa extends Fragment implements LocationListener ,  View
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
-        mc.setZoom(20);
+        mc.setZoom(14);
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
         GeoPoint center = new GeoPoint(-34.98604036, -71.24007225);
