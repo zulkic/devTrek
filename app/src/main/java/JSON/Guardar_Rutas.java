@@ -43,6 +43,7 @@ public class Guardar_Rutas extends AsyncTask<Void,Void,Void> {
             int result = RutaRepo.isValid(context, ruta.getId());
             if(result == -1 )
             {
+                Log.i("guardar ruta: ", ruta.getOficial().toString());
                 RutaRepo.insertOrUpdate(context,ruta);
             }
             if(result == 0)

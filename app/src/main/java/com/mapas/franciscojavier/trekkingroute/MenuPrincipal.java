@@ -7,31 +7,31 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-import android.content.res.Configuration;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.view.MenuInflater;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import java.util.ArrayList;
+import android.widget.Toast;
 
 import com.mapas.franciscojavier.trekkingroute.Account.LoginFragment;
 import com.mapas.franciscojavier.trekkingroute.Account.MainCalls;
 import com.mapas.franciscojavier.trekkingroute.Account.RegisterFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
+import java.util.ArrayList;
+
+import JSON.Sincronizar_Rutas;
 import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
 import greendao.DaoSession;
@@ -44,7 +44,7 @@ import repositorios.Tipo_Puntos_InteresRepo;
 
 public class MenuPrincipal extends Activity
         implements //NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener,DetalleIndicadorFragment.OnFragmentInteractionListener, MainCalls {
+        RoutesFragment.OnFragmentInteractionListener,EliminarRuta.OnFragmentInteractionListener, MainCalls,Favoritas.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -73,6 +73,7 @@ public class MenuPrincipal extends Activity
         pref = this.getSharedPreferences(Globals.PREF, Context.MODE_PRIVATE);;
         rol = pref.getString(Globals.ROL, "invitado");
         Log.i("rol: ", rol);
+        Globals.context = this;
         setContentView(R.layout.activity_menu_principal);
 
 //        mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -115,7 +116,6 @@ public class MenuPrincipal extends Activity
             items.add(new DrawerItem(tagTitles[1],R.drawable.ic_ruby));
             items.add(new DrawerItem(tagTitles[5],R.drawable.ic_ruby));
         }
-
 
         // Relacionar el adaptador y la escucha de la lista del drawer
         drawerList.setAdapter(new DrawerListAdapter(this, items));
@@ -187,169 +187,12 @@ public class MenuPrincipal extends Activity
 
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        onSectionAttached(position);
-        Fragment fragment= null;
-        FragmentManager fragmentManager = getFragmentManager();
-        Boolean logout = true;
-        if(rol.equals(Globals.ADMIN)) {
-            switch (position) {
-                case 0:
-                    fragment = new PantallaInicio();
-                    break;
-                case 1:
-                    fragment = new VisualizarMapa();
-                    break;
-                case 2:
-                    fragment = new RoutesFragment();
-                    break;
-                case 3:
-                    fragment = new CrearRuta();
-                    break;
-                case 4:
-                    fragment = new DetalleIndicadorFragment();
-                    break;
-                case 5:
-                    fragment = new LoginFragment();
-                    //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
-                    break;
-                case 6:
-                    Cerrar_Sesion();
-                    logout = false;
-                    break;
-            }
-        }
-        else if(rol.equals(Globals.CLIENTE)) {
-            switch (position) {
-                case 0:
-                    fragment = new PantallaInicio();
-                    break;
-                case 1:
-                    fragment = new VisualizarMapa();
-                    break;
-                case 2:
-                    fragment = new RoutesFragment();
-                    break;
-                case 3:
-                    fragment = new CrearRuta();
-                    break;
-                case 4:
-                    fragment = new DetalleIndicadorFragment();
-                    break;
-                case 5:
-                    fragment = new LoginFragment();
-                    //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
-                    break;
-                case 6:
-                    fragment = new Histograma();
-                    //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
-                    break;
-                case 7:
-                    Cerrar_Sesion();
-                    logout = false;
-                    break;
-            }
-        }
-        else{
-            switch (position) {
-                case 0:
-                    fragment = new PantallaInicio();
-                    break;
-                case 1:
-                    fragment = new VisualizarMapa();
-                    break;
-                case 2:
-                    fragment = new LoginFragment();
-                    //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
-                    break;
-            }
-        }
-        //restoreActionBar();
-        if(logout) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit();
-        }
-    }
-
-    public void onSectionAttached(int number) {
-        if(rol.equals(Globals.ADMIN)) {
-            switch (number) {
-                case 0:
-                    mTitle = getString(R.string.title_section0);
-                    break;
-                case 1:
-                    mTitle = getString(R.string.title_section1);
-                    break;
-                case 2:
-                    mTitle = getString(R.string.title_section2);
-                    break;
-                case 3:
-                    mTitle = getString(R.string.title_section3);
-                    break;
-                case 4:
-                    mTitle = getString(R.string.title_section4);
-                    break;
-                case 5:
-                    mTitle = getString(R.string.title_section6);
-                    break;
-                case 6:
-                    mTitle = getString(R.string.title_section7);
-                    break;
-
-            }
-        }
-        else if(rol.equals(Globals.CLIENTE)) {
-            switch (number) {
-                case 0:
-                    mTitle = getString(R.string.title_section0);
-                    break;
-                case 1:
-                    mTitle = getString(R.string.title_section1);
-                    break;
-                case 2:
-                    mTitle = getString(R.string.title_section2);
-                    break;
-                case 3:
-                    mTitle = getString(R.string.title_section3);
-                    break;
-                case 4:
-                    mTitle = getString(R.string.title_section4);
-                    break;
-                case 5:
-                    mTitle = getString(R.string.title_section6);
-                    break;
-                case 6:
-                    mTitle = getString(R.string.title_section7);
-                    break;
-            }
-        }
-        else {
-            switch (number) {
-                case 0:
-                    mTitle = getString(R.string.title_section0);
-                    break;
-                case 1:
-                    mTitle = getString(R.string.title_section1);
-                    break;
-                case 2:
-                    mTitle = getString(R.string.title_section5);
-                    break;
-            }
-        }
-    }
-
-//    public void restoreActionBar() {
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayShowTitleEnabled(true);
-//        actionBar.setTitle(mTitle);
+//    @Override
+//    public void onNavigationDrawerItemSelected(int position) {
 //    }
 
-
-
+    public void onSectionAttached(int number) {
+            }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -366,6 +209,24 @@ public class MenuPrincipal extends Activity
             // Toma los eventos de selección del toggle aquí
             return true;
         }
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_sync) {
+            Boolean sync = false;
+            Sincronizar_Rutas sincronizar_rutas = new Sincronizar_Rutas(this);
+            try {
+                sync = sincronizar_rutas.execute().get();
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(), "Error al sincronizar", Toast.LENGTH_LONG).show();
+            }
+            if(sync)
+                Toast.makeText(getApplicationContext(), "Rutas sincronizadas", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(getApplicationContext(), "Sincronización fallida", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -446,6 +307,12 @@ public class MenuPrincipal extends Activity
         ft.commit();
 
     }
+
+    public Context context()
+    {
+        return this;
+    }
+
     @Override
     public void goToHome() {
         Intent i = getBaseContext().getPackageManager()
@@ -515,9 +382,10 @@ public class MenuPrincipal extends Activity
                     fragment = new CrearRuta();
                     break;
                 case 4:
-                    Intent i = new Intent(this, FgmAcInicioRecorrido.class);
+                    fragment = new Favoritas();
+                    /*Intent i = new Intent(this, FgmAcInicioRecorrido.class);
                     startActivity(i);
-                    flagInicioRecorrido = false;
+                    flagInicioRecorrido = false;*/
                     break;
                 case 5:
                     fragment = new LoginFragment();
@@ -544,19 +412,16 @@ public class MenuPrincipal extends Activity
                     fragment = new CrearRuta();
                     break;
                 case 4:
-                    Intent i = new Intent(this, FgmAcInicioRecorrido.class);
+                    fragment = new Favoritas();
+                    /*Intent i = new Intent(this, FgmAcInicioRecorrido.class);
                     startActivity(i);
-                    flagInicioRecorrido = false;
+                    flagInicioRecorrido = false;*/
                     break;
                 case 5:
                     fragment = new LoginFragment();
                     //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
                     break;
                 case 6:
-                    fragment = new Histograma();
-                    //Intent intent = new Intent(MenuPrincipal.this, LoginActivity.class);
-                    break;
-                case 7:
                     Cerrar_Sesion();
                     logout = false;
                     break;
@@ -581,7 +446,6 @@ public class MenuPrincipal extends Activity
             if(flagInicioRecorrido)
                 fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
-
 
         // Se actualiza el item seleccionado y el título, después de cerrar el drawer
         drawerList.setItemChecked(position, true);

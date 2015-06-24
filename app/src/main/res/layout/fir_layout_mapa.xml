@@ -2,17 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0B9AE2"
     >
 
-    <TextView
-        android:id="@+id/fir_mapa"
+    tools:context="com.mapas.franciscojavier.trekkingroute.IniciarRecorrido">
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tilesource="Mapnik"
+        android:layout_alignParentBottom="true" />
+
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="97dp"
-        android:text="Mapa para el recorrido"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:id="@+id/imageButtonGPS"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_action_device_gps_not_fixed"/>
 
 </RelativeLayout>

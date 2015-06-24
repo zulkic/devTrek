@@ -2,7 +2,7 @@ package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,21 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
-import JSON.Obtener_Rutas;
 import greendao.Ruta;
+import repositorios.RutaRepo;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
+ * Created by juancarlosgonzalezca on 18-06-2015.
  */
-public class RoutesFragment extends Fragment{
+public class Favoritas extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,8 +38,8 @@ public class RoutesFragment extends Fragment{
     ArrayList<Ruta> rutas = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
-    public static RoutesFragment newInstance(String param1, String param2) {
-        RoutesFragment fragment = new RoutesFragment();
+    public static Favoritas newInstance(String param1, String param2) {
+        Favoritas fragment = new Favoritas();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -58,7 +51,7 @@ public class RoutesFragment extends Fragment{
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RoutesFragment() {
+    public Favoritas() {
     }
 
     @Override
@@ -71,16 +64,16 @@ public class RoutesFragment extends Fragment{
         }
 
         try {
-            Obtener_Rutas task = new Obtener_Rutas(getActivity());
-            rutas = task.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+            rutas =  (ArrayList<Ruta>) RutaRepo.favoritas(getActivity());
+            for(Ruta ruta : rutas )
+            {
+                Log.i("ruta: ", ruta.getNombre());
+                Log.i("oficial: ", ruta.getOficial().toString());
+            }
         }
         catch (Exception e)
         {
-            Log.i("Error: ", "no hay rutas para mostrar");
+            Log.i("Error: ", "no hay rutas favoritas");
         }
     }
     @Override
@@ -104,21 +97,9 @@ public class RoutesFragment extends Fragment{
                     Ruta item = (Ruta) listView.getAdapter().getItem(position);
                     Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
                             , Toast.LENGTH_SHORT).show();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("id_ruta", Integer.parseInt(item.getId().toString()));
-                    /*bundle.putString("nombre_ruta",item.getNombre());
-                    bundle.putString("descripcion_ruta",item.getDescripcion());
-                    bundle.putString("tiempo_ruta",item.getTiempo_estimado());
-                    bundle.putFloat("kms_ruta",item.getKms());
-                    bundle.putBoolean("oficial", item.getOficial());
-                    bundle.putBoolean("sincronizada", item.getSincronizada());
-                    bundle.putBoolean("favorita", item.getFavorita());*/
-                    Fragment tf = new MostrarRuta();
-                    tf.setArguments(bundle);
-                    FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-                    ft.replace(R.id.container, tf);
-                    ft.addToBackStack(null);
-                    ft.commit();
+                    Intent i = new Intent(getActivity(), FgmAcInicioRecorrido.class);
+                    i.putExtra("id_ruta",item.getId());
+                    startActivity(i);
                 }
             });
 

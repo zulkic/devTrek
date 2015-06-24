@@ -12,9 +12,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import greendao.Ruta;
+import greendao.Sync;
 import repositorios.RutaRepo;
+import repositorios.SyncRepo;
 
 public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
 
@@ -32,6 +35,8 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
     private static final String TAG_KMS = "kms";
     private static final String TAG_TIEMPO_ESTIMADO = "tiempo_estimado";
     private static final String TAG_OFICIAL = "oficial";
+    private String tiempo_sync;
+    private Sync sync;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -42,6 +47,15 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
         this.ruta = new Ruta();
         this.context = context;
         this.jsonParser = new JSONParser();
+        this.sync = SyncRepo.getSyncForId(context, (long) 1);
+        Tiempo_Sync task_tiempo = new Tiempo_Sync(context);
+        try {
+            tiempo_sync = task_tiempo.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -56,7 +70,7 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
         hasInternet conexion = new hasInternet(this.context);
         Boolean internet = conexion.getInternet();
 
-        if(internet) {
+        if(internet && !tiempo_sync.equals(this.sync.getTiempo())) {
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
@@ -81,8 +95,16 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
                     this.ruta.setDescripcion(c.getString(TAG_DESCRIPCION));
                     this.ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
                     this.ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
-                    this.ruta.setOficial(Boolean.getBoolean(c.getString(TAG_OFICIAL)));
-                    this.ruta.setFavorita(false);
+                    Integer oficial = Integer.parseInt(c.getString(TAG_OFICIAL));
+                    if(oficial == 1)
+                    {
+                        ruta.setOficial(true);
+                    }
+                    else{
+                        ruta.setOficial(false);
+                    }
+                    ruta.setSincronizada(true);
+                    ruta.setFavorita(false);
                     int valid = RutaRepo.isValid(context, ruta.getId());
                     if(valid == -1 )
                     {
