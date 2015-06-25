@@ -41,6 +41,7 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private Marker aux;
     private Indicador indicador;
     private DownloadManager mgr=null;
-    Long i, f;
+    int i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     // GPSTracker class
     GPS gps;
@@ -331,32 +332,43 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     public void onClick(View v) {
         Fragment newFragment=null;
         Date c = null;
+        Calendar now = Calendar.getInstance();
         switch (v.getId()){
             case R.id.button_start:
                 if(encendido){
-                    Toast.makeText(v.getContext(), "La ruta ya comenzo a grabarse", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), R.string.toast_rute_start, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    c = new Date();
-                    System.out.println("getTimeInicio() => "+c.getTime());
-                    i = c.getTime();
-                    //System.out.println("getTimeInicio "+i);
-                    String tiempoInicioRecorrido= df.format(i);
-                    System.out.println("getTimeInicio "+tiempoInicioRecorrido);
+                    int hour = now.get(Calendar.HOUR_OF_DAY);
+                    int minute = now.get(Calendar.MINUTE);
+                    int second = now.get(Calendar.SECOND);
+                    System.out.printf("INICIO %02d:%02d:%02d",hour, minute, second);
+                    i= hour*3600 + minute*60 + second;
+                    System.out.println("getTimeInicio "+i);
+
                     grabarRecorrido();
                 }
                 break;
             case R.id.button_end :
                 if(encendido){
-                    c = new Date();
-                    System.out.println("getTimeFin() => "+c.getTime());
-                    f = c.getTime();
-                    String tiempoFinRecorrido= df.format(f);
-                    System.out.println("getTimeFin "+tiempoFinRecorrido);
+                    int hour = now.get(Calendar.HOUR_OF_DAY);
+                    int minute = now.get(Calendar.MINUTE);
+                    int second = now.get(Calendar.SECOND);
+                    System.out.printf("FIN %02d:%02d:%02d",hour, minute, second);
+                    f= hour*3600 + minute*60 + second;
+                    System.out.println("getTimeInicio "+f);
 
                     f=f-i;
-                    String tiempoTotalRecorrido= df.format(f);
+                    hour=f/3600;
+                    minute=(f-(3600*hour))/60;
+                    second=f-((hour*3600)+(minute*60));
+                    System.out.println(hour+"h "+minute+"m "+second+"s");
+                    //String tiempoTotalRecorrido= df.format(f);
+                    String tiempoTotalRecorrido= hour+":"+minute+":"+second;
+                    //System.out.println("tiempoTotalRecorrido "+tiempoTotalRecorrido);
                     System.out.println("distancia ----------->"+distancia);
+                    distancia = distancia/1000;
+                    System.out.println("distancia nueva------>"+distancia);
 
                     apagarRecorrido();
 
@@ -366,7 +378,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
 
                 }
                 else{
-                    Toast.makeText(v.getContext(), "Primero inicie un Ruta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(),R.string.toast_rute_end , Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.imageButtonGPS:
