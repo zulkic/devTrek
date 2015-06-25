@@ -2,7 +2,6 @@ package com.mapas.franciscojavier.trekkingroute.Account;
 
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.R;
 import com.mapas.franciscojavier.trekkingroute.SessionManager;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
@@ -33,7 +33,7 @@ import JSON.Buscar_Usuario;
  * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
-public class LoginFragment extends Fragment implements AdapterView.OnClickListener {
+public class LoginFragment extends SherlockFragment implements AdapterView.OnClickListener {
 
     //private static final String TAG = RegisterActivity.class.getSimpleName();
     private EditText editUserEmail;

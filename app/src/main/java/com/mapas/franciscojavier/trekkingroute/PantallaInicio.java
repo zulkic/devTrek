@@ -5,18 +5,17 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragment;
 
 /**
  * Created by nicolas on 10-06-2015.
  */
-public class PantallaInicio extends android.app.Fragment {
+public class PantallaInicio extends SherlockFragment {
 
     public static PantallaInicio newInstance() {
         PantallaInicio fragment = new PantallaInicio();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }

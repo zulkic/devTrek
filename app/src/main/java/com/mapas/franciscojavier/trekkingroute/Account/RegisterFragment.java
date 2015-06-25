@@ -3,7 +3,6 @@ package com.mapas.franciscojavier.trekkingroute.Account;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.R;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
@@ -28,7 +28,7 @@ import greendao.Usuario;
 /**
  * Created by nicolas on 03-06-2015.
  */
-public class RegisterFragment extends Fragment implements AdapterView.OnClickListener{
+public class RegisterFragment extends SherlockFragment implements AdapterView.OnClickListener{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";

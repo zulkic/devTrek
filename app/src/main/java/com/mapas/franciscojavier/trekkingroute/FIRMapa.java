@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.ResourceProxy;
@@ -41,17 +41,15 @@ import greendao.Punto_interes;
 import greendao.Ruta;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
-import repositorios.RutaRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
-public class FIRMapa extends Fragment implements LocationListener, AdapterView.OnClickListener {
+public class FIRMapa extends SherlockFragment implements LocationListener, AdapterView.OnClickListener {
 
     private MapView osm;
     private MapController mc;
     private LocationManager locationManager;
     // GPSTracker class
     private GPS gps;
-    private Long id_ruta;
     private Ruta ruta;
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
@@ -68,16 +66,15 @@ public class FIRMapa extends Fragment implements LocationListener, AdapterView.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        if (view == null) {
-            this.id_ruta = this.getArguments().getLong("id_ruta");
-            ruta = RutaRepo.getRutaForId(Globals.context, id_ruta);
+            Log.i("Mapa: ", "me han llamado");
+            ruta = Globals.ini_rec;
 
             gps = new GPS(Globals.context);
 
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
 
-            view = inflater.inflate(R.layout.fir_layout_mapa, container, false);
+            view = inflater.inflate(R.layout.fir_layout_mapa, null);
             ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
             botonGps.setOnClickListener(this);
 
@@ -100,19 +97,7 @@ public class FIRMapa extends Fragment implements LocationListener, AdapterView.O
 
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
-        }
         return view;
-    }
-    public static FIRMapa newInstance(String text) {
-
-        Log.i("mapa: ", "newInstance");
-        FIRMapa f = new FIRMapa();
-        Bundle b = new Bundle();
-        b.putString("msg", text);
-
-        f.setArguments(b);
-
-        return f;
     }
 
     public void initPathOverlay(){
@@ -174,10 +159,10 @@ public class FIRMapa extends Fragment implements LocationListener, AdapterView.O
         {
             try
             {
-                Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.id_ruta.intValue(),Globals.context);
+                Coordenadas_Ruta tarea_get_coordenadas = new Coordenadas_Ruta(this.ruta.getId().intValue(),Globals.context);
                 lista_coordenadas = tarea_get_coordenadas.execute().get();
 
-                Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.id_ruta.intValue(),Globals.context);
+                Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.ruta.getId().intValue(),Globals.context);
                 lista_puntos = tarea_get_puntos.execute().get();
 
             }
@@ -188,7 +173,7 @@ public class FIRMapa extends Fragment implements LocationListener, AdapterView.O
         }
         else
         {
-            for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(Globals.context, this.id_ruta))
+            for(Coordenada coordenada : CoordenadaRepo.coordenadas_ruta(Globals.context, this.ruta.getId()))
             {
                 lista_coordenadas.add(coordenada);
             }

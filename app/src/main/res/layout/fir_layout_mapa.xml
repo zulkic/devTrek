@@ -4,11 +4,10 @@
     android:layout_height="match_parent"
     >
 
-    tools:context="com.mapas.franciscojavier.trekkingroute.IniciarRecorrido">
     <org.osmdroid.views.MapView
         android:id="@+id/mapview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         tilesource="Mapnik"
         android:layout_alignParentBottom="true" />
 

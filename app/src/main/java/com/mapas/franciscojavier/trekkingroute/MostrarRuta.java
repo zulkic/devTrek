@@ -1,24 +1,24 @@
 package com.mapas.franciscojavier.trekkingroute;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.ResourceProxy;
@@ -49,7 +49,7 @@ import repositorios.Tipo_Puntos_InteresRepo;
 /**
  * Created by FranciscoJavier on 28-04-2015.
  */
-public class MostrarRuta extends Fragment{
+public class MostrarRuta extends SherlockFragment {
     private MapView osm;
     private MapController mc;
     private LocationManager locationManager;
@@ -195,7 +195,7 @@ public class MostrarRuta extends Fragment{
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater  = getActivity().getMenuInflater();
+        inflater  = ((SherlockFragmentActivity)getActivity()).getSupportMenuInflater();
         inflater.inflate(R.menu.menu_mostrar_ruta, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -252,25 +252,18 @@ public class MostrarRuta extends Fragment{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-                Fragment newFragment = new DetallesCrearRuta().newInstance(this.tiempo_ruta,this.kms_ruta,this.nombre_ruta,this.descripcion_ruta,this.id);
-            //newFragment.setTiempoTotal(tiempoTotalRecorrido);
-                FragmentManager fm1 = getFragmentManager();
-                FragmentTransaction ft1 = fm1.beginTransaction();
-                ft1.replace(R.id.container, newFragment)
-                        .addToBackStack(null)
-                        .commit();
-
+            android.support.v4.app.FragmentTransaction ft = Globals.ft.beginTransaction();
+            ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(this.tiempo_ruta,this.kms_ruta,this.nombre_ruta,this.descripcion_ruta,this.id));
+            ft.commit();
             return true;
         }
         if (id == R.id.action_delet) {
             //Toast.makeText(getActivity(),"el eliminar", Toast.LENGTH_SHORT).show();
             Long idLong = new Long(this.id);
-            Fragment tf = new DetallesEliminarRuta().newInstance(idLong,
-                    this.nombre_ruta, this.tiempo_ruta, this.kms_ruta, "tipo", this.descripcion_ruta);
-            //pendiente
-            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-            ft.replace(R.id.container, tf);
-            ft.addToBackStack(null);
+
+            FragmentTransaction ft = Globals.ft.beginTransaction();
+            ft.replace(R.id.content_frame, new DetallesEliminarRuta().newInstance(idLong,
+                    this.nombre_ruta, this.tiempo_ruta, this.kms_ruta, "tipo", this.descripcion_ruta));
             ft.commit();
             return true;
         }
@@ -288,9 +281,11 @@ public class MostrarRuta extends Fragment{
         {
             Toast.makeText(getActivity(), "Iniciando recorrido : " + ruta.getNombre()
                     , Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getActivity(), FgmAcInicioRecorrido.class);
-            i.putExtra("id_ruta",ruta.getId());
-            startActivity(i);
+            Globals.ini_rec = this.ruta;
+            Fragment frag = new Frag_Iniciar_Rec();
+            FragmentTransaction ft = Globals.ft.beginTransaction();
+            ft.replace(R.id.content_frame, frag);
+            ft.commit();
         }
         return super.onOptionsItemSelected(item);
     }

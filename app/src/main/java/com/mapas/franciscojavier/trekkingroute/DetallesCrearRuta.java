@@ -21,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ import greendao.Punto_interes;
 import greendao.Ruta;
 
 
-public class DetallesCrearRuta extends Fragment implements View.OnClickListener{
+public class DetallesCrearRuta extends SherlockFragment implements View.OnClickListener{
 
     String tiempoTotal;
     int LARGO_NOMBRE_RUTA=1;

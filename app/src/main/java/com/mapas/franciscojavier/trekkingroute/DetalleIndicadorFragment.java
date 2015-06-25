@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.dummy.DummyContent;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import greendao.Ruta;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class DetalleIndicadorFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class DetalleIndicadorFragment extends SherlockFragment implements AbsListView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
 

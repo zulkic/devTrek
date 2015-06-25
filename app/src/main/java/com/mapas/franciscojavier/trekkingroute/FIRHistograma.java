@@ -3,6 +3,7 @@ package com.mapas.franciscojavier.trekkingroute;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,21 +27,18 @@ public class FIRHistograma extends Fragment implements View.OnClickListener {
     private LineChart chart;
     private int max;
     private int min;
-    private Long id_ruta;
     private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        if (view == null) {
-
-            this.id_ruta = this.getArguments().getLong("id_ruta");
-            view = inflater.inflate(R.layout.fir_layout_histograma,container, false);
+            Log.i("histograma: ", "me han llamado");
+            view = inflater.inflate(R.layout.fir_layout_histograma, null);
             ImageButton botonDescarga = (ImageButton) view.findViewById(R.id.imageButton_download);
             botonDescarga.setOnClickListener(this);
 
-            Coordenadas_Ruta coordenadas_ruta = new Coordenadas_Ruta(id_ruta.intValue() , Globals.context);
+            Coordenadas_Ruta coordenadas_ruta = new Coordenadas_Ruta(Globals.ini_rec.getId().intValue() , Globals.context);
             coordenadas = new ArrayList<>();
             try {
                 coordenadas = coordenadas_ruta.execute().get();
@@ -118,7 +116,6 @@ public class FIRHistograma extends Fragment implements View.OnClickListener {
             yAxisR.setAxisMinValue(min);
             yAxisR.setAxisMaxValue(max);
 
-        }
         return view;
     }
 

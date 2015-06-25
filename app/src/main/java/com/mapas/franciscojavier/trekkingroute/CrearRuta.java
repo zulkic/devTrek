@@ -4,8 +4,6 @@ package com.mapas.franciscojavier.trekkingroute;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -16,9 +14,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +25,8 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.MenuItem;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.ResourceProxy;
@@ -49,7 +49,7 @@ import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
-public class CrearRuta extends Fragment implements LocationListener, AdapterView.OnClickListener{
+public class CrearRuta extends SherlockFragment implements LocationListener, AdapterView.OnClickListener{
     View rootView;
     private MapView osm;
     private MapController mc;
@@ -120,7 +120,7 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ResourceProxy rp = new ResourceProxyImpl(getActivity());
-        this.indicador = new Indicador(this.getResources().getDrawable(R.drawable.abc_ab_share_pack_mtrl_alpha),rp,getActivity());
+        this.indicador = new Indicador(this.getResources().getDrawable(R.drawable.abs__ab_share_pack_holo_light),rp,getActivity());
         for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
         {
             tipo_puntos.add(tipo_punto_interes);
@@ -360,13 +360,9 @@ public class CrearRuta extends Fragment implements LocationListener, AdapterView
 
                     apagarRecorrido();
 
-                    newFragment = new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos());
-                    //newFragment.setTiempoTotal(tiempoTotalRecorrido);
-                    FragmentManager fm1 = getFragmentManager();
-                    FragmentTransaction ft1 = fm1.beginTransaction();
-                    ft1.replace(R.id.container, newFragment)
-                            .addToBackStack(null)
-                            .commit();
+                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos()));
+                    ft.commit();
 
                 }
                 else{

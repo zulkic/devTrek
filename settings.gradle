@@ -1,1 +1,1 @@
-include ':MyDaoGenerator', ':app'
+include ':MyDaoGenerator', ':app', ':ActionBarSherlockLib'

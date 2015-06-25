@@ -2,7 +2,6 @@ package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -99,20 +100,13 @@ public class EliminarRuta extends Fragment{
                     // Loads the given URL
                     Ruta item = (Ruta) listView.getAdapter().getItem(position);
 
-
-                   /** System.out.println("item: item.getNombre()"+item.getNombre());
-                    System.out.println("item: item.getDescripcion()"+item.getDescripcion());
-                    System.out.println("item: item.getKms()"+item.getKms());
-                    System.out.println("item: item.getId()"+item.getId());
-                    System.out.println("item: item.getTiempo_estimado()"+item.getTiempo_estimado());*/
-
                     Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
                             , Toast.LENGTH_SHORT).show();
-                    Fragment tf = new DetallesEliminarRuta().newInstance(item.getId(),
-                            item.getNombre(), item.getTiempo_estimado(), item.getKms(),"tipo", item.getDescripcion());
-                    FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-                    ft.replace(R.id.container, tf);
-                    ft.addToBackStack(null);
+
+
+                    android.support.v4.app.FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, new DetallesEliminarRuta().newInstance(item.getId(),
+                            item.getNombre(), item.getTiempo_estimado(), item.getKms(),"tipo", item.getDescripcion()));
                     ft.commit();
                 }
             });

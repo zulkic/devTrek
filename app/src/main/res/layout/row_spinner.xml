@@ -9,7 +9,7 @@
      android:id="@+id/icon"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:src="@drawable/abc_ic_clear_mtrl_alpha"/>
+     android:src="@drawable/abs__ic_clear"/>
     <TextView
      android:id="@+id/tipo_recorrido"
      android:layout_width="wrap_content"

@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
-public class FgmAcInicioRecorrido extends FragmentActivity implements ActionBar.TabListener, FIRDetalles.OnFragmentInteractionListener {
+public class FgmAcInicioRecorrido extends FragmentActivity implements ActionBar.TabListener, DetalleIndicadorFragment.OnFragmentInteractionListener {
     private ActionBar actionbar;
     private ViewPager viewpager;
     private FragmentPageAdapter ft;

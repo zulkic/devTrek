@@ -19,7 +19,7 @@
     <string name="title_section4">Iniciar Recorrido</string>
     <string name="title_section5">Login</string>
     <string name="title_section6">Perfil</string>
-    <string name="title_section7">Histograma</string>
+    <string name="title_section7">Cerrar Sesion</string>
     <string-array name="Tags">
         <item>Inicio</item>
         <item>Visualizar Mapa</item>

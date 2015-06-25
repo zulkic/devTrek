@@ -1,10 +1,13 @@
 package com.mapas.franciscojavier.trekkingroute.Utility;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
+
+import greendao.Ruta;
 
 /**
  * Created by Nicolas on 06-06-2015.
@@ -30,4 +33,6 @@ public class Globals {
     public static final String CLIENTE = "cliente";
     public static final String ADMIN = "admin";
     public static Context context;
+    public static FragmentManager ft;
+    public static Ruta ini_rec;
 }

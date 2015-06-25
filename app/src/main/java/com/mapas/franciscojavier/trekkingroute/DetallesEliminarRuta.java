@@ -1,19 +1,21 @@
 package com.mapas.franciscojavier.trekkingroute;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+
 import JSON.Eliminar_Ruta;
 
 
-public class DetallesEliminarRuta extends Fragment implements View.OnClickListener{
+public class DetallesEliminarRuta extends SherlockFragment implements View.OnClickListener{
 
     int LARGO_NOMBRE_RUTA=1;
     private static Long ID_RUTA;
@@ -50,14 +52,7 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
         TextView tipoRecorrido = (TextView) v.findViewById(R.id.editTextEliminar_recorrido_mediante);
         TextView descripcion = (TextView) v.findViewById(R.id.editTextEliminar_descripcion);
 
-        /**System.out.println(".setText(NOMBRE); "+NOMBRE);
-        System.out.println(".setText(TIEMPO); "+TIEMPO);
-        System.out.println(".setText(TIPO); "+TIPO);
-        System.out.println(".setText(DESCRIPCION); "+DESCRIPCION);*/
-
         String km = Float.toString(KMS);
-
-        //System.out.println(".setText(KMS); "+km);
 
         nombreRuta.setText(NOMBRE);
         nombreRuta.setOnClickListener(this);
@@ -92,15 +87,11 @@ public class DetallesEliminarRuta extends Fragment implements View.OnClickListen
                             "Se elimino: "+"\n"
                                     + NOMBRE
                             ,Toast.LENGTH_SHORT).show();
-                //BUSCAR COMO RETROSEDER UNA VEZ Q SE ELIMINA----pendiete
-                //getFragmentManager().popBackStack();
-                Fragment newFragment = new RoutesFragment();
-                //newFragment.setTiempoTotal(tiempoTotalRecorrido);
-                FragmentManager fm1 = getFragmentManager();
-                FragmentTransaction ft1 = fm1.beginTransaction();
-                ft1.replace(R.id.container, newFragment)
-                        .addToBackStack(null)
-                        .commit();
+
+                FragmentTransaction ft = Globals.ft.beginTransaction();
+                ft.replace(R.id.content_frame, new RoutesFragment());
+                ft.commit();
+
                 break;
             case R.id.button_cancelar_eliminar_ruta:
                 //Toast.makeText(getActivity().getBaseContext(),"Se cancelo: "+"\n"+ NOMBRE+"\n",Toast.LENGTH_SHORT).show();

@@ -1,7 +1,6 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.DownloadManager;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,16 +15,15 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.MenuItem;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapController;
@@ -48,7 +46,7 @@ import repositorios.CoordenadaRepo;
 /**
  * Created by FranciscoJavier on 28-04-2015.
  */
-public class VisualizarMapa extends Fragment implements LocationListener ,  View.OnClickListener{
+public class VisualizarMapa extends SherlockFragment implements LocationListener ,  View.OnClickListener{
     private MapView osm;
     private MapController mc;
     private LocationManager locationManager;

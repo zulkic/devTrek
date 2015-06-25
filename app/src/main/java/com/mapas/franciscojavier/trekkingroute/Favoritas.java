@@ -1,9 +1,9 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+
 import java.util.ArrayList;
 
 import greendao.Ruta;
@@ -21,7 +24,7 @@ import repositorios.RutaRepo;
 /**
  * Created by juancarlosgonzalezca on 18-06-2015.
  */
-public class Favoritas extends Fragment {
+public class Favoritas extends SherlockFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -97,9 +100,12 @@ public class Favoritas extends Fragment {
                     Ruta item = (Ruta) listView.getAdapter().getItem(position);
                     Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
                             , Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getActivity(), FgmAcInicioRecorrido.class);
-                    i.putExtra("id_ruta",item.getId());
-                    startActivity(i);
+
+                    Globals.ini_rec = item;
+                    Fragment frag = new Frag_Iniciar_Rec();
+                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, frag);
+                    ft.commit();
                 }
             });
 

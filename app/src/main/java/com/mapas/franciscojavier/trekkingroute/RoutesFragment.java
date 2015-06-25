@@ -1,9 +1,9 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -28,7 +31,7 @@ import greendao.Ruta;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class RoutesFragment extends Fragment{
+public class RoutesFragment extends SherlockFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -106,19 +109,14 @@ public class RoutesFragment extends Fragment{
                             , Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();
                     bundle.putInt("id_ruta", Integer.parseInt(item.getId().toString()));
-                    /*bundle.putString("nombre_ruta",item.getNombre());
-                    bundle.putString("descripcion_ruta",item.getDescripcion());
-                    bundle.putString("tiempo_ruta",item.getTiempo_estimado());
-                    bundle.putFloat("kms_ruta",item.getKms());
-                    bundle.putBoolean("oficial", item.getOficial());
-                    bundle.putBoolean("sincronizada", item.getSincronizada());
-                    bundle.putBoolean("favorita", item.getFavorita());*/
-                    Fragment tf = new MostrarRuta();
-                    tf.setArguments(bundle);
-                    FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-                    ft.replace(R.id.container, tf);
-                    ft.addToBackStack(null);
+
+                    Fragment frag = new MostrarRuta();
+                    frag.setArguments(bundle);
+
+                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, frag);
                     ft.commit();
+
                 }
             });
 
