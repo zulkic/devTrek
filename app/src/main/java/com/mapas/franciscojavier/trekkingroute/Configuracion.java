@@ -30,7 +30,6 @@ public class Configuracion extends SherlockFragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_login);
         View v = inflater.inflate(R.layout.frament_configuracion, container, false);
 
         radioSexGroup = (RadioGroup) v.findViewById(R.id.radioIdioma);
@@ -59,8 +58,6 @@ public class Configuracion extends SherlockFragment implements View.OnClickListe
                     mListener.changeLanguage("es");
                 else
                     Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
-                //idioma("en");
-
         }
     }
     @Override

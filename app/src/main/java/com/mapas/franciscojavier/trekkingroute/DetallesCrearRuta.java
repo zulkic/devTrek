@@ -42,7 +42,6 @@ import greendao.Ruta;
 public class DetallesCrearRuta extends SherlockFragment implements View.OnClickListener{
 
     String tiempoTotal;
-    int LARGO_NOMBRE_RUTA=1;
     private static final String ARG_PARAM1 = "nada";
     private static final String ARG_PARAM2 = "vacio";
     private static String ARG_TIEMPO_RUTA = "hollow";
@@ -168,7 +167,6 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
                 EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
                 String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
                 if(!formHaveErrors(editTextNombreRuta)) {
-                    //Toast.makeText(getActivity().getBaseContext(), editTextNombreRuta.getText()+" \n "+ ARG_PARAM3, Toast.LENGTH_SHORT).show();
                     String nombreRuta = editTextNombreRuta.getText().toString();
                     String tiempoRuta = textTiempoEstimado.getText().toString();
 
