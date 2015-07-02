@@ -436,7 +436,8 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         inflater.inflate(R.menu.menu_principal, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    private void idioma(String i)
+    @Override
+    public void changeLanguage(String i)
     {
         String languageToLoad  = i;
         Locale locale = new Locale(languageToLoad);

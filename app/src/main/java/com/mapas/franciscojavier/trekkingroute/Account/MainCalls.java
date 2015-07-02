@@ -14,4 +14,6 @@ public interface MainCalls {
     public void login(String email, String password);
 
     public void goToHome();
+
+    public void changeLanguage(String idiom);
 }

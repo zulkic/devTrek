@@ -73,7 +73,7 @@
     <string name="recorrido_mediante">Recorrido mediante</string>
     <string name="nombre_ruta">Nombre de la Ruta</string>
     <string name="tiempo_estimado">Tiempo Estimado</string>
-    <string name="distacia_recorrida">Distancia Recorrida (mts)</string>
+    <string name="distacia_recorrida">Distancia Recorrida (km)</string>
     <string name="descripcion_ruta">Descripcion</string>
     <string name="button_guardar_ruta">Guardar</string>
     <string name="button_cancelar_ruta">Cancelar</string>
