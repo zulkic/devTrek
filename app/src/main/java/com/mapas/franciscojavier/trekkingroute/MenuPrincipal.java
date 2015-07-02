@@ -28,6 +28,8 @@ import com.mapas.franciscojavier.trekkingroute.Account.RegisterFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import JSON.Sincronizar_Regiones;
+import java.util.Locale;
+
 import JSON.Sincronizar_Rutas;
 import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
@@ -38,6 +40,8 @@ import repositorios.RegionRepo;
 import repositorios.SyncRepo;
 import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
+
+
 
 public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFragment.OnFragmentInteractionListener, EliminarRuta.OnFragmentInteractionListener, MainCalls,Favoritas.OnFragmentInteractionListener {
 
@@ -169,6 +173,7 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
             SyncRepo.insertOrUpdate(this, sync);
             Log.i("Time sync: ", "Sincronizado");
         }
+
         try{
             if(Tipo_ObstaculoRepo.getAllTipos_Obstaculos(this).size() == 0  || Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(this).size() == 0 ) {
                 Sincronizar_Tipos_Indicadores tarea = new Sincronizar_Tipos_Indicadores(this);
@@ -211,7 +216,11 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         }
 
         if (id == R.id.action_settings) {
-            return true;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new Configuracion());
+            ft.commit();
+
+            //return true;
         }
 
         if (id == R.id.action_sync) {
@@ -426,6 +435,19 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.menu_principal, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public void changeLanguage(String i)
+    {
+        String languageToLoad  = i;
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+        goToHome();
+
     }
 
 }
