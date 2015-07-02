@@ -103,4 +103,15 @@
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="action_example">--</string>
+
+<!-- Configuracion -->
+    <string name="radio_Español"> Español </string>
+    <string name="radio_Ingles"> Ingles </string>
+    <string name="radio_Mapudungun"> Mapudungun </string>
+    <string name="btn_cambiar_idioma"> Cambiar </string>
+    <string name="btn_cancelar_idioma"> Cacelar </string>
+    <string name="seleccion_idioma">Seleccione el idioma</string>
+    <string name="title_configuracion">Configuración</string>
+
+
 </resources>

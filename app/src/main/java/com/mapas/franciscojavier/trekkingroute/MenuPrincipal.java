@@ -27,6 +27,8 @@ import com.mapas.franciscojavier.trekkingroute.Account.MainCalls;
 import com.mapas.franciscojavier.trekkingroute.Account.RegisterFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
+import java.util.Locale;
+
 import JSON.Sincronizar_Rutas;
 import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
@@ -69,6 +71,8 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         Globals.context = this;
         Globals.ft = getSupportFragmentManager();
         setContentView(R.layout.activity_menu_principal);
+
+
 
         mTitle = mDrawerTitle = getTitle();
 
@@ -204,7 +208,11 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         }
 
         if (id == R.id.action_settings) {
-            return true;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new Configuracion());
+            ft.commit();
+
+            //return true;
         }
 
         if (id == R.id.action_sync) {
@@ -419,6 +427,18 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.menu_principal, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+    private void idioma(String i)
+    {
+        String languageToLoad  = i;
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+        goToHome();
+
     }
 
 }
