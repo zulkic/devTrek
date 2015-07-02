@@ -12,12 +12,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import greendao.Ruta;
-import greendao.Sync;
 import repositorios.RutaRepo;
-import repositorios.SyncRepo;
 
 public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
 
@@ -35,8 +32,9 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
     private static final String TAG_KMS = "kms";
     private static final String TAG_TIEMPO_ESTIMADO = "tiempo_estimado";
     private static final String TAG_OFICIAL = "oficial";
-    private String tiempo_sync;
-    private Sync sync;
+    private static final String TAG_REGION = "id_region";
+    private static final String TAG_TIPO = "tipo";
+    private Boolean internet;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -47,14 +45,22 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
         this.ruta = new Ruta();
         this.context = context;
         this.jsonParser = new JSONParser();
-        this.sync = SyncRepo.getSyncForId(context, (long) 1);
-        Tiempo_Sync task_tiempo = new Tiempo_Sync(context);
-        try {
-            tiempo_sync = task_tiempo.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        Ruta aux = RutaRepo.getRutaForId(context, id.longValue());
+        if(aux != null)
+        {
+            this.ruta = aux;
+            internet = false;
+        }
+        else
+        {
+            hasInternet conexion = new hasInternet(this.context);
+            try {
+                internet = conexion.execute().get();
+            }
+            catch(Exception e)
+            {
+                internet = false;
+            }
         }
     }
 
@@ -67,10 +73,8 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
      * getting All products from url
      */
     protected Ruta doInBackground(Void... args) {
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
 
-        if(internet && !tiempo_sync.equals(this.sync.getTiempo())) {
+        if (internet) {
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("id_ruta", Integer.toString(id)));
@@ -96,36 +100,26 @@ public class Buscar_Ruta extends AsyncTask<Void, Void, Ruta> {
                     this.ruta.setKms(Float.parseFloat(c.getString(TAG_KMS)));
                     this.ruta.setTiempo_estimado(c.getString(TAG_TIEMPO_ESTIMADO));
                     Integer oficial = Integer.parseInt(c.getString(TAG_OFICIAL));
-                    if(oficial == 1)
-                    {
+                    if (oficial == 1) {
                         ruta.setOficial(true);
-                    }
-                    else{
+                    } else {
                         ruta.setOficial(false);
                     }
+                    ruta.setId_region(Integer.parseInt(c.getString(TAG_REGION)));
+                    ruta.setTipo(c.getString(TAG_TIPO));
                     ruta.setSincronizada(true);
                     ruta.setFavorita(false);
                     int valid = RutaRepo.isValid(context, ruta.getId());
-                    if(valid == -1 )
-                    {
-                        RutaRepo.insertOrUpdate(context,this.ruta);
+                    if (valid == -1) {
+                        RutaRepo.insertOrUpdate(context, this.ruta);
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        else
-        {
-            this.ruta = RutaRepo.getRutaForId(context, id.longValue());
-        }
         return ruta;
     }
-
-    /**
-     * After completing background task Dismiss the progress dialog
-     * *
-     */
 
     protected void onPostExecute(Ruta result) {
         super.onPostExecute(result);

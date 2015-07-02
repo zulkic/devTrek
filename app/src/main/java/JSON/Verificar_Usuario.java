@@ -24,12 +24,21 @@ public class Verificar_Usuario extends AsyncTask<Void, Void, Boolean> {
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_AUTENT = "existe";
+    private Boolean internet;
 
     public Verificar_Usuario(String email, Context context)
     {
         this.email = email;
         this.jsonParser = new JSONParser();
         this.context = context;
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
     /**
      * Before starting background thread Show Progress Dialog
@@ -45,8 +54,6 @@ public class Verificar_Usuario extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... args) {
 
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
         Boolean existe = false;
         if(internet) {
 

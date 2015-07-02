@@ -4,9 +4,9 @@ package com.mapas.franciscojavier.trekkingroute;
  * Created by nicolas on 10-05-2015.
  */
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+import com.mapas.franciscojavier.trekkingroute.Utility.Wrapper;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -50,7 +52,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
     private static boolean ARG_EDITAR = false;
     private Spinner spinnerReco;
     private Button btnSubmit;
-    private String Caminando = "Caminando";//getString(R.string.trail_caminando);
+    private String Caminando = "Caminando";//getActivity().getResources().getString(R.string.trail_caminando);
     private String Trotando="Trotando";//getString(R.string.trail_trotando);
     private String Corriendo="Corriendo";//getString(R.string.trail_corriendo);
     private String Bicicleta="Bicicleta";//getString(R.string.trail_bicicleta);
@@ -64,6 +66,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
     public DetallesCrearRuta() {
         // Required empty public constructor
     }
+
     public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, ArrayList<Coordenada> coordenadas, ArrayList<Punto_interes> puntos_interes) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
@@ -83,7 +86,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
         lista_puntos_interes = puntos_interes;
         return fragment;
     }
-    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta,String nombreRuta, String descripcionRuta,Integer id_ruta) {
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, String nombreRuta, String descripcionRuta, Integer id_ruta) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
@@ -99,9 +102,10 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
         df.setRoundingMode(RoundingMode.DOWN);
         String mts = df.format(distaciaRuta);
         //float mtrs = Float.valueOf(mts);
-        mts = mts.replace(',', '.');
+
         ARG_DISTANCIA_RUTA=mts;
         Log.d("ARG_DISTANCIA_RUTA",ARG_DISTANCIA_RUTA);
+        Log.d("ARG_DISTANCIA_RUTA",mts);
         return fragment;
     }
 
@@ -163,11 +167,16 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
                 EditText textTiempoEstimado = (EditText)getActivity().findViewById(R.id.editTextiempo_estimado);
                 spinnerReco = (Spinner) getActivity().findViewById(R.id.spinner_recorrido);
                 EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
+                String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
                 if(!formHaveErrors(editTextNombreRuta)) {
                     //Toast.makeText(getActivity().getBaseContext(), editTextNombreRuta.getText()+" \n "+ ARG_PARAM3, Toast.LENGTH_SHORT).show();
                     String nombreRuta = editTextNombreRuta.getText().toString();
                     String tiempoRuta = textTiempoEstimado.getText().toString();
-                    String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
+
+
+                    if(ARG_DISTANCIA_RUTA.contains(",")){
+                        ARG_DISTANCIA_RUTA = ARG_DISTANCIA_RUTA.replace(',', '.');
+                    }
                     float mtrs = Float.valueOf(ARG_DISTANCIA_RUTA);
                     String descripcionRuta = editTextDescripcion.getText().toString();
 
@@ -179,6 +188,8 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
                     nuevaRuta.setKms(mtrs);
                     nuevaRuta.setOficial(true);    //verificar mas adelante
                     nuevaRuta.setSincronizada(false);
+                    nuevaRuta.setTipo(tipoRuta);
+                    nuevaRuta.setId_region(9); //Obtener el Id de la region desde un spinner
                     nuevaRuta.setFavorita(false);
 
                     try
@@ -191,43 +202,51 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
                             tarea_modificar_ruta.execute();
 
                             Toast.makeText(getActivity().getBaseContext(),"Ruta Modificada con exito ", Toast.LENGTH_SHORT).show();
-                            getFragmentManager().popBackStack();
+                            FragmentTransaction ft = Globals.ft.beginTransaction();
+                            ft.replace(R.id.content_frame, new RoutesFragment());
+                            ft.commit();
 
                         }
                         else {
-                            Nueva_Ruta tarea_agregar_ruta = new Nueva_Ruta(nuevaRuta, getActivity());
-                            int id = tarea_agregar_ruta.execute().get();
-                            for (Coordenada coordenada : lista_coordenadas) {
-                                coordenada.setId_ruta(id);
-                            }
-                            Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas, getActivity());
-                            tarea_agregar_coordenadas.execute();
+                            if(lista_coordenadas.size() >= 2) {
+                                Nueva_Ruta tarea_agregar_ruta = new Nueva_Ruta(nuevaRuta, getActivity());
+                                Wrapper wrapper = tarea_agregar_ruta.execute().get();
+                                int id = wrapper.getId();
+                                boolean inet = wrapper.getInternet();
+                                if (id > 0) {
+                                    Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas, getActivity(), wrapper);
+                                    tarea_agregar_coordenadas.execute();
 
-                            for(Punto_interes punto_interes : lista_puntos_interes)
+                                    Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes, getActivity(), wrapper);
+                                    tarea_agregar_puntos.execute();
+
+                                    //obstaculos
+
+                                    Toast.makeText(getActivity().getBaseContext(), "Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
+                                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                                    ft.replace(R.id.content_frame, new RoutesFragment());
+                                    ft.commit();
+                                }
+                            }
+                            else
                             {
-                                punto_interes.setId_ruta(id);
+                                Toast.makeText(getActivity().getBaseContext(), "No hay suficientes puntos para crear la ruta ", Toast.LENGTH_SHORT).show();
                             }
-
-                            Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes, getActivity());
-                            tarea_agregar_puntos.execute();
-
-                                //obstaculos
-
-                            Toast.makeText(getActivity().getBaseContext(),"Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
-                            getFragmentManager().popBackStack();
-
                         }
 
                     }
                     catch (Exception e)
                     {
                         Log.i("Error post", e.toString());
+                        Toast.makeText(getActivity().getBaseContext(), "Error en la creación de la ruta ", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
             case R.id.button_cancelar_ruta:
                 //getActivity().onBackPressed();Toast.makeText(getActivity().getBaseContext(),
-                getFragmentManager().popBackStack();
+                FragmentTransaction ft = Globals.ft.beginTransaction();
+                ft.replace(R.id.content_frame, new CrearRuta());
+                ft.commit();
                 break;
         }
     }

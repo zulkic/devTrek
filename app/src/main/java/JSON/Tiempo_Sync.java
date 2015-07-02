@@ -23,6 +23,7 @@ public class Tiempo_Sync extends AsyncTask<Void, Void, String> {
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_SYNC = "sync";
     private static final String TAG_TIEMPO = "tiempo";
+    private Boolean internet;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -31,6 +32,14 @@ public class Tiempo_Sync extends AsyncTask<Void, Void, String> {
     public Tiempo_Sync(Context context) {
         this.context = context;
         this.jsonParser = new JSONParser();
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
 
     @Override
@@ -42,8 +51,6 @@ public class Tiempo_Sync extends AsyncTask<Void, Void, String> {
      * getting All products from url
      */
     protected String doInBackground(Void... args) {
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
         String tiempo = "";
 
         if(internet) {

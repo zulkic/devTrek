@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.mapas.franciscojavier.trekkingroute.Utility.Wrapper;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -16,7 +18,7 @@ import greendao.Ruta;
 import repositorios.RutaRepo;
 
 //clase para crear una nueva ruta
-public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
+public class Nueva_Ruta extends AsyncTask<Void, Void, Wrapper> {
 
     private Ruta ruta;
     private JSONParser jsonParser;
@@ -25,12 +27,21 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_ID= "id_ruta";
+    private Boolean internet;
 
     public Nueva_Ruta(Ruta ruta, Context context)
     {
         this.ruta = ruta;
         this.jsonParser = new JSONParser();
         this.context = context;
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
     /**
      * Before starting background thread Show Progress Dialog
@@ -44,10 +55,8 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
      * Creating product
      * */
     @Override
-     protected Integer doInBackground(Void... args) {
+     protected Wrapper doInBackground(Void... args) {
 
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
         Integer id = 0;
 
         if(internet) {
@@ -57,6 +66,8 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
             String kms = this.ruta.getKms().toString();
             String tiempo_estimado = this.ruta.getTiempo_estimado();
             String oficial = this.ruta.getOficial().toString();
+            String id_region = this.ruta.getId_region().toString();
+            String tipo = this.ruta.getTipo();
 
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -65,6 +76,8 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
             params.add(new BasicNameValuePair("kms", kms));
             params.add(new BasicNameValuePair("tiempo_estimado", tiempo_estimado));
             params.add(new BasicNameValuePair("oficial", oficial));
+            params.add(new BasicNameValuePair("id_region", id_region));
+            params.add(new BasicNameValuePair("tipo", tipo));
 
             // getting JSON Object
             // Note that create product url accepts POST method
@@ -88,6 +101,9 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            ruta.setSincronizada(true);
+            ruta.setFavorita(false);
+            id = RutaRepo.insertOrUpdate(this.context,ruta);
         }
         else {
             ruta.setSincronizada(false);
@@ -95,13 +111,14 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Integer> {
             id = RutaRepo.insertOrUpdate(this.context,ruta);
             Log.i("id ruta offnet: ", id.toString());
         }
-        return id;
+        Wrapper wrapper = new Wrapper(id, internet);
+        return wrapper;
     }
 
     /**
      * After completing background task Dismiss the progress dialog
      * **/
-    protected void onPostExecute(Integer result) {
+    protected void onPostExecute(Wrapper result) {
         super.onPostExecute(result);
 
     }

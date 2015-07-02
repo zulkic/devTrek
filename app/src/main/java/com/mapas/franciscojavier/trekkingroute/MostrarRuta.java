@@ -58,12 +58,6 @@ public class MostrarRuta extends SherlockFragment {
     private OverlayItem inicio;
     private OverlayItem fin;
     private Integer id;
-    private String nombre_ruta;
-    private String descripcion_ruta;
-    private String tiempo_ruta;
-    private Float kms_ruta;
-    private Boolean sincronizada;
-    private Boolean favorita;
     private Ruta ruta = new Ruta();
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
@@ -135,8 +129,8 @@ public class MostrarRuta extends SherlockFragment {
         if(lista_coordenadas.size() > 0)
         {
             List lineData = new ArrayList();
-            this.inicio = new OverlayItem("Inicio " + nombre_ruta, descripcion_ruta ,new GeoPoint (lista_coordenadas.get(0).getLatitud(),lista_coordenadas.get(0).getLongitud()));
-            this.fin = new OverlayItem("Fin ruta " + nombre_ruta, "termino de ruta",new GeoPoint (lista_coordenadas.get(lista_coordenadas.size()-1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size()-1).getLongitud()));
+            this.inicio = new OverlayItem("Inicio " + ruta.getNombre(), ruta.getDescripcion() ,new GeoPoint (lista_coordenadas.get(0).getLatitud(),lista_coordenadas.get(0).getLongitud()));
+            this.fin = new OverlayItem("Fin ruta " + ruta.getNombre(), "termino de ruta",new GeoPoint (lista_coordenadas.get(lista_coordenadas.size()-1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size()-1).getLongitud()));
             for( Coordenada coordenada : lista_coordenadas)
             {
                 lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
@@ -252,18 +246,17 @@ public class MostrarRuta extends SherlockFragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-            android.support.v4.app.FragmentTransaction ft = Globals.ft.beginTransaction();
-            ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(this.tiempo_ruta,this.kms_ruta,this.nombre_ruta,this.descripcion_ruta,this.id));
+            FragmentTransaction ft = Globals.ft.beginTransaction();
+            ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(ruta.getTiempo_estimado(),ruta.getKms(),ruta.getNombre(),this.ruta.getDescripcion(),ruta.getId().intValue()));
             ft.commit();
             return true;
         }
         if (id == R.id.action_delet) {
             //Toast.makeText(getActivity(),"el eliminar", Toast.LENGTH_SHORT).show();
-            Long idLong = new Long(this.id);
 
             FragmentTransaction ft = Globals.ft.beginTransaction();
-            ft.replace(R.id.content_frame, new DetallesEliminarRuta().newInstance(idLong,
-                    this.nombre_ruta, this.tiempo_ruta, this.kms_ruta, "tipo", this.descripcion_ruta));
+            ft.replace(R.id.content_frame, new DetallesEliminarRuta().newInstance(ruta.getId(),
+                    ruta.getNombre(), ruta.getTiempo_estimado(), ruta.getKms(), "tipo", ruta.getDescripcion()));
             ft.commit();
             return true;
         }

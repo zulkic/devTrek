@@ -26,12 +26,21 @@ public class Registrar_Usuario extends AsyncTask<Void, Void, Void> {
     private static String url_registrar_usuario = "http://trythistrail.16mb.com/registrar_usuario.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private Boolean internet;
 
     public Registrar_Usuario(Usuario usuario, Context context)
     {
         this.usuario = usuario;
         this.jsonParser = new JSONParser();
         this.context = context;
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
     /**
      * Before starting background thread Show Progress Dialog
@@ -46,9 +55,6 @@ public class Registrar_Usuario extends AsyncTask<Void, Void, Void> {
      * */
     @Override
     protected Void doInBackground(Void... args) {
-
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
 
         if(internet) {
             String nombre = this.usuario.getNombre();

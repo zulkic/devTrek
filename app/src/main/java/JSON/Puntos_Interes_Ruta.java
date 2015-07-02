@@ -15,6 +15,7 @@ import java.util.List;
 
 import greendao.Punto_interes;
 import repositorios.Punto_interesRepo;
+import repositorios.RutaRepo;
 
 /**
  * Created by juancarlosgonzalezca on 28-05-2015.
@@ -35,6 +36,7 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
     private static final String TAG_LATITUD = "latitud";
     private static final String TAG_LONGITUD = "longitud";
     private static final String TAG_ID_RUTA = "id_ruta";
+    private Boolean internet;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -46,6 +48,27 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
         this.context = context;
         this.puntos_interesList = new ArrayList<Punto_interes>();
         this.jsonParser = new JSONParser();
+        List<Punto_interes> aux = Punto_interesRepo.punto_intereses_ruta(context, id.longValue());
+        if(RutaRepo.isValid(context, id.longValue()) == 1 && !aux.isEmpty())
+        {
+            for(Punto_interes punto_interes : aux)
+            {
+                this.puntos_interesList.add(punto_interes);
+            }
+            internet = false;
+            Log.i("Puntos de interes: ", "obtenidos de manera local");
+        }
+        else
+        {
+            hasInternet conexion = new hasInternet(this.context);
+            try {
+                internet = conexion.execute().get();
+            }
+            catch(Exception e)
+            {
+                internet = false;
+            }
+        }
     }
 
     @Override
@@ -57,8 +80,7 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
      * getting All products from url
      */
     protected ArrayList<Punto_interes> doInBackground(Void... args) {
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
+
         if(internet) {
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -95,13 +117,6 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
-        }
-        else
-        {
-            for(Punto_interes punto_interes : Punto_interesRepo.punto_intereses_ruta(context, id.longValue()))
-            {
-                this.puntos_interesList.add(punto_interes);
             }
         }
         return puntos_interesList;

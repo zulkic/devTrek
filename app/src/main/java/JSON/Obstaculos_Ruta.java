@@ -34,6 +34,7 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
     private static final String TAG_LATITUD = "latitud";
     private static final String TAG_LONGITUD = "longitud";
     private static final String TAG_ID_RUTA = "id_ruta";
+    private Boolean internet;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -45,6 +46,14 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
         this.context = context;
         this.obstaculosList = new ArrayList<Obstaculo>();
         this.jsonParser = new JSONParser();
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
 
     @Override
@@ -56,8 +65,6 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
      * getting All products from url
      */
     protected ArrayList<Obstaculo> doInBackground(Void... args) {
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
 
         if(internet) {
             // Building Parameters

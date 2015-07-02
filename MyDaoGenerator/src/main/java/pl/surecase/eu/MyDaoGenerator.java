@@ -16,6 +16,8 @@ public class MyDaoGenerator {
         ruta.addFloatProperty("kms");
         ruta.addStringProperty("tiempo_estimado");
         ruta.addBooleanProperty("oficial");
+        ruta.addIntProperty("id_region");
+        ruta.addStringProperty("tipo");
         ruta.addBooleanProperty("sincronizada");
         ruta.addBooleanProperty("favorita");
 
@@ -83,6 +85,11 @@ public class MyDaoGenerator {
         sync.addIdProperty();
         sync.addStringProperty("tabla");
         sync.addStringProperty("tiempo");
+
+        Entity region = schema.addEntity("Region");
+        region.addIdProperty();
+        region.addStringProperty("nombre");
+        region.addStringProperty("ordinal");
 
         String filePath = "../devTrek/app/src/main/java";
         //new File(filePath).mkdirs();

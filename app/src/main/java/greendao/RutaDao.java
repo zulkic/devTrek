@@ -29,8 +29,10 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
         public final static Property Kms = new Property(3, Float.class, "kms", false, "KMS");
         public final static Property Tiempo_estimado = new Property(4, String.class, "tiempo_estimado", false, "TIEMPO_ESTIMADO");
         public final static Property Oficial = new Property(5, Boolean.class, "oficial", false, "OFICIAL");
-        public final static Property Sincronizada = new Property(6, Boolean.class, "sincronizada", false, "SINCRONIZADA");
-        public final static Property Favorita = new Property(7, Boolean.class, "favorita", false, "FAVORITA");
+        public final static Property Id_region = new Property(6, Integer.class, "id_region", false, "ID_REGION");
+        public final static Property Tipo = new Property(7, String.class, "tipo", false, "TIPO");
+        public final static Property Sincronizada = new Property(8, Boolean.class, "sincronizada", false, "SINCRONIZADA");
+        public final static Property Favorita = new Property(9, Boolean.class, "favorita", false, "FAVORITA");
     };
 
 
@@ -52,8 +54,10 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
                 "'KMS' REAL," + // 3: kms
                 "'TIEMPO_ESTIMADO' TEXT," + // 4: tiempo_estimado
                 "'OFICIAL' INTEGER," + // 5: oficial
-                "'SINCRONIZADA' INTEGER," + // 6: sincronizada
-                "'FAVORITA' INTEGER);"); // 7: favorita
+                "'ID_REGION' INTEGER," + // 6: id_region
+                "'TIPO' TEXT," + // 7: tipo
+                "'SINCRONIZADA' INTEGER," + // 8: sincronizada
+                "'FAVORITA' INTEGER);"); // 9: favorita
     }
 
     /** Drops the underlying database table. */
@@ -97,14 +101,24 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
             stmt.bindLong(6, oficial ? 1l: 0l);
         }
  
+        Integer id_region = entity.getId_region();
+        if (id_region != null) {
+            stmt.bindLong(7, id_region);
+        }
+ 
+        String tipo = entity.getTipo();
+        if (tipo != null) {
+            stmt.bindString(8, tipo);
+        }
+ 
         Boolean sincronizada = entity.getSincronizada();
         if (sincronizada != null) {
-            stmt.bindLong(7, sincronizada ? 1l: 0l);
+            stmt.bindLong(9, sincronizada ? 1l: 0l);
         }
  
         Boolean favorita = entity.getFavorita();
         if (favorita != null) {
-            stmt.bindLong(8, favorita ? 1l: 0l);
+            stmt.bindLong(10, favorita ? 1l: 0l);
         }
     }
 
@@ -124,8 +138,10 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3), // kms
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // tiempo_estimado
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // oficial
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // sincronizada
-            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0 // favorita
+            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // id_region
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // tipo
+            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // sincronizada
+            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0 // favorita
         );
         return entity;
     }
@@ -139,8 +155,10 @@ public class RutaDao extends AbstractDao<Ruta, Long> {
         entity.setKms(cursor.isNull(offset + 3) ? null : cursor.getFloat(offset + 3));
         entity.setTiempo_estimado(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setOficial(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setSincronizada(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
-        entity.setFavorita(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
+        entity.setId_region(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setTipo(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setSincronizada(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
+        entity.setFavorita(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
      }
     
     /** @inheritdoc */

@@ -36,6 +36,8 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
     private static final String TAG_KMS = "kms";
     private static final String TAG_TIEMPO_ESTIMADO = "tiempo_estimado";
     private static final String TAG_OFICIAL = "oficial";
+    private static final String TAG_REGION = "id_region";
+    private static final String TAG_TIPO = "tipo";
     private String tiempo_sync;
     private Sync sync;
 
@@ -57,7 +59,6 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        Log.i("tiempo: ", tiempo_sync);
     }
 
     @Override
@@ -69,9 +70,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
      * getting All products from url
      */
     protected ArrayList<Ruta> doInBackground(Void... args) {
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
-        if(internet && !tiempo_sync.equals(this.sync.getTiempo())){
+        if(!tiempo_sync.equals("error") && !tiempo_sync.equals(this.sync.getTiempo())){
             // Building Parameters
             Log.i("obtener rutas online: ", "rutas obtenidas online");
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -109,6 +108,8 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                         else{
                             ruta.setOficial(false);
                         }
+                        ruta.setId_region(Integer.parseInt(c.getString(TAG_REGION)));
+                        ruta.setTipo(c.getString(TAG_TIPO));
                         ruta.setSincronizada(true);
                         ruta.setFavorita(false);
                         Log.i("obtener ruta: ", ruta.getOficial().toString());
@@ -132,7 +133,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
         else
         {
             Log.i("obtener rutas offline: ", "rutas obtenidas offline");
-            for(Ruta ruta : RutaRepo.getAllRutas(context)) {
+            for (Ruta ruta : RutaRepo.getAllRutas(context)) {
                 Log.i("nombre: ", ruta.getNombre());
                 Log.i("oficial", ruta.getOficial().toString());
                 this.rutasList.add(ruta);

@@ -34,6 +34,7 @@ public class Sincronizar_Tipos_Indicadores extends AsyncTask<Void, Void, Void> {
     private static final String TAG_ID_TIPO_PUNTO_INTERES = "id_tipo_punto_interes";
     private static final String TAG_NOMBRE = "nombre";
     private static final String TAG_ICONO = "nombre_icono";
+    private Boolean internet;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -43,6 +44,14 @@ public class Sincronizar_Tipos_Indicadores extends AsyncTask<Void, Void, Void> {
     {
         this.context = context;
         this.jsonParser = new JSONParser();
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
 
     @Override
@@ -54,8 +63,7 @@ public class Sincronizar_Tipos_Indicadores extends AsyncTask<Void, Void, Void> {
      * getting All products from url
      */
     protected Void doInBackground(Void... args) {
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
+
         if(internet) {
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();

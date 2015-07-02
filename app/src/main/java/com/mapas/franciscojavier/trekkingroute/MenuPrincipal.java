@@ -27,6 +27,7 @@ import com.mapas.franciscojavier.trekkingroute.Account.MainCalls;
 import com.mapas.franciscojavier.trekkingroute.Account.RegisterFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
+import JSON.Sincronizar_Regiones;
 import java.util.Locale;
 
 import JSON.Sincronizar_Rutas;
@@ -35,6 +36,7 @@ import greendao.DaoMaster;
 import greendao.DaoSession;
 import greendao.Sync;
 import greendao.Usuario;
+import repositorios.RegionRepo;
 import repositorios.SyncRepo;
 import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
@@ -71,8 +73,6 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         Globals.context = this;
         Globals.ft = getSupportFragmentManager();
         setContentView(R.layout.activity_menu_principal);
-
-
 
         mTitle = mDrawerTitle = getTitle();
 
@@ -171,12 +171,20 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
             sync.setTabla("rutas");
             sync.setTiempo("inicializado");
             SyncRepo.insertOrUpdate(this, sync);
+            Log.i("Time sync: ", "Sincronizado");
         }
 
         try{
             if(Tipo_ObstaculoRepo.getAllTipos_Obstaculos(this).size() == 0  || Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(this).size() == 0 ) {
                 Sincronizar_Tipos_Indicadores tarea = new Sincronizar_Tipos_Indicadores(this);
                 tarea.execute();
+                Log.i("Tipos indicadores: ", "Sincronizados");
+            }
+            if(RegionRepo.getAllRegiones(this).size() == 0)
+            {
+                Sincronizar_Regiones reg = new Sincronizar_Regiones(this);
+                reg.execute();
+                Log.i("Regiones: ", "Sincronizadas");
             }
 
         }

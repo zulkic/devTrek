@@ -25,21 +25,27 @@ public class Cambiar_Contrasenia extends AsyncTask<Void, Void, Void> {
     private static String url_cambiar_contrasenia = "http://trythistrail.16mb.com/cambiar_contrasenia.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private Boolean internet;
 
     public Cambiar_Contrasenia(Usuario usuario, Context context)
     {
         this.usuario = usuario;
         this.context = context;
         this.jsonParser = new JSONParser();
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
 
     /**
      * Saving product
      * */
     protected Void doInBackground(Void... args) {
-
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
 
         if(internet) {
         }
