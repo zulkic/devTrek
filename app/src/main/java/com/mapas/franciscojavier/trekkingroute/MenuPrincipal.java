@@ -251,7 +251,6 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         // Locate Position
         Boolean logout = true;
-        Boolean flagInicioRecorrido = true;
         if(rol.equals(Globals.ADMIN)) {
             switch (position) {
                 case 0:
@@ -296,7 +295,7 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
                     ft.replace(R.id.content_frame, new Favoritas());
                     break;
                 case 5:
-                    ft.replace(R.id.content_frame, new LoginFragment());
+                    ft.replace(R.id.content_frame, new PerfilFragment());
                     break;
                 case 6:
                     Cerrar_Sesion();
