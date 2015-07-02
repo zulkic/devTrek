@@ -52,12 +52,12 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
     private static boolean ARG_EDITAR = false;
     private Spinner spinnerReco;
     private Button btnSubmit;
-    private String Caminando = "Caminando";//getActivity().getResources().getString(R.string.trail_caminando);
-    private String Trotando="Trotando";//getString(R.string.trail_trotando);
-    private String Corriendo="Corriendo";//getString(R.string.trail_corriendo);
-    private String Bicicleta="Bicicleta";//getString(R.string.trail_bicicleta);
-    private String Caballo="Caballo";//getString(R.string.trail_caballo);
-    private String Auto="Auto";//getString(R.string.trail_auto);
+    private String Caminando ;
+    private String Trotando;
+    private String Corriendo;
+    private String Bicicleta;
+    private String Caballo;
+    private String Auto;
     private static ArrayList<Coordenada> lista_coordenadas;
     private static ArrayList<Punto_interes> lista_puntos_interes;
 
@@ -137,20 +137,16 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
 
         //SPINER
         spinnerReco = (Spinner) v.findViewById(R.id.spinner_recorrido);
-        /**List<String> listRecorido = new ArrayList<String>();
-         listRecorido.add("Caminando");
-         listRecorido.add("Trotando");
-         listRecorido.add("Corriendo");
-         listRecorido.add("En Bicicleta");
-         listRecorido.add("A Caballo");
-         listRecorido.add("En Auto");*/
 
-        //ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,listRecorido);
-
-        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        //spinnerReco.setAdapter(dataAdapter);
-        spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, listRecorido));
+        Caminando = getString(R.string.trail_caminando);
+        Trotando=getString(R.string.trail_trotando);
+        Corriendo=getString(R.string.trail_corriendo);
+        Bicicleta=getString(R.string.trail_bicicleta);
+        Caballo=getString(R.string.trail_caballo);
+        Auto=getString(R.string.trail_auto);
+        String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
+        this.listRecorido = listRecorido;
+        spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, this.listRecorido));
 
         // Spinner item selection Listener
         addListenerOnSpinnerItemSelection();
