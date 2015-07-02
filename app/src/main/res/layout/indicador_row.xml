@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="5dp">
     <ImageView
+        android:padding="10dp"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/imageButton_Ind"
-        android:minHeight="80dp"
-        android:minWidth="80dp" />
+        android:minHeight="70dp"
+        android:minWidth="70dp" />
     <TextView
-        android:padding="5dp"
         android:gravity="center"
         android:id="@+id/textView_nombre_indicador"
         android:layout_width="fill_parent"
