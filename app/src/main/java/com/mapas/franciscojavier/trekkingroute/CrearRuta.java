@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 
 import greendao.Coordenada;
+import greendao.Tipo_Indicador;
 import greendao.Tipo_obstaculo;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
@@ -61,19 +62,17 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private Boolean encendido= false;
     private Integer contador = 1;
     private Integer id_ruta = 1;
-    private ArrayList<Tipo_punto_interes> tipo_puntos = new ArrayList<>();
-    private ArrayList<Tipo_obstaculo> tipo_obstaculos = new ArrayList<>();
+    private ArrayList<Tipo_Indicador> tipo_puntos = new ArrayList<>();
+    private ArrayList<Tipo_Indicador> tipo_obstaculos = new ArrayList<>();
     private ArrayList<Coordenada> coordenadas;
     private GridView lv;
-    private List<Overlay> puntosDeInteres;
-    private List<Overlay> obstaculos;
+    private List<Overlay> indicadores;
     private Location localicacionA = new Location("punto A");
     private Location localicacionB = new Location("punto B");
     private Boolean primerLocalicacion = true;
     private float distancia;
     private Marker aux;
     private Indicador indicador;
-    private IndicadorObs indicadorObs;
     private DownloadManager mgr=null;
     int i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
@@ -111,7 +110,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
         initPathOverlay();
-        puntosDeInteres = osm.getOverlays();
+        indicadores = osm.getOverlays();
         GeoPoint center = new GeoPoint(latitude, longitude);
         mc.animateTo(center);
 
@@ -128,7 +127,6 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         super.onCreate(savedInstanceState);
         ResourceProxy rp = new ResourceProxyImpl(getActivity());
         this.indicador = new Indicador(this.getResources().getDrawable(R.drawable.abs__ab_share_pack_holo_light),rp,getActivity());
-        this.indicadorObs = new IndicadorObs(this.getResources().getDrawable(R.drawable.abs__ab_share_pack_holo_light),rp,getActivity());
         for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
         {
             tipo_puntos.add(tipo_punto_interes);
@@ -237,9 +235,10 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
             public void onItemClick(AdapterView adapter, View view, int position, long arg) {
                 // Loads the given URL
                 //puntos.get(position).getId_tipo_punto_interes()
-                Toast.makeText(getActivity(), "Accediendo a: "+ tipo_puntos.get(position).getNombre(), Toast.LENGTH_SHORT).show();
-                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_puntos.get(position).getNombre(),tipo_puntos.get(position).getNombre_icono(),
-                        tipo_puntos.get(position).getId());
+                Tipo_punto_interes tipo_punto = (Tipo_punto_interes) tipo_puntos.get(position);
+                Toast.makeText(getActivity(), "Accediendo a: "+ tipo_punto.getNombre(), Toast.LENGTH_SHORT).show();
+                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_punto.getNombre(),tipo_punto.getNombre_icono(),
+                        tipo_punto.getId());
                 alert.dismiss();
             }
         });
@@ -267,17 +266,16 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         View convertView = (View) inflater.inflate(R.layout.popup_crear_obstaculos, null);
         alert.setView(convertView);
         alert.setTitle("Obstaculos");
-        this.lv = (GridView) convertView.findViewById(R.id.lista_item);
-        this.lv.setAdapter(new ItemIndicadorObs(getActivity(), tipo_obstaculos));
+        this.lv = (GridView) convertView.findViewById(R.id.lista_item_obs);
+        this.lv.setAdapter(new ItemIndicador(getActivity(), tipo_obstaculos));
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapter, View view, int position, long arg) {
-                // Loads the given URL
-                //puntos.get(position).getId_tipo_punto_interes()
-                Toast.makeText(getActivity(), "Accediendo a: "+ tipo_obstaculos.get(position).getNombre(), Toast.LENGTH_SHORT).show();
-                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_obstaculos.get(position).getNombre(),tipo_obstaculos.get(position).getNombre_icono(),
-                        tipo_obstaculos.get(position).getId());
+                Tipo_obstaculo tipo_obstaculo = (Tipo_obstaculo) tipo_obstaculos.get(position);
+                Toast.makeText(getActivity(), "Accediendo a: "+ tipo_obstaculo.getNombre(), Toast.LENGTH_SHORT).show();
+                addPoiOverlayObs(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_obstaculo.getNombre(), tipo_obstaculo.getNombre_icono(),
+                        tipo_obstaculo.getId());
                 alert.dismiss();
             }
         });
@@ -291,9 +289,9 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private void addPoiOverlayObs(GeoPoint gp, String titulo,String icono,Long id_tipo) {
         int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
         Drawable drawable= this.getResources().getDrawable(resID);
-        this.indicadorObs.createIndicador(drawable,titulo,titulo,gp,id_tipo);
-        obstaculos.clear();
-        obstaculos.add(this.indicadorObs);
+        this.indicador.createIndicadorObs(drawable,titulo,titulo,gp,id_tipo);
+        indicadores.clear();
+        indicadores.add(this.indicador);
         //osm.invalidate();
     }
 
@@ -302,8 +300,8 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
         Drawable drawable= this.getResources().getDrawable(resID);
         this.indicador.createIndicador(drawable,titulo,titulo,gp,id_tipo);
-        puntosDeInteres.clear();
-        puntosDeInteres.add(this.indicador);
+        indicadores.clear();
+        indicadores.add(this.indicador);
         //osm.invalidate();
     }
 
@@ -424,7 +422,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                     apagarRecorrido();
 
                     FragmentTransaction ft = Globals.ft.beginTransaction();
-                    ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicadorObs.getPuntos()));
+                    ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicador.getObstaculos()));
                     ft.commit();
 
                 }

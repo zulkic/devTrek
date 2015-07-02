@@ -209,7 +209,6 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
                                 Nueva_Ruta tarea_agregar_ruta = new Nueva_Ruta(nuevaRuta, getActivity());
                                 Wrapper wrapper = tarea_agregar_ruta.execute().get();
                                 int id = wrapper.getId();
-                                boolean inet = wrapper.getInternet();
                                 if (id > 0) {
                                     Post_Coordenadas_Ruta tarea_agregar_coordenadas = new Post_Coordenadas_Ruta(lista_coordenadas, getActivity(), wrapper);
                                     tarea_agregar_coordenadas.execute();
@@ -217,7 +216,8 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
                                     Post_Puntos_Interes_Ruta tarea_agregar_puntos = new Post_Puntos_Interes_Ruta(lista_puntos_interes, getActivity(), wrapper);
                                     tarea_agregar_puntos.execute();
 
-                                    //obstaculos
+                                    Post_Obstaculos_Ruta tarea_agregar_obstaculos = new Post_Obstaculos_Ruta(lista_obstaculos, getActivity(), wrapper);
+                                    tarea_agregar_obstaculos.execute();
 
                                     Toast.makeText(getActivity().getBaseContext(), "Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
                                     FragmentTransaction ft = Globals.ft.beginTransaction();

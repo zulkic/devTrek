@@ -93,6 +93,7 @@ public class Sincronizar_Tipos_Indicadores extends AsyncTask<Void, Void, Void> {
                         tipo_obstaculo.setNombre_icono(c.getString(TAG_ICONO));
                         Tipo_ObstaculoRepo.insertOrUpdate(this.context, tipo_obstaculo);
                     }
+                    Log.i("Tipos obstaculos: "," sincronizados exitosamente");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -129,6 +130,7 @@ public class Sincronizar_Tipos_Indicadores extends AsyncTask<Void, Void, Void> {
                         tipo_punto_interes.setNombre_icono(c.getString(TAG_ICONO));
                         Tipo_Puntos_InteresRepo.insertOrUpdate(this.context, tipo_punto_interes);
                     }
+                    Log.i("Tipos puntos: "," sincronizados exitosamente");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
