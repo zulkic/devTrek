@@ -35,12 +35,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import JSON.Coordenadas_Ruta;
+import JSON.Obstaculos_Ruta;
 import JSON.Puntos_Interes_Ruta;
 import greendao.Coordenada;
+import greendao.Obstaculo;
 import greendao.Punto_interes;
 import greendao.Ruta;
+import greendao.Tipo_obstaculo;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
+import repositorios.ObstaculoRepo;
+import repositorios.Punto_interesRepo;
+import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
 public class FIRMapa extends SherlockFragment implements LocationListener, AdapterView.OnClickListener {
@@ -53,7 +59,9 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     private Ruta ruta;
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
+    private ArrayList<Obstaculo> lista_obstaculos = new ArrayList<>();
     private List<Overlay> puntosDeInteres;
+    private List<Overlay> obstaculos;
     private OverlayItem inicio;
     private OverlayItem fin;
     private Marker aux;
@@ -165,6 +173,9 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                 Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.ruta.getId().intValue(),Globals.context);
                 lista_puntos = tarea_get_puntos.execute().get();
 
+                Obstaculos_Ruta tarea_get_obstaculos = new Obstaculos_Ruta(this.ruta.getId().intValue(),Globals.context);
+                lista_obstaculos = tarea_get_obstaculos.execute().get();
+
             }
             catch (Exception e)
             {
@@ -177,6 +188,17 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             {
                 lista_coordenadas.add(coordenada);
             }
+
+            for(Punto_interes punto_interes : Punto_interesRepo.punto_intereses_ruta(Globals.context, this.ruta.getId()))
+            {
+                lista_puntos.add(punto_interes);
+            }
+
+            for(Obstaculo obstaculo : ObstaculoRepo.obstaculos_ruta(Globals.context, this.ruta.getId()))
+            {
+                lista_obstaculos.add(obstaculo);
+            }
+
             Log.i("coordenadas offline: ", "obtiene coordenadas offline");
         }
 
@@ -230,6 +252,20 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
             mapOverlays.add(in);
         }
+
+        for(Obstaculo pi : lista_obstaculos)
+        {
+            Tipo_obstaculo tpi = Tipo_ObstaculoRepo.getTipo_ObstaculoForId(getActivity(), pi.getId_tipo_obstaculo().longValue());
+            String titulo = tpi.getNombre();
+            String icono = tpi.getNombre_icono();
+            GeoPoint gp = new GeoPoint(pi.getLatitud(), pi.getLongitud());
+            int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
+            drawable= this.getResources().getDrawable(resID);
+            ResourceProxy rp = new ResourceProxyImpl(getActivity());
+            Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
+            mapOverlays.add(in);
+        }
+
     }
 
 

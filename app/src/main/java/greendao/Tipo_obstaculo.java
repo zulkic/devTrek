@@ -4,7 +4,7 @@ package greendao;
 /**
  * Entity mapped to table TIPO_OBSTACULO.
  */
-public class Tipo_obstaculo {
+public class Tipo_obstaculo extends Tipo_Indicador {
 
     private Long id;
     private String nombre;

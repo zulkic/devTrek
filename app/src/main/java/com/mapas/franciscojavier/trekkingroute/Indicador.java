@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IMapView;
@@ -18,6 +14,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 
+import greendao.Obstaculo;
 import greendao.Punto_interes;
 
 /**
@@ -28,6 +25,7 @@ public class Indicador extends ItemizedOverlay {
     private OverlayItem overlay;
     private Context mContext;
     private ArrayList<Punto_interes> puntos = new ArrayList<>();
+    private ArrayList<Obstaculo> obstaculos = new ArrayList<>();
 
     public Indicador(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context) {
         super(pDefaultMarker, pResourceProxy);
@@ -53,8 +51,24 @@ public class Indicador extends ItemizedOverlay {
         puntos.add(pto);
     }
 
+    public void createIndicadorObs(Drawable marker,String titulo, String descripcion, GeoPoint gp,Long id_tipo){
+        Obstaculo pto = new Obstaculo();
+        pto.setId_tipo_obstaculo((int)(long)id_tipo);
+        pto.setDescripcion(descripcion);
+        pto.setLatitud(gp.getLatitude());
+        pto.setLongitud(gp.getLongitude());
+        overlay= new OverlayItem(titulo,descripcion,gp);
+        overlay.setMarker(marker);
+        addOverlay(overlay);
+        obstaculos.add(pto);
+    }
+
+
     public ArrayList<Punto_interes> getPuntos() {
         return puntos;
+    }
+    public ArrayList<Obstaculo> getObstaculos() {
+        return obstaculos;
     }
 
     public void addOverlay(OverlayItem overlay) {

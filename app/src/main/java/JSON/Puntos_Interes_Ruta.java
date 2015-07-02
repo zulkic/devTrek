@@ -114,6 +114,8 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
 
                         this.puntos_interesList.add(punto_interes);
                     }
+                    Guardar_Puntos_interes task_guardar = new Guardar_Puntos_interes(this.puntos_interesList,context, id.longValue());
+                    task_guardar.execute();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
