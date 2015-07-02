@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import JSON.Modificar_Ruta;
 import JSON.Nueva_Ruta;
 import JSON.Post_Coordenadas_Ruta;
-import JSON.Post_Obstaculos_Ruta;
 import JSON.Post_Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Obstaculo;
@@ -43,7 +42,6 @@ import greendao.Ruta;
 public class DetallesCrearRuta extends SherlockFragment implements View.OnClickListener{
 
     String tiempoTotal;
-    int LARGO_NOMBRE_RUTA=1;
     private static final String ARG_PARAM1 = "nada";
     private static final String ARG_PARAM2 = "vacio";
     private static String ARG_TIEMPO_RUTA = "hollow";
@@ -54,12 +52,12 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
     private static boolean ARG_EDITAR = false;
     private Spinner spinnerReco;
     private Button btnSubmit;
-    private String Caminando = "Caminando";//getActivity().getResources().getString(R.string.trail_caminando);
-    private String Trotando="Trotando";//getString(R.string.trail_trotando);
-    private String Corriendo="Corriendo";//getString(R.string.trail_corriendo);
-    private String Bicicleta="Bicicleta";//getString(R.string.trail_bicicleta);
-    private String Caballo="Caballo";//getString(R.string.trail_caballo);
-    private String Auto="Auto";//getString(R.string.trail_auto);
+    private String Caminando ;
+    private String Trotando;
+    private String Corriendo;
+    private String Bicicleta;
+    private String Caballo;
+    private String Auto;
     private static ArrayList<Coordenada> lista_coordenadas;
     private static ArrayList<Punto_interes> lista_puntos_interes;
     private static ArrayList<Obstaculo> lista_obstaculos;
@@ -142,7 +140,20 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
         //SPINER
         spinnerReco = (Spinner) v.findViewById(R.id.spinner_recorrido);
 
-        spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, listRecorido));
+        Caminando = getString(R.string.trail_caminando);
+        Trotando=getString(R.string.trail_trotando);
+        Corriendo=getString(R.string.trail_corriendo);
+        Bicicleta=getString(R.string.trail_bicicleta);
+        Caballo=getString(R.string.trail_caballo);
+        Auto=getString(R.string.trail_auto);
+        String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
+        this.listRecorido = listRecorido;
+        spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, this.listRecorido));
+
+        // Spinner item selection Listener
+        addListenerOnSpinnerItemSelection();
+
+        //FIN DEL SPINER
 
         return v;
     }
@@ -156,7 +167,6 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
                 EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
                 String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
                 if(!formHaveErrors(editTextNombreRuta)) {
-                    //Toast.makeText(getActivity().getBaseContext(), editTextNombreRuta.getText()+" \n "+ ARG_PARAM3, Toast.LENGTH_SHORT).show();
                     String nombreRuta = editTextNombreRuta.getText().toString();
                     String tiempoRuta = textTiempoEstimado.getText().toString();
 
