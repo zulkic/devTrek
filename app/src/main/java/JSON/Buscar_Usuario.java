@@ -36,6 +36,7 @@ public class Buscar_Usuario extends AsyncTask<Void, Void, Void> {
     private static final String TAG_NOMBRE = "nombre";
     private static final String TAG_ROL = "rol";
     private MainCalls mListener;
+    private Boolean internet;
     /**
      * Before starting background thread Show Progress Dialog
      */
@@ -46,6 +47,14 @@ public class Buscar_Usuario extends AsyncTask<Void, Void, Void> {
         this.context = context;
         this.jsonParser = new JSONParser();
         this.mListener = mListener;
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
 
     @Override
@@ -57,8 +66,6 @@ public class Buscar_Usuario extends AsyncTask<Void, Void, Void> {
      * getting All products from url
      */
     protected Void doInBackground(Void... args) {
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
         if(internet) {
             // Building Parameters
             Log.i("Email: ", "("+this.email+")");
@@ -100,11 +107,6 @@ public class Buscar_Usuario extends AsyncTask<Void, Void, Void> {
 
         return null;
     }
-
-    /**
-     * After completing background task Dismiss the progress dialog
-     * *
-     */
 
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);

@@ -26,12 +26,21 @@ public class Nuevo_Punto_Interes extends AsyncTask<Void, Void, Void> {
     private static String url_agregar_punto_interes = "http://trythistrail.16mb.com/agregar_punto_interes.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private Boolean internet;
 
     public Nuevo_Punto_Interes(Punto_interes punto_interes, Context context)
     {
         this.punto_interes = punto_interes;
         this.jsonParser = new JSONParser();
         this.context = context;
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
     /**
      * Before starting background thread Show Progress Dialog
@@ -46,9 +55,6 @@ public class Nuevo_Punto_Interes extends AsyncTask<Void, Void, Void> {
      * */
     @Override
     protected Void doInBackground(Void... args) {
-
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
 
         if(internet) {
             String descripcion = this.punto_interes.getDescripcion();

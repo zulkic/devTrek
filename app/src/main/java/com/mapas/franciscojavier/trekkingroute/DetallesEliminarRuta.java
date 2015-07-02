@@ -1,6 +1,7 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,13 +90,18 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
                             ,Toast.LENGTH_SHORT).show();
 
                 FragmentTransaction ft = Globals.ft.beginTransaction();
-                ft.replace(R.id.content_frame, new RoutesFragment());
+                ft.replace(R.id.content_frame, new PantallaInicio());
                 ft.commit();
 
                 break;
             case R.id.button_cancelar_eliminar_ruta:
                 //Toast.makeText(getActivity().getBaseContext(),"Se cancelo: "+"\n"+ NOMBRE+"\n",Toast.LENGTH_SHORT).show();
-                getFragmentManager().popBackStack();
+                ft = Globals.ft.beginTransaction();
+                Fragment fr = new MostrarRuta();
+                Bundle bundle = new Bundle();
+                bundle.putInt("id_ruta", ID_RUTA.intValue());
+                ft.replace(R.id.content_frame, fr);
+                ft.commit();
                 break;
             default:
                 return;

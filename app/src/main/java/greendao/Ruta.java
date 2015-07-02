@@ -12,6 +12,8 @@ public class Ruta {
     private Float kms;
     private String tiempo_estimado;
     private Boolean oficial;
+    private Integer id_region;
+    private String tipo;
     private Boolean sincronizada;
     private Boolean favorita;
 
@@ -22,13 +24,15 @@ public class Ruta {
         this.id = id;
     }
 
-    public Ruta(Long id, String nombre, String descripcion, Float kms, String tiempo_estimado, Boolean oficial, Boolean sincronizada, Boolean favorita) {
+    public Ruta(Long id, String nombre, String descripcion, Float kms, String tiempo_estimado, Boolean oficial, Integer id_region, String tipo, Boolean sincronizada, Boolean favorita) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.kms = kms;
         this.tiempo_estimado = tiempo_estimado;
         this.oficial = oficial;
+        this.id_region = id_region;
+        this.tipo = tipo;
         this.sincronizada = sincronizada;
         this.favorita = favorita;
     }
@@ -79,6 +83,22 @@ public class Ruta {
 
     public void setOficial(Boolean oficial) {
         this.oficial = oficial;
+    }
+
+    public Integer getId_region() {
+        return id_region;
+    }
+
+    public void setId_region(Integer id_region) {
+        this.id_region = id_region;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public Boolean getSincronizada() {

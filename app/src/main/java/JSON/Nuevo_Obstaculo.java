@@ -26,12 +26,21 @@ public class Nuevo_Obstaculo extends AsyncTask<Void, Void, Void> {
     private static String url_agregar_obstaculo = "http://trythistrail.16mb.com/agregar_obstaculo.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private Boolean internet;
 
     public Nuevo_Obstaculo(Obstaculo obstaculo, Context context)
     {
         this.obstaculo = obstaculo;
         this.jsonParser = new JSONParser();
         this.context = context;
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
     /**
      * Before starting background thread Show Progress Dialog
@@ -47,8 +56,6 @@ public class Nuevo_Obstaculo extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... args) {
 
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
 
         if(internet) {
             String descripcion = this.obstaculo.getDescripcion();

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.mapas.franciscojavier.trekkingroute.Utility.Wrapper;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -24,12 +26,19 @@ public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
     private static String url_agregar_coordenadas_ruta = "http://trythistrail.16mb.com/agregar_coordenadas_ruta.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private Wrapper wp;
 
-    public Post_Coordenadas_Ruta(ArrayList<Coordenada> coordenadas, Context context)
+    public Post_Coordenadas_Ruta(ArrayList<Coordenada> coordenadas, Context context, Wrapper wp)
     {
         this.coordenadas = coordenadas;
+        this.wp = wp;
         this.context = context;
         this.jsonParser = new JSONParser();
+        int id = wp.getId();
+        for (Coordenada coordenada : coordenadas) {
+            coordenada.setId_ruta(id);
+        }
+
     }
     /**
      * Before starting background thread Show Progress Dialog
@@ -45,10 +54,7 @@ public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... args) {
 
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
-
-        if(internet) {
+        if(wp.getInternet()) {
             // Building Parameters
             for(Coordenada coordenada : this.coordenadas) {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -77,6 +83,7 @@ public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                CoordenadaRepo.insertOrUpdate(context,coordenada);
             }
         }
         else

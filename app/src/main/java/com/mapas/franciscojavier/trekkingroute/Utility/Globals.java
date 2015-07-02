@@ -35,4 +35,5 @@ public class Globals {
     public static Context context;
     public static FragmentManager ft;
     public static Ruta ini_rec;
+    public static final Boolean internet = false;
 }

@@ -3,11 +3,12 @@ package JSON;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 
 /**
  * Created by juancarlosgonzalezca on 19-05-2015.
  */
-public class hasInternet {
+public class hasInternet extends AsyncTask<Void, Void, Boolean >{
 
     private Context context;
 
@@ -16,36 +17,22 @@ public class hasInternet {
         this.context = context;
     }
 
-    public Boolean getInternet() {
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    /*
-    public Boolean getInternet() {
-        if (isNetworkAvailable()) {
-            try {
-                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.cl").openConnection());
-                urlc.setRequestProperty("User-Agent", "Test");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(1500);
-                urlc.connect();
-                return (urlc.getResponseCode() == 200);
-            } catch (IOException e) {
-                Log.e("Error", "Error checking internet connection", e);
-            }
-        } else {
-            Log.d("No internet", "No network available!");
-        }
-        return false;
+    protected void onPostExecute(Boolean result) {
+        super.onPostExecute(result);
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
-    }
-*/
 }

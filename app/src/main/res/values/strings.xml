@@ -80,6 +80,9 @@
 <!--Eliminar ruta-->
     <string name="title_eliminar_ruta">Datos para de la ruta</string>
 
+    <string name="noInternet">No hay conexión a internet</string>
+    <string name="rutaLocal">Ruta guardada de manera local</string>
+    <string name="sincronizadas">Rutas sincronizadas exitosamente</string>
 
     <string name="errorEmpty">No puede ser vacío</string>
     <string name="errorSpaces">No puede tener espacios</string>

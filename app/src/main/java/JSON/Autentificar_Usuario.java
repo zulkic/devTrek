@@ -25,6 +25,7 @@ public class Autentificar_Usuario extends AsyncTask<Void, Void, Boolean> {
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_AUTENT = "autentificado";
+    private Boolean internet;
 
     public Autentificar_Usuario(String email, String contrasenia, Context context)
     {
@@ -32,6 +33,14 @@ public class Autentificar_Usuario extends AsyncTask<Void, Void, Boolean> {
         this.contrasenia = contrasenia;
         this.jsonParser = new JSONParser();
         this.context = context;
+        hasInternet conexion = new hasInternet(this.context);
+        try {
+            internet = conexion.execute().get();
+        }
+        catch(Exception e)
+        {
+            internet = false;
+        }
     }
     /**
      * Before starting background thread Show Progress Dialog
@@ -47,8 +56,6 @@ public class Autentificar_Usuario extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... args) {
 
-        hasInternet conexion = new hasInternet(this.context);
-        Boolean internet = conexion.getInternet();
         Boolean autentificado = false;
         if(internet) {
 
@@ -85,9 +92,6 @@ public class Autentificar_Usuario extends AsyncTask<Void, Void, Boolean> {
         return autentificado;
     }
 
-    /**
-     * After completing background task Dismiss the progress dialog
-     * **/
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
 
