@@ -37,13 +37,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import JSON.Coordenadas_Ruta;
+import JSON.Obstaculos_Ruta;
 import JSON.Puntos_Interes_Ruta;
 import greendao.Coordenada;
+import greendao.Obstaculo;
 import greendao.Punto_interes;
 import greendao.Ruta;
+import greendao.Tipo_obstaculo;
 import greendao.Tipo_punto_interes;
 import repositorios.CoordenadaRepo;
+import repositorios.ObstaculoRepo;
+import repositorios.Punto_interesRepo;
 import repositorios.RutaRepo;
+import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
 /**
@@ -61,7 +67,9 @@ public class MostrarRuta extends SherlockFragment {
     private Ruta ruta = new Ruta();
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
+    private ArrayList<Obstaculo> lista_obstaculos = new ArrayList<>();
     private List<Overlay> puntosDeInteres;
+    private List<Overlay> obstaculos;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,6 +91,7 @@ public class MostrarRuta extends SherlockFragment {
         //addPolyOverlay();
         addLineOverlay();
         puntosDeInteres = osm.getOverlays();
+        obstaculos = osm.getOverlays();
         //GeoPoint center = new GeoPoint(, );
         //mc.animateTo(center);
         //addMarket(center);
@@ -111,6 +120,9 @@ public class MostrarRuta extends SherlockFragment {
                 Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(this.id,getActivity());
                 lista_puntos = tarea_get_puntos.execute().get();
 
+                Obstaculos_Ruta tarea_get_obstaculos = new Obstaculos_Ruta(this.id,getActivity());
+                lista_obstaculos = tarea_get_obstaculos.execute().get();
+
             }
             catch (Exception e)
             {
@@ -123,6 +135,17 @@ public class MostrarRuta extends SherlockFragment {
             {
                 lista_coordenadas.add(coordenada);
             }
+
+            for(Punto_interes punto_interes : Punto_interesRepo.punto_intereses_ruta(getActivity(), this.id.longValue()))
+            {
+                lista_puntos.add(punto_interes);
+            }
+
+            for(Obstaculo obstaculo : ObstaculoRepo.obstaculos_ruta(getActivity(), this.id.longValue()))
+            {
+                lista_obstaculos.add(obstaculo);
+            }
+
             Log.i("coordenadas offline: ", "obtiene coordenadas offline");
         }
 
@@ -176,6 +199,21 @@ public class MostrarRuta extends SherlockFragment {
             Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
             mapOverlays.add(in);
         }
+
+        for(Obstaculo obs : lista_obstaculos)
+        {
+            Log.i("ID: ", Integer.toString(obs.getId_tipo_obstaculo()));
+            Tipo_obstaculo tpi = Tipo_ObstaculoRepo.getTipo_ObstaculoForId(getActivity(), obs.getId_tipo_obstaculo().longValue());
+            String titulo = tpi.getNombre();
+            String icono = tpi.getNombre_icono();
+            GeoPoint gp = new GeoPoint(obs.getLatitud(), obs.getLongitud());
+            int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
+            drawable= this.getResources().getDrawable(resID);
+            ResourceProxy rp = new ResourceProxyImpl(getActivity());
+            Indicador in = new Indicador(drawable,rp,getActivity(),titulo,obs.getDescripcion(),gp);
+            mapOverlays.add(in);
+        }
+
     }
 
 

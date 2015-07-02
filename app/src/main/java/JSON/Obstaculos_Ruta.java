@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Obstaculo;
+import repositorios.ObstaculoRepo;
+import repositorios.RutaRepo;
 
 /**
  * Created by juancarlosgonzalezca on 28-05-2015.
@@ -21,7 +23,7 @@ import greendao.Obstaculo;
 public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>> {
 
     private ArrayList<Obstaculo> obstaculosList;
-    private int id;
+    private Integer id;
     private Context context;
     private JSONParser jsonParser;
     private static String url_obtener_obstaculos_ruta = "http://trythistrail.16mb.com/obstaculos_ruta.php";
@@ -40,19 +42,32 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
      * Before starting background thread Show Progress Dialog
      */
 
-    public Obstaculos_Ruta(int id, Context context)
+    public Obstaculos_Ruta(Integer id, Context context)
     {
         this.id = id;
         this.context = context;
         this.obstaculosList = new ArrayList<Obstaculo>();
         this.jsonParser = new JSONParser();
-        hasInternet conexion = new hasInternet(this.context);
-        try {
-            internet = conexion.execute().get();
-        }
-        catch(Exception e)
+        List<Obstaculo> aux = ObstaculoRepo.obstaculos_ruta(context, id.longValue());
+        if(RutaRepo.isValid(context, id.longValue()) == 1 && !aux.isEmpty())
         {
+            for(Obstaculo obsculo : aux)
+            {
+                this.obstaculosList.add(obsculo);
+            }
             internet = false;
+            Log.i("Obstaculos: ", "obtenidos de manera local");
+        }
+        else
+        {
+            hasInternet conexion = new hasInternet(this.context);
+            try {
+                internet = conexion.execute().get();
+            }
+            catch(Exception e)
+            {
+                internet = false;
+            }
         }
     }
 
@@ -74,7 +89,7 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
             JSONObject json = jsonParser.makeHttpRequest(url_obtener_obstaculos_ruta, "GET", params);
 
             // Check your log cat for JSON reponse
-            Log.d("CObstaculos ruta: ", json.toString());
+            Log.d("Obstaculos ruta: ", json.toString());
 
             try {
                 // Checking for SUCCESS TAG
@@ -92,13 +107,14 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
                         // Storing each json item in variable
                         obstaculo.setId((Long.getLong(c.getString(TAG_ID))));
                         obstaculo.setDescripcion(c.getString(TAG_DESCRIPCION));
-                        obstaculo.setId_tipo_obstaculo(Integer.getInteger(c.getString(TAG_ID_TIPO_OBSTACULO)));
+                        obstaculo.setId_tipo_obstaculo(Integer.parseInt(c.getString(TAG_ID_TIPO_OBSTACULO)));
                         obstaculo.setLatitud(Double.parseDouble(c.getString(TAG_LATITUD)));
                         obstaculo.setLongitud(Double.parseDouble(c.getString(TAG_LONGITUD)));
                         obstaculo.setId_ruta(Integer.parseInt(c.getString(TAG_ID_RUTA)));
-
                         this.obstaculosList.add(obstaculo);
                     }
+                    Guardar_Obstaculos task_guardar = new Guardar_Obstaculos(this.obstaculosList,context, id.longValue());
+                    task_guardar.execute();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -14,16 +14,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import greendao.Tipo_obstaculo;
-import greendao.Tipo_punto_interes;
+import greendao.*;
+import greendao.Tipo_Indicador;
 
 public class ItemIndicador extends BaseAdapter {
 
     private Context context;
-    private List<Tipo_punto_interes> items;
-    private List<Tipo_obstaculo> items_obs;
+    private List<Tipo_Indicador> items;
 
-    public ItemIndicador(Context context, List<Tipo_punto_interes> items) {
+    public ItemIndicador(Context context, List<Tipo_Indicador> items) {
         this.context = context;
         this.items = items;
     }
@@ -58,10 +57,20 @@ public class ItemIndicador extends BaseAdapter {
         // Set data into the view.
         ImageView icono = (ImageView) rowView.findViewById(R.id.imageButton_Ind);
         TextView tv = (TextView) rowView.findViewById(R.id.textView_nombre_indicador);
-        Tipo_punto_interes punto = this.items.get(position);
-        int resID = context.getResources().getIdentifier(punto.getNombre_icono().trim(),"drawable",context.getPackageName());
-        icono.setImageResource(resID);
-        tv.setText(punto.getNombre());
+        if (this.items.get(position) instanceof  Tipo_punto_interes) {
+            Tipo_punto_interes punto = (Tipo_punto_interes)this.items.get(position);
+            int resID = context.getResources().getIdentifier(punto.getNombre_icono().trim(),"drawable",context.getPackageName());
+            icono.setImageResource(resID);
+            tv.setText(punto.getNombre());
+        }
+        else
+        {
+            Tipo_obstaculo punto = (Tipo_obstaculo)this.items.get(position);
+            int resID = context.getResources().getIdentifier(punto.getNombre_icono().trim(),"drawable",context.getPackageName());
+            icono.setImageResource(resID);
+            tv.setText(punto.getNombre());
+        }
+
         return rowView;
     }
 
