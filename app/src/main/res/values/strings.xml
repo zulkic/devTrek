@@ -115,6 +115,15 @@
     <string name="btn_cancelar_idioma"> Cacelar </string>
     <string name="seleccion_idioma">Seleccione el idioma</string>
     <string name="title_configuracion">Configuración</string>
+    <string name="title_perfil">Perfil del Usuario</string>
+    <string name="button_guardar_perfil">Aceptar</string>
+    <string name="button_cancelar_perfil">Cancelar</string>
+    <string name="hint_old_password_confirmation">Contraseña actual</string>
+    <string name="hint_new_password">Nueva Contraseña</string>
+    <string name="correo_usuario">Correo</string>
+    <string name="nombre_usuario">Nombre</string>
+    <string name="nueva_contraseña_usuario">Cambiar contraseña?</string>
+    <string name="passwordOld">Debes ingresar la contraseña actual</string>
 
 
 </resources>

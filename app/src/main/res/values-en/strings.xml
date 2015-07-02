@@ -98,5 +98,20 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">--</string>
+    <string name="btn_cambiar_idioma">Change</string>
+    <string name="btn_cancelar_idioma">Cancel</string>
+    <string name="button_cancelar_perfil">Cancel</string>
+    <string name="button_guardar_perfil">Accept</string>
+    <string name="hint_old_password_confirmation">Current password</string>
+    <string name="noInternet">Nno Internet connection</string>
+    <string name="radio_Español">Spanish</string>
+    <string name="radio_Ingles">English</string>
+    <string name="rutaLocal">Locally saved route</string>
+    <string name="seleccion_idioma">Choose the language</string>
+    <string name="sincronizadas">Successfully synchronized routes</string>
+    <string name="title_perfil">User Profile</string>
+    <string name="hint_new_password">New Password</string>
+    <string name="title_configuracion">Settings</string>
+
 
 </resources>
