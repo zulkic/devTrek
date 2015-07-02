@@ -34,6 +34,7 @@ import JSON.Nueva_Ruta;
 import JSON.Post_Coordenadas_Ruta;
 import JSON.Post_Puntos_Interes_Ruta;
 import greendao.Coordenada;
+import greendao.Obstaculo;
 import greendao.Punto_interes;
 import greendao.Ruta;
 
@@ -60,6 +61,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
     private String Auto="Auto";//getString(R.string.trail_auto);
     private static ArrayList<Coordenada> lista_coordenadas;
     private static ArrayList<Punto_interes> lista_puntos_interes;
+    private static ArrayList<Obstaculo> lista_obstaculos;
 
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
@@ -67,7 +69,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
         // Required empty public constructor
     }
 
-    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, ArrayList<Coordenada> coordenadas, ArrayList<Punto_interes> puntos_interes) {
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, ArrayList<Coordenada> coordenadas, ArrayList<Punto_interes> puntos_interes, ArrayList<Obstaculo> obstaculos) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
@@ -84,6 +86,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
 
         lista_coordenadas = coordenadas;
         lista_puntos_interes = puntos_interes;
+        lista_obstaculos = obstaculos;
         return fragment;
     }
     public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, String nombreRuta, String descripcionRuta, Integer id_ruta) {

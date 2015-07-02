@@ -5,25 +5,23 @@ package com.mapas.franciscojavier.trekkingroute;
  */
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
-import greendao.Punto_interes;
+import greendao.Tipo_obstaculo;
 import greendao.Tipo_punto_interes;
 
 public class ItemIndicador extends BaseAdapter {
 
     private Context context;
     private List<Tipo_punto_interes> items;
+    private List<Tipo_obstaculo> items_obs;
 
     public ItemIndicador(Context context, List<Tipo_punto_interes> items) {
         this.context = context;
