@@ -28,6 +28,7 @@ public class Globals {
     public static final String EMAIL = "Email";
     public static final String NOMBRE = "Nombre";
     public static final String ROL = "Rol";
+    public static final String PASS = "Pass";
     public static final String PREF = "Prefs";
     public static final String INVITADO = "invitado";
     public static final String CLIENTE = "cliente";
