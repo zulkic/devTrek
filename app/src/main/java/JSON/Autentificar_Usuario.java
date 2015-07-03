@@ -1,8 +1,11 @@
 package JSON;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -76,8 +79,15 @@ public class Autentificar_Usuario extends AsyncTask<Void, Void, Boolean> {
             try {
                 int success = json.getInt(TAG_SUCCESS);
                 String aux = json.getString(TAG_AUTENT);
-                if(aux.equals("1"))
-                    autentificado=true;
+                if(aux.equals("1")) {
+                    autentificado = true;
+                    SharedPreferences sharedpreferences;
+                    SharedPreferences.Editor editor;
+                    sharedpreferences = context.getSharedPreferences(Globals.PREF, Context.MODE_PRIVATE);
+                    editor = sharedpreferences.edit();
+                    editor.putString(Globals.PASS, this.contrasenia);
+                    editor.commit();
+                }
                 if (success != 0) {
                     // successfully created product
                     Log.i("autentificar usuario", "autentificado correctamente");

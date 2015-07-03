@@ -35,8 +35,14 @@ public class Guardar_Coordenadas extends AsyncTask<Void,Void,Void> {
     protected Void doInBackground(Void... params) {
         for(Coordenada coordenada : this.coordenadas)
         {
-            coordenada.setId_ruta(id_ruta.intValue());
-            CoordenadaRepo.insertOrUpdate(context,coordenada);
+            Coordenada nueva = new Coordenada();
+            nueva.setLatitud(coordenada.getLatitud());
+            nueva.setLongitud(coordenada.getLongitud());
+            nueva.setAltitud(coordenada.getAltitud());
+            nueva.setPosicion(coordenada.getPosicion());
+            nueva.setId_ruta(id_ruta.intValue());
+
+            CoordenadaRepo.insertOrUpdate(context,nueva);
 
         }
         Log.i("Coordenadas guardadas: ", "coordenadas guardadas exitosamente");
