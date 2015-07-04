@@ -17,7 +17,7 @@
     <string name="title_section2">Planificar Viaje</string>
     <string name="title_section3">Crear Ruta</string>
     <string name="title_section4">Iniciar Recorrido</string>
-    <string name="title_section5">Login</string>
+    <string name="title_section5">Iniciar Sesion</string>
     <string name="title_section6">Perfil</string>
     <string name="title_section7">Cerrar Sesion</string>
     <string-array name="Tags">
@@ -26,7 +26,7 @@
         <item>Planificar Viaje</item>
         <item>Crear Ruta</item>
         <item>Iniciar Rec</item>
-        <item>Login</item>
+        <item>Iniciar Sesion</item>
         <item>Perfil</item>
         <item>Cerrar Sesion</item>
     </string-array>
@@ -78,7 +78,7 @@
     <string name="button_guardar_ruta">Guardar</string>
     <string name="button_cancelar_ruta">Cancelar</string>
 <!--Eliminar ruta-->
-    <string name="title_eliminar_ruta">Datos para de la ruta</string>
+    <string name="title_eliminar_ruta">Datos para de la ruta a Eliminar</string>
 
     <string name="noInternet">No hay conexión a internet</string>
     <string name="rutaLocal">Ruta guardada de manera local</string>
@@ -105,13 +105,11 @@
 
     <string name="title_activity_main2">Main2Activity</string>
 
-    <string name="action_example">--</string>
-
 <!-- Configuracion -->
     <string name="radio_Español"> Español </string>
     <string name="radio_Ingles"> Ingles </string>
     <string name="radio_Mapudungun"> Mapudungun </string>
-    <string name="btn_cambiar_idioma"> Cambiar </string>
+    <string name="btn_cambiar_idioma"> Aceptar </string>
     <string name="btn_cancelar_idioma"> Cacelar </string>
     <string name="seleccion_idioma">Seleccione el idioma</string>
     <string name="title_configuracion">Configuración</string>

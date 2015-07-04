@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.mapas.franciscojavier.trekkingroute.dummy.DummyContent;
+//import com.mapas.franciscojavier.trekkingroute.dummy.DummyContent;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -130,7 +130,7 @@ public class DetalleIndicadorFragment extends SherlockFragment implements AbsLis
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+//            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 

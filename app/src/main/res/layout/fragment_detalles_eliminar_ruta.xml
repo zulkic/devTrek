@@ -1,156 +1,166 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mapas.franciscojavier.trekkingroute.DetallesEliminarRuta"
-    android:orientation="horizontal"
-    android:background="@color/bg_ruta"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:scrollbars="none" >
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:background="@color/bg_ruta"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:id="@+id/linearLayoutEliminar">
-        <TextView
+        <!-- TODO: Update blank fragment layout -->
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_eliminar_ruta"
-            android:id="@+id/textViewName"
-            android:gravity="center_horizontal"
-            android:textColor="@color/white"
-            android:layout_marginBottom="10dip"
-            android:textSize="30sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/nombre_ruta"
-            android:id="@+id/textViewEliminar_nombre_ruta" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/bg_edit_text"
-            android:textColor="@color/into_edit_text"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:inputType="time"
-            android:text="0"
-            android:id="@+id/editTextEliminar_nombre_ruta" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/tiempo_estimado"
-            android:layout_below="@id/editTextEliminar_nombre_ruta"
-            android:id="@+id/textViewEliminar_tiempo_estimado" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/bg_edit_text"
-            android:textColor="@color/into_edit_text"
-            android:padding="10dp"
-            android:inputType="time"
-            android:text="0"
-            android:id="@+id/editTextEliminar_tiempo_estimado" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/distacia_recorrida"
-            android:id="@+id/textViewEliminar_distancia_recorrida" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="0"
-            android:layout_marginBottom="10dp"
-            android:background="@color/bg_edit_text"
-            android:textColor="@color/into_edit_text"
-            android:padding="10dp"
-            android:id="@+id/editTextEliminar_distancia_recorrida" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/recorrido_mediante"
-            android:layout_below="@id/editTextEliminar_distancia_recorrida"
-            android:id="@+id/textViewEliminar_recorrido_mediante" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="0"
-            android:layout_marginBottom="10dp"
-            android:background="@color/bg_edit_text"
-            android:textColor="@color/into_edit_text"
-            android:padding="10dp"
-            android:id="@+id/editTextEliminar_recorrido_mediante" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/descripcion_ruta"
-            android:layout_below="@id/editTextEliminar_recorrido_mediante"
-            android:id="@+id/textViewEliminar_descripcion" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="0"
-            android:layout_marginBottom="10dp"
-            android:background="@color/bg_edit_text"
-            android:textColor="@color/into_edit_text"
-            android:padding="10dp"
-            android:id="@+id/editTextEliminar_descripcion" />
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:id="@+id/linearLayoutEliminar1">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_eliminar_ruta"
+                android:id="@+id/textViewName"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dip"
+                android:textSize="30sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/nombre_ruta"
+                android:id="@+id/textViewEliminar_nombre_ruta" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/into_edit_text"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:inputType="time"
+                android:text="0"
+                android:id="@+id/editTextEliminar_nombre_ruta" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tiempo_estimado"
+                android:layout_below="@id/editTextEliminar_nombre_ruta"
+                android:id="@+id/textViewEliminar_tiempo_estimado" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/into_edit_text"
+                android:padding="10dp"
+                android:inputType="time"
+                android:text="0"
+                android:id="@+id/editTextEliminar_tiempo_estimado" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/distacia_recorrida"
+                android:id="@+id/textViewEliminar_distancia_recorrida" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="0"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/into_edit_text"
+                android:padding="10dp"
+                android:id="@+id/editTextEliminar_distancia_recorrida" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/recorrido_mediante"
+                android:layout_below="@id/editTextEliminar_distancia_recorrida"
+                android:id="@+id/textViewEliminar_recorrido_mediante" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="0"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/into_edit_text"
+                android:padding="10dp"
+                android:id="@+id/editTextEliminar_recorrido_mediante" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/descripcion_ruta"
+                android:layout_below="@id/editTextEliminar_recorrido_mediante"
+                android:id="@+id/textViewEliminar_descripcion" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="0"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/into_edit_text"
+                android:padding="10dp"
+                android:id="@+id/editTextEliminar_descripcion" />
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/btn_orange"
-            android:textColor="@color/white"
-            android:text="@string/button_aceptar_eliminar_ruta"
-            android:id="@+id/button_aceptar_eliminar_ruta"
-            android:layout_marginRight="2dip"
-            android:layout_weight="1"
-            />
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayoutEliminar2"
+            android:layout_below="@id/linearLayoutEliminar1">
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/btn_orange"
+                android:textColor="@color/white"
+                android:text="@string/button_aceptar_eliminar_ruta"
+                android:id="@+id/button_aceptar_eliminar_ruta"
+                android:layout_marginRight="2dip"
+                android:layout_weight="1"
+                />
 
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/btn_orange"
-            android:textColor="@color/white"
-            android:text="@string/button_cancelar_eliminar_ruta"
-            android:id="@+id/button_cancelar_eliminar_ruta"
-            android:layout_weight="1" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/btn_orange"
+                android:textColor="@color/white"
+                android:text="@string/button_cancelar_eliminar_ruta"
+                android:id="@+id/button_cancelar_eliminar_ruta"
+                android:layout_weight="1" />
 
-    </LinearLayout>
-</RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

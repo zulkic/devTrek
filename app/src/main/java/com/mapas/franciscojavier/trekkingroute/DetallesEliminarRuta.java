@@ -73,6 +73,7 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
     }
     @Override
     public void onClick(View v) {
+        FragmentTransaction ft;
         switch (v.getId()){
             case R.id.button_aceptar_eliminar_ruta:
                 try{
@@ -89,18 +90,28 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
                                     + NOMBRE
                             ,Toast.LENGTH_SHORT).show();
 
-                FragmentTransaction ft = Globals.ft.beginTransaction();
+                ft = Globals.ft.beginTransaction();
                 ft.replace(R.id.content_frame, new PantallaInicio());
                 ft.commit();
 
                 break;
             case R.id.button_cancelar_eliminar_ruta:
                 //Toast.makeText(getActivity().getBaseContext(),"Se cancelo: "+"\n"+ NOMBRE+"\n",Toast.LENGTH_SHORT).show();
-                ft = Globals.ft.beginTransaction();
-                Fragment fr = new MostrarRuta();
+//                ft = Globals.ft.beginTransaction();
+//                Fragment fr = new MostrarRuta();
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("id_ruta", ID_RUTA.intValue());
+//                fr.setArguments(bundle);
+//                ft.replace(R.id.content_frame, fr);
+//                ft.commit();
                 Bundle bundle = new Bundle();
                 bundle.putInt("id_ruta", ID_RUTA.intValue());
-                ft.replace(R.id.content_frame, fr);
+
+                Fragment frag = new MostrarRuta();
+                frag.setArguments(bundle);
+
+                ft = Globals.ft.beginTransaction();
+                ft.replace(R.id.content_frame, frag);
                 ft.commit();
                 break;
             default:

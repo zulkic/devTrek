@@ -1,65 +1,61 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_crear_ruta"
+    android:orientation="vertical"
     tools:context="com.mapas.franciscojavier.trekkingroute.CrearRuta">
-    <org.osmdroid.views.MapView
-        android:id="@+id/mapview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tilesource="Mapnik"
-        android:layout_alignParentBottom="true" />
+        android:layout_weight="1">
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tilesource="Mapnik"
+            android:layout_alignParentBottom="true" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonGPS"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_action_device_gps_not_fixed"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton_Indicadores"
+            android:src="@drawable/ic_parque"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/imageButton_Obstaculos"
+            android:layout_alignRight="@+id/imageButtonGPS"
+            android:layout_alignEnd="@+id/imageButtonGPS"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton_Obstaculos"
+            android:src="@drawable/ic_montaas"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <ToggleButton
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_start"
-        android:id="@+id/button_start"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
+        android:id="@+id/tBtnIniFin"
+        android:textOn="Fin"
+        android:textOff="Inicio"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_end"
-        android:id="@+id/button_end"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButtonGPS"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/ic_action_device_gps_not_fixed"/>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton_Indicadores"
-        android:layout_above="@+id/button_start"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="58dp"
-        android:src="@drawable/ic_parque" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton_Obstaculos"
-        android:layout_above="@+id/button_end"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="58dp"
-        android:src="@drawable/ic_montaas" />
-
-
-
-</RelativeLayout>
+</LinearLayout>

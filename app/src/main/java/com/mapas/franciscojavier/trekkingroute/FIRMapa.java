@@ -55,7 +55,6 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     private MapController mc;
     private LocationManager locationManager;
     // GPSTracker class
-    private GPS gps;
     private Ruta ruta;
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
@@ -73,38 +72,45 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-            Log.i("Mapa: ", "me han llamado");
-            ruta = Globals.ini_rec;
+    // TODO Auto-generated method stub
+        Log.i("Mapa: ", "me han llamado");
+        ruta = Globals.ini_rec;
+        double latitude;
+        double longitude;
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+        else{
+            //posicion curico
+            latitude = -34.98605794;
+            longitude = -71.24138117;
+        }
 
-            gps = new GPS(Globals.context);
 
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
+        view = inflater.inflate(R.layout.fir_layout_mapa, null);
+        ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
+        botonGps.setOnClickListener(this);
 
-            view = inflater.inflate(R.layout.fir_layout_mapa, null);
-            ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
-            botonGps.setOnClickListener(this);
+        osm = (MapView) view.findViewById(R.id.mapview);
+        osm.setTileSource(Globals.MAPQUESTOSM);
+        osm.setUseDataConnection(true);
+        osm.setBuiltInZoomControls(true);
+        osm.setMultiTouchControls(true);
+        mc = (MapController) osm.getController();
+        mc.setZoom(15);
+        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
+        this.osm.getOverlays().add(myScaleBarOverlay);
 
-            osm = (MapView) view.findViewById(R.id.mapview);
-            osm.setTileSource(Globals.MAPQUESTOSM);
-            osm.setUseDataConnection(true);
-            osm.setBuiltInZoomControls(true);
-            osm.setMultiTouchControls(true);
-            mc = (MapController) osm.getController();
-            mc.setZoom(15);
-            ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
-            this.osm.getOverlays().add(myScaleBarOverlay);
+        initPathOverlay();
+        addLineOverlay();
+        puntosDeInteres = osm.getOverlays();
 
-            initPathOverlay();
-            addLineOverlay();
-            puntosDeInteres = osm.getOverlays();
-
-            GeoPoint center = new GeoPoint(latitude, longitude);
-            mc.animateTo(center);
-
-            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+        GeoPoint center = new GeoPoint(latitude, longitude);
+        mc.animateTo(center);
         return view;
     }
 
@@ -271,9 +277,9 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
 
     @Override
     public void onLocationChanged(Location location) {
-        gps.setLatitude(location.getLatitude());
+        /*gps.setLatitude(location.getLatitude());
         gps.setLongitude(location.getLongitude());
-        gps.setAltitude(location.getAltitude());
+        gps.setAltitude(location.getAltitude());*/
         this.punto = new GeoPoint(location.getLatitude(), location.getLongitude(), location.getAltitude());
         //mc.animateTo(punto);
         addMarket(punto);
@@ -304,11 +310,12 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     }
 
     public void activarGps() {
-        if(gps.canGetLocation()){
-            GeoPoint punto = new GeoPoint(gps.getLatitude(),gps.getLongitude());
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
             mc.animateTo(punto);
         }else{
-            gps.showSettingsAlert();
+            //gps.showSettingsAlert();
         }
     }
 
