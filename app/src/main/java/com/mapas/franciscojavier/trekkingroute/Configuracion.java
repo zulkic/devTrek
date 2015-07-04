@@ -58,6 +58,10 @@ public class Configuracion extends SherlockFragment implements View.OnClickListe
                     mListener.changeLanguage("es");
                 else
                     Toast.makeText(getActivity(),"Error", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnCancelarIdioma:
+                mListener.goToHome();
+                break;
         }
     }
     @Override
