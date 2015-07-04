@@ -35,9 +35,13 @@ public class Guardar_Puntos_interes extends AsyncTask<Void,Void,Void> {
     protected Void doInBackground(Void... params) {
         for(Punto_interes punto_interes : this.punto_intereses)
         {
-            punto_interes.setId_ruta(id_ruta.intValue());
+            Punto_interes nuevo = new Punto_interes();
+            nuevo.setLatitud(punto_interes.getLatitud());
+            nuevo.setLongitud(punto_interes.getLatitud());
+            nuevo.setId_tipo_punto_interes(punto_interes.getId_tipo_punto_interes());
+            nuevo.setId_ruta(id_ruta.intValue());
+            nuevo.setDescripcion(punto_interes.getDescripcion());
             Punto_interesRepo.insertOrUpdate(context, punto_interes);
-
         }
         Log.i("Puntos guardados: ", "puntos de interes guardados exitosamente");
         return null;

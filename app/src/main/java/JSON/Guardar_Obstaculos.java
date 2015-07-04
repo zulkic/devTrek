@@ -35,8 +35,13 @@ public class Guardar_Obstaculos extends AsyncTask<Void,Void,Void> {
     protected Void doInBackground(Void... params) {
         for(Obstaculo obstaculo : this.obstaculos)
         {
-            obstaculo.setId_ruta(id_ruta.intValue());
-            ObstaculoRepo.insertOrUpdate(context, obstaculo);
+            Obstaculo nuevo = new Obstaculo();
+            nuevo.setLatitud(obstaculo.getLatitud());
+            nuevo.setLongitud(obstaculo.getLatitud());
+            nuevo.setId_tipo_obstaculo(obstaculo.getId_tipo_obstaculo());
+            nuevo.setId_ruta(id_ruta.intValue());
+            nuevo.setDescripcion(obstaculo.getDescripcion());
+            ObstaculoRepo.insertOrUpdate(context, nuevo);
 
         }
         Log.i("Obstaculos guardados: ", "obstaculos guardados exitosamente");

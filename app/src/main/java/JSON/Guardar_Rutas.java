@@ -37,7 +37,7 @@ public class Guardar_Rutas extends AsyncTask<Void,Void,Void> {
     @Override
     protected Void doInBackground(Void... params) {
         Long new_id = this.rutas.get(this.rutas.size()-1).getId();
-        new_id+=1;
+        new_id+=1l;
         for(Ruta ruta : this.rutas)
         {
             int result = RutaRepo.isValid(context, ruta.getId());
