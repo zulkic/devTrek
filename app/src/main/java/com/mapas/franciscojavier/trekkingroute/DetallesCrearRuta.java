@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import JSON.Modificar_Ruta;
 import JSON.Nueva_Ruta;
 import JSON.Post_Coordenadas_Ruta;
+import JSON.Post_Obstaculos_Ruta;
 import JSON.Post_Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Obstaculo;

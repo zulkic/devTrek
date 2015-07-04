@@ -58,7 +58,6 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
     private ArrayList<OverlayItem> ind_ini = new ArrayList<>();
     private ArrayList<OverlayItem> ind_fin = new ArrayList<>();
     // GPSTracker class
-    GPS gps;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -79,6 +78,8 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
 
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
+
+
     }
 
     @Override
@@ -179,27 +180,21 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
                 }
                 Log.i("coordenadas offline: ", "obtiene coordenadas offline");
             }
-            if(lista_coordenadas.size() >= 2) {
-                List lineData = new ArrayList();
-                this.inicio = new OverlayItem("Inicio ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(0).getLatitud(), lista_coordenadas.get(0).getLongitud()));
-                this.ind_ini.add(this.inicio);
-                this.fin = new OverlayItem("Fin ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(lista_coordenadas.size() - 1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size() - 1).getLongitud()));
-                this.ind_fin.add(this.fin);
-                for (Coordenada coordenada : lista_coordenadas) {
-                    lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
-                }
-                // apply line style & data and add to map
+            List lineData = new ArrayList();
+            this.inicio = new OverlayItem("Inicio ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(0).getLatitud(), lista_coordenadas.get(0).getLongitud()));
+            this.ind_ini.add(this.inicio);
+            this.fin = new OverlayItem("Fin ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(lista_coordenadas.size() - 1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size() - 1).getLongitud()));
+            this.ind_fin.add(this.fin);
+            for (Coordenada coordenada : lista_coordenadas) {
+                lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
+            }
+            // apply line style & data and add to map
 
-                PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA, getActivity());
-                lineOverlay.setPaint(paint);
-                lineOverlay.addPoints(lineData);
-                //lineOverlay.setData(lineData);
-                osm.getOverlays().add(lineOverlay);
-            }
-            else
-            {
-                Log.i("Error: ", "La ruta no tiene puntos");
-            }
+            PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA, getActivity());
+            lineOverlay.setPaint(paint);
+            lineOverlay.addPoints(lineData);
+            //lineOverlay.setData(lineData);
+            osm.getOverlays().add(lineOverlay);
         }
         addPoiOverlay();
     }
