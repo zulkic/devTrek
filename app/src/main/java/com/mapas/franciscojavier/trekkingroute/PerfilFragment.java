@@ -148,7 +148,5 @@ public class PerfilFragment extends SherlockFragment implements AdapterView.OnCl
         super.onDetach();
         mListener = null;
     }
-    public void nada(){
 
-    }
 }

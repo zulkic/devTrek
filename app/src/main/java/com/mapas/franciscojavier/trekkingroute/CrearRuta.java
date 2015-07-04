@@ -232,7 +232,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         // Mensaje
         alertDialog.setMessage("GPS no esta habilitado. Desea ir al menu de ajustes?");
 
-        // El botón de Configuración
+        // El boton de Configuracion
         alertDialog.setPositiveButton("Ajustes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -240,7 +240,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
             }
         });
 
-        // El botón de Cancelacion
+        // El boton de Cancelacion
         alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

@@ -6,6 +6,7 @@ package com.mapas.franciscojavier.trekkingroute;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.annotation.Nullable;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
@@ -51,7 +53,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
     private static String ARG_NOMBRE_RUTA="";
     private static String ARG_DESCRIPCION_RUTA="";
     private static Integer ARG_ID_RUTA;
-    private static boolean ARG_EDITAR = false;
+    private static boolean ARG_EDITAR;;
     private Spinner spinnerReco;
     private Button btnSubmit;
     private String Caminando ;
@@ -63,6 +65,12 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
     private static ArrayList<Coordenada> lista_coordenadas;
     private static ArrayList<Punto_interes> lista_puntos_interes;
     private static ArrayList<Obstaculo> lista_obstaculos;
+    Button botonGuardar;
+    Button botonCancelar;
+    EditText editNombreRuta;
+    TextView textTiempoEstimado;
+    TextView textDistanciaRecorrida;
+    EditText editDescripcion;
 
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
@@ -72,6 +80,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
 
     public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, ArrayList<Coordenada> coordenadas, ArrayList<Punto_interes> puntos_interes, ArrayList<Obstaculo> obstaculos) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
+        ARG_EDITAR = false;
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
         args.putFloat(ARG_PARAM2, distaciaRuta);
@@ -92,6 +101,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
     }
     public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, String nombreRuta, String descripcionRuta, Integer id_ruta) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
+        ARG_EDITAR = true;
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, tiempoTotalRuta);
         args.putFloat(ARG_PARAM2, distaciaRuta);
@@ -114,30 +124,19 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detalles_ruta, container, false);
-        Button botonGuardar = (Button) v.findViewById(R.id.button_guardar_ruta);
-        Button botonCancelar = (Button) v.findViewById(R.id.button_cancelar_ruta);
-        EditText editNombreRuta = (EditText) v.findViewById(R.id.editText_nombre_ruta);
-        EditText textTiempoEstimado = (EditText)v.findViewById(R.id.editTextiempo_estimado);
-        EditText textDistanciaRecorrida = (EditText)v.findViewById(R.id.editText_distancia_recorrida);
-        EditText editDescripcion = (EditText) v.findViewById(R.id.editText_descripcion);
+        botonGuardar = (Button) v.findViewById(R.id.button_guardar_ruta);
+        botonCancelar = (Button) v.findViewById(R.id.button_cancelar_ruta);
+        editNombreRuta = (EditText) v.findViewById(R.id.editText_nombre_ruta);
+        textTiempoEstimado = (TextView)v.findViewById(R.id.editTextiempo_estimado);
+        textDistanciaRecorrida = (TextView)v.findViewById(R.id.editText_distancia_recorrida);
+        editDescripcion = (EditText) v.findViewById(R.id.editText_descripcion);
 
-        editNombreRuta.setOnClickListener(this);
-        botonGuardar.setOnClickListener(this);
-        botonCancelar.setOnClickListener(this);
-        textTiempoEstimado.setText(ARG_TIEMPO_RUTA);
-        textTiempoEstimado.setOnClickListener(this);
-        editDescripcion.setOnClickListener(this);
 
-        textDistanciaRecorrida.setText(ARG_DISTANCIA_RUTA);
-        textDistanciaRecorrida.setOnClickListener(this);
-        if(ARG_EDITAR){
-            editNombreRuta.setText(ARG_NOMBRE_RUTA);
-            editDescripcion.setText(ARG_DESCRIPCION_RUTA);
-        }
+
 
         //SPINER
         spinnerReco = (Spinner) v.findViewById(R.id.spinner_recorrido);
@@ -156,7 +155,15 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         addListenerOnSpinnerItemSelection();
 
         //FIN DEL SPINER
+        textTiempoEstimado.setText(ARG_TIEMPO_RUTA);
+        textDistanciaRecorrida.setText(ARG_DISTANCIA_RUTA);
 
+        if(ARG_EDITAR){
+            editNombreRuta.setText(ARG_NOMBRE_RUTA);
+            editDescripcion.setText(ARG_DESCRIPCION_RUTA);
+        }
+        botonGuardar.setOnClickListener(this);
+        botonCancelar.setOnClickListener(this);
         return v;
     }
     @Override
@@ -164,7 +171,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         switch (v.getId()){
             case R.id.button_guardar_ruta:
                 EditText editTextNombreRuta= (EditText) getActivity().findViewById(R.id.editText_nombre_ruta);
-                EditText textTiempoEstimado = (EditText)getActivity().findViewById(R.id.editTextiempo_estimado);
+                TextView textTiempoEstimado = (TextView)getActivity().findViewById(R.id.editTextiempo_estimado);
                 spinnerReco = (Spinner) getActivity().findViewById(R.id.spinner_recorrido);
                 EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
                 String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
@@ -243,9 +250,21 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
                 break;
             case R.id.button_cancelar_ruta:
                 //getActivity().onBackPressed();Toast.makeText(getActivity().getBaseContext(),
-                FragmentTransaction ft = Globals.ft.beginTransaction();
-                ft.replace(R.id.content_frame, new CrearRuta());
-                ft.commit();
+                if(ARG_EDITAR) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id_ruta", ARG_ID_RUTA);
+                    Fragment frag = new MostrarRuta();
+                    frag.setArguments(bundle);
+                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, frag);
+                    ft.commit();
+                }
+                else{
+                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, new CrearRuta());
+                    ft.commit();
+
+                }
                 break;
         }
     }
