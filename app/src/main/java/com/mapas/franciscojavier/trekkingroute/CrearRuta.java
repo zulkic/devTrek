@@ -6,13 +6,17 @@ import android.app.DownloadManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -78,17 +82,25 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private Boolean enabled = true;
     int i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-    // GPSTracker class
-    GPS gps;
     private GeoPoint punto;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        gps = new GPS(getActivity());
-
-        double latitude = gps.getLatitude();
-        double longitude = gps.getLongitude();
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+        double latitude;
+        double longitude;
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+        else{
+            //posicion curico
+            latitude = -34.98605794;
+            longitude = -71.24138117;
+        }
 
         View view = inflater.inflate(R.layout.fragment_crear_ruta, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
@@ -111,11 +123,10 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         this.osm.getOverlays().add(myScaleBarOverlay);
         initPathOverlay();
         indicadores = osm.getOverlays();
-        GeoPoint center = new GeoPoint(latitude, longitude);
+        GeoPoint center = new GeoPoint(latitude,longitude);
         mc.animateTo(center);
 
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
 
@@ -203,13 +214,43 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     }
 
     public void activarGps() {
-        if(gps.canGetLocation()){
-            GeoPoint punto = new GeoPoint(gps.getLatitude(),gps.getLongitude());
+
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
             mc.animateTo(punto);
         }else{
-            gps.showSettingsAlert();
+            showSettingsAlert();
         }
     }
+    public void showSettingsAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+
+        // Titulo de la alerta
+        alertDialog.setTitle("GPS apagado");
+
+        // Mensaje
+        alertDialog.setMessage("GPS no esta habilitado. Desea ir al menu de ajustes?");
+
+        // El botón de Configuración
+        alertDialog.setPositiveButton("Ajustes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                getActivity().startActivity(intent);
+            }
+        });
+
+        // El botón de Cancelacion
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Mostrando el mensaje de alerta
+        alertDialog.show();
+    }
+
     private void agregarIndicadorAPosicion() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
@@ -236,8 +277,8 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                 // Loads the given URL
                 //puntos.get(position).getId_tipo_punto_interes()
                 Tipo_punto_interes tipo_punto = (Tipo_punto_interes) tipo_puntos.get(position);
-                Toast.makeText(getActivity(), "Accediendo a: "+ tipo_punto.getNombre(), Toast.LENGTH_SHORT).show();
-                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_punto.getNombre(),tipo_punto.getNombre_icono(),
+                Toast.makeText(getActivity(), "Accediendo a: " + tipo_punto.getNombre(), Toast.LENGTH_SHORT).show();
+                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_punto.getNombre(), tipo_punto.getNombre_icono(),
                         tipo_punto.getId());
                 alert.dismiss();
             }
@@ -289,7 +330,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private void addPoiOverlayObs(GeoPoint gp, String titulo,String icono,Long id_tipo) {
         int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
         Drawable drawable= this.getResources().getDrawable(resID);
-        this.indicador.createIndicadorObs(drawable,titulo,titulo,gp,id_tipo);
+        this.indicador.createIndicadorObs(drawable, titulo, titulo, gp, id_tipo);
         indicadores.clear();
         indicadores.add(this.indicador);
         //osm.invalidate();
@@ -324,9 +365,9 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     public void onLocationChanged(Location location) {
 
         //Log.i(">>><<<<<", "---------=========ERROR==========------------");
-        gps.setLatitude(location.getLatitude());
+        /*gps.setLatitude(location.getLatitude());
         gps.setLongitude(location.getLongitude());
-        gps.setAltitude(location.getAltitude());
+        gps.setAltitude(location.getAltitude());*/
         this.punto = new GeoPoint(location.getLatitude(), location.getLongitude(), location.getAltitude());
         //mc.animateTo(punto);
         addMarket(punto, encendido);
@@ -364,7 +405,6 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override
