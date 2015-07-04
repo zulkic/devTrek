@@ -115,7 +115,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         mc.animateTo(center);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 3, this);
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
 
@@ -181,8 +181,16 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         //dentro de la clase gps esta la funcion para apagarlo asiq esta puede q no sea necesaria
         initPathOverlay();
         this.coordenadas = new ArrayList<>();
-        this.contador = 1;
+        Coordenada nueva_coordenada = new Coordenada();
+        nueva_coordenada.setLatitud((double) punto.getLatitude());
+        nueva_coordenada.setLongitud((double) punto.getLongitude());
+        nueva_coordenada.setAltitud((int) punto.getAltitude());
+        nueva_coordenada.setId_ruta(id_ruta);
+        nueva_coordenada.setPosicion(contador);
+        this.coordenadas.add(nueva_coordenada);
+        this.contador = 2;
         encendido = true;
+        addMarket(punto, encendido);
     }
     public void apagarRecorrido()
     {
@@ -348,7 +356,6 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                     localicacionA.setLongitude(location.getLongitude());
                 }
                 Coordenada nueva_coordenada = new Coordenada();
-                nueva_coordenada.setId((long) contador);
                 nueva_coordenada.setLatitud((double) punto.getLatitude());
                 nueva_coordenada.setLongitud((double) punto.getLongitude());
                 nueva_coordenada.setAltitud((int) punto.getAltitude());
@@ -423,6 +430,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
 
                     FragmentTransaction ft = Globals.ft.beginTransaction();
                     ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicador.getObstaculos()));
+                    ft.addToBackStack("Detalle Crear Ruta");
                     ft.commit();
 
                 }

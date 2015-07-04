@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +69,7 @@ public class MostrarRuta extends SherlockFragment {
     private ArrayList<Coordenada> lista_coordenadas = new ArrayList<>();
     private ArrayList<Punto_interes> lista_puntos = new ArrayList<>();
     private ArrayList<Obstaculo> lista_obstaculos = new ArrayList<>();
-    private List<Overlay> puntosDeInteres;
-    private List<Overlay> obstaculos;
+    private GestureDetector gestureDetector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,17 +90,13 @@ public class MostrarRuta extends SherlockFragment {
         //setupMyLocation();
         //addPolyOverlay();
         addLineOverlay();
-        puntosDeInteres = osm.getOverlays();
-        obstaculos = osm.getOverlays();
         //GeoPoint center = new GeoPoint(, );
         //mc.animateTo(center);
         //addMarket(center);
-
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
-
-
     }
+
     // add line overlay to map
     private void addLineOverlay() {
         // set custom line style
@@ -202,7 +198,6 @@ public class MostrarRuta extends SherlockFragment {
 
         for(Obstaculo obs : lista_obstaculos)
         {
-            Log.i("ID: ", Integer.toString(obs.getId_tipo_obstaculo()));
             Tipo_obstaculo tpi = Tipo_ObstaculoRepo.getTipo_ObstaculoForId(getActivity(), obs.getId_tipo_obstaculo().longValue());
             String titulo = tpi.getNombre();
             String icono = tpi.getNombre_icono();
@@ -286,6 +281,7 @@ public class MostrarRuta extends SherlockFragment {
         if (id == R.id.action_edit) {
             FragmentTransaction ft = Globals.ft.beginTransaction();
             ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(ruta.getTiempo_estimado(),ruta.getKms(),ruta.getNombre(),this.ruta.getDescripcion(),ruta.getId().intValue()));
+            ft.addToBackStack("Detalles Crear Ruta");
             ft.commit();
             return true;
         }
@@ -295,6 +291,7 @@ public class MostrarRuta extends SherlockFragment {
             FragmentTransaction ft = Globals.ft.beginTransaction();
             ft.replace(R.id.content_frame, new DetallesEliminarRuta().newInstance(ruta.getId(),
                     ruta.getNombre(), ruta.getTiempo_estimado(), ruta.getKms(), "tipo", ruta.getDescripcion()));
+            ft.addToBackStack("Eliminar Ruta");
             ft.commit();
             return true;
         }
@@ -316,6 +313,7 @@ public class MostrarRuta extends SherlockFragment {
             Fragment frag = new Frag_Iniciar_Rec();
             FragmentTransaction ft = Globals.ft.beginTransaction();
             ft.replace(R.id.content_frame, frag);
+            ft.addToBackStack("Iniciar Recorrido");
             ft.commit();
         }
         return super.onOptionsItemSelected(item);

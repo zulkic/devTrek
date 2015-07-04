@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,9 +26,9 @@ import com.mapas.franciscojavier.trekkingroute.Account.MainCalls;
 import com.mapas.franciscojavier.trekkingroute.Account.RegisterFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
-import JSON.Sincronizar_Regiones;
 import java.util.Locale;
 
+import JSON.Sincronizar_Regiones;
 import JSON.Sincronizar_Rutas;
 import JSON.Sincronizar_Tipos_Indicadores;
 import greendao.DaoMaster;
@@ -320,6 +319,7 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
         if(logout) {
 
         }
+        ft.addToBackStack("Switch");
         ft.commit();
         mDrawerList.setItemChecked(position, true);
         // Get the title followed by the position
@@ -350,14 +350,14 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
 
     @Override
     public void onBackPressed() {
-
-        FragmentManager manager = getSupportFragmentManager();
-        if (manager.getBackStackEntryCount() > 0) {
+        Log.i("Back pressed: ", "es que me han llamado tio");
+        if (Globals.ft.getBackStackEntryCount() > 0) {
     // If there are back-stack entries, leave the FragmentActivity
     // implementation take care of them.
-            manager.popBackStack();
-
+            Log.i("Back pressed: ", "por el if tio");
+            Globals.ft.popBackStack();
         } else {
+            Log.i("Back pressed: ", "por el else tio");
     // Otherwise, ask user if he wants to leave :)
             super.onBackPressed();
         }

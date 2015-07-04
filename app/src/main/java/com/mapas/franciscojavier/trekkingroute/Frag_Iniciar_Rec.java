@@ -29,7 +29,7 @@ public class Frag_Iniciar_Rec extends SherlockFragment implements View.OnClickLi
         // Set the ViewPagerAdapter into ViewPager
         adapter = new ViewPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(adapter);
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(2);
         return view;
     }
 

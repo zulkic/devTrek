@@ -48,11 +48,15 @@ public class RutaRepo {
                 Log.i("valid: ", "is valid");
                 return 1;
             }
-            Log.i("valid: ", "is not valid");
-            return 0;
+            else {
+                Log.i("valid: ", "is not valid");
+                return 0;
+            }
         }
-        Log.i("valid: ", "is null");
-        return -1;
+        else {
+            Log.i("valid: ", "is null");
+            return -1;
+        }
     }
 
     public static List<Ruta> noSincronizadas(Context context)

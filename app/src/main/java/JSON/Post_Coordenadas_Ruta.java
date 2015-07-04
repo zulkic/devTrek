@@ -83,8 +83,9 @@ public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                CoordenadaRepo.insertOrUpdate(context,coordenada);
             }
+            Guardar_Coordenadas guardar_coordenadas = new Guardar_Coordenadas(coordenadas, context, wp.getId().longValue());
+            guardar_coordenadas.execute();
         }
         else
         {
@@ -99,7 +100,8 @@ public class Post_Coordenadas_Ruta extends AsyncTask<Void, Void, Void> {
     /**
      * After completing background task Dismiss the progress dialog
      * **/
-    protected void onPostExecute(String file_url) {
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
 
     }
 

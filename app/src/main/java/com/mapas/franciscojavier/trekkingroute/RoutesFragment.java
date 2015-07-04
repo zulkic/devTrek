@@ -89,6 +89,7 @@ public class RoutesFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_routes, container, false);
 
         // Set the adapter
@@ -115,6 +116,7 @@ public class RoutesFragment extends SherlockFragment {
 
                     FragmentTransaction ft = Globals.ft.beginTransaction();
                     ft.replace(R.id.content_frame, frag);
+                    ft.addToBackStack("Mostrar Ruta");
                     ft.commit();
 
                 }
@@ -168,5 +170,4 @@ public class RoutesFragment extends SherlockFragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
-
 }

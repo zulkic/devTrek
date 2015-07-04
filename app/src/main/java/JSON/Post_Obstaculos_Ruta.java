@@ -84,8 +84,9 @@ public class Post_Obstaculos_Ruta extends AsyncTask<Void, Void, Void> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                ObstaculoRepo.insertOrUpdate(context, obstaculo);
             }
+            Guardar_Obstaculos guardar_obstaculos = new Guardar_Obstaculos(obstaculos, context, wp.getId().longValue());
+            guardar_obstaculos.execute();
         }
         else
         {
@@ -100,7 +101,8 @@ public class Post_Obstaculos_Ruta extends AsyncTask<Void, Void, Void> {
     /**
      * After completing background task Dismiss the progress dialog
      * **/
-    protected void onPostExecute(String file_url) {
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
 
     }
 

@@ -37,7 +37,7 @@ public class Guardar_Obstaculos extends AsyncTask<Void,Void,Void> {
         {
             Obstaculo nuevo = new Obstaculo();
             nuevo.setLatitud(obstaculo.getLatitud());
-            nuevo.setLongitud(obstaculo.getLatitud());
+            nuevo.setLongitud(obstaculo.getLongitud());
             nuevo.setId_tipo_obstaculo(obstaculo.getId_tipo_obstaculo());
             nuevo.setId_ruta(id_ruta.intValue());
             nuevo.setDescripcion(obstaculo.getDescripcion());

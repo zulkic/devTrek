@@ -28,6 +28,7 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Wrapper> {
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_ID= "id_ruta";
     private Boolean internet;
+    private Integer id = 0;
 
     public Nueva_Ruta(Ruta ruta, Context context)
     {
@@ -56,8 +57,6 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Wrapper> {
      * */
     @Override
      protected Wrapper doInBackground(Void... args) {
-
-        Integer id = 0;
 
         if(internet) {
             Log.i("nueva ruta: ", "agregando una nueva ruta");
@@ -93,7 +92,7 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Wrapper> {
                 id = json.getInt(TAG_ID);
                 if (success != 0) {
                     // successfully created product
-                    Log.i("nueva_ruta", "creada correctamente");
+                    Log.i("nueva_ruta", "creada correctamente " + id.toString() );
                 } else {
                     // failed to create product
                     Log.i("nueva_ruta", "algo fallo");
@@ -103,7 +102,9 @@ public class Nueva_Ruta extends AsyncTask<Void, Void, Wrapper> {
             }
             ruta.setSincronizada(true);
             ruta.setFavorita(false);
-            id = RutaRepo.insertOrUpdate(this.context,ruta);
+            ruta.setId(id.longValue());
+            Guardar_Rutas guardar_rutas = new Guardar_Rutas(ruta, context);
+            guardar_rutas.execute();
         }
         else {
             ruta.setSincronizada(false);

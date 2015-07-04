@@ -25,8 +25,8 @@ public class FIRHistograma extends Fragment implements View.OnClickListener {
 
     private ArrayList<Coordenada> coordenadas;
     private LineChart chart;
-    private int max;
-    private int min;
+    private Integer max;
+    private Integer min;
     private View view;
 
     @Override
@@ -157,23 +157,25 @@ public class FIRHistograma extends Fragment implements View.OnClickListener {
         ArrayList<Entry> entries6 = new ArrayList<>();
         Entry entry = null;
         int i=0;
+        Log.i("max: ", max.toString());
+        Log.i("min: ", min.toString());
         for(Entry punto : entries) {
-            if(max >= 0 && min < 250)
+            if(max >= 0 && min <= 250)
                 entry = new Entry(250, i);
                 entries1.add(entry);
-            if (max >= 250 && min < 500) {
+            if (max >= 250 && min <= 500) {
                 entry = new Entry(500, i);
                 entries2.add(entry);
             }
-            if (max >= 500 && min < 1000) {
+            if (max >= 500 && min <= 1000) {
                 entry = new Entry(1000, i);
                 entries3.add(entry);
             }
-            if (max >= 1000 && min < 1500) {
+            if (max >= 1000 && min <= 1500) {
                 entry = new Entry(1500, i);
                 entries4.add(entry);
             }
-            if(max >= 1500 && min < 3000) {
+            if(max >= 1500 && min <= 3000) {
                 entry = new Entry(3000, i);
                 entries5.add(entry);
             }
@@ -183,56 +185,63 @@ public class FIRHistograma extends Fragment implements View.OnClickListener {
             }
             i+=1;
         }
+        if(entries1 != null) {
+            LineDataSet nivel1 = new LineDataSet(entries1, "0-250mts");
+            nivel1.setColor(Color.rgb(3, 128, 0));
+            nivel1.setDrawValues(false);
+            nivel1.setDrawFilled(true);
+            nivel1.setFillColor(Color.rgb(3, 128, 0));
+            nivel1.setDrawCircles(false);
+            datos.add(nivel1);
+        }
+        if(entries2 != null) {
+            LineDataSet nivel2 = new LineDataSet(entries2, "250-500mts");
+            nivel2.setColor(Color.rgb(141, 212, 40));
+            nivel2.setDrawValues(false);
+            nivel2.setDrawFilled(true);
+            nivel2.setFillColor(Color.rgb(141, 212, 40));
+            nivel2.setDrawCircles(false);
+            datos.add(nivel2);
+        }
 
-        LineDataSet nivel1 = new LineDataSet(entries1, "0-250mts");
-        nivel1.setColor(Color.rgb(3, 128, 0));
-        nivel1.setDrawValues(false);
-        nivel1.setDrawFilled(true);
-        nivel1.setFillColor(Color.rgb(3, 128, 0));
-        nivel1.setDrawCircles(false);
+        if(entries3 != null) {
+            LineDataSet nivel3 = new LineDataSet(entries3, "500-1000mts");
+            nivel3.setColor(Color.rgb(154, 226, 143));
+            nivel3.setDrawValues(false);
+            nivel3.setDrawFilled(true);
+            nivel3.setFillColor(Color.rgb(154, 226, 143));
+            nivel3.setDrawCircles(false);
+            datos.add(nivel3);
+        }
 
-        LineDataSet nivel2 = new LineDataSet(entries2, "250-500mts");
-        nivel2.setColor(Color.rgb(141, 212, 40));
-        nivel2.setDrawValues(false);
-        nivel2.setDrawFilled(true);
-        nivel2.setFillColor(Color.rgb(141,212,40));
-        nivel2.setDrawCircles(false);
+        if(entries4 != null) {
+            LineDataSet nivel4 = new LineDataSet(entries4, "1000-1500mts");
+            nivel4.setColor(Color.rgb(255, 180, 91));
+            nivel4.setDrawValues(false);
+            nivel4.setDrawFilled(true);
+            nivel4.setFillColor(Color.rgb(255, 180, 91));
+            nivel4.setDrawCircles(false);
+            datos.add(nivel4);
+        }
 
-        LineDataSet nivel3 = new LineDataSet(entries3, "500-1000mts");
-        nivel3.setColor(Color.rgb(154, 226, 143));
-        nivel3.setDrawValues(false);
-        nivel3.setDrawFilled(true);
-        nivel3.setFillColor(Color.rgb(154,226,143));
-        nivel3.setDrawCircles(false);
-
-        LineDataSet nivel4 = new LineDataSet(entries4, "1000-1500mts");
-        nivel4.setColor(Color.rgb(255, 180, 91));
-        nivel4.setDrawValues(false);
-        nivel4.setDrawFilled(true);
-        nivel4.setFillColor(Color.rgb(255,180,91));
-        nivel4.setDrawCircles(false);
-
-        LineDataSet nivel5 = new LineDataSet(entries5, "1500-3000mts");
-        nivel5.setColor(Color.rgb(134, 73, 0));
-        nivel5.setDrawValues(false);
-        nivel5.setDrawFilled(true);
-        nivel5.setFillColor(Color.rgb(134,73,0));
-        nivel5.setDrawCircles(false);
-
-        LineDataSet nivel6 = new LineDataSet(entries6, "+3000mts");
-        nivel6.setColor(Color.rgb(255, 217, 172));
-        nivel6.setDrawValues(false);
-        nivel6.setDrawFilled(true);
-        nivel6.setFillColor(Color.rgb(255,217,172));
-        nivel6.setDrawCircles(false);
-
-        datos.add(nivel1);
-        datos.add(nivel2);
-        datos.add(nivel3);
-        datos.add(nivel4);
-        datos.add(nivel5);
-        datos.add(nivel6);
-
+        if(entries5 != null) {
+            LineDataSet nivel5 = new LineDataSet(entries5, "1500-3000mts");
+            nivel5.setColor(Color.rgb(134, 73, 0));
+            nivel5.setDrawValues(false);
+            nivel5.setDrawFilled(true);
+            nivel5.setFillColor(Color.rgb(134, 73, 0));
+            nivel5.setDrawCircles(false);
+            datos.add(nivel5);
+        }
+        if(entries6 != null) {
+            LineDataSet nivel6 = new LineDataSet(entries6, "+3000mts");
+            nivel6.setColor(Color.rgb(255, 217, 172));
+            nivel6.setDrawValues(false);
+            nivel6.setDrawFilled(true);
+            nivel6.setFillColor(Color.rgb(255, 217, 172));
+            nivel6.setDrawCircles(false);
+            datos.add(nivel6);
+        }
         return datos;
     }
 

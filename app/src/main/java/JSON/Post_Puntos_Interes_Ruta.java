@@ -84,8 +84,9 @@ public class Post_Puntos_Interes_Ruta extends AsyncTask<Void, Void, Void> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Punto_interesRepo.insertOrUpdate(context, punto_interes);
             }
+            Guardar_Puntos_interes guardar_puntos_interes = new Guardar_Puntos_interes(puntos_interes, context, wp.getId().longValue());
+            guardar_puntos_interes.execute();
         }
         else
         {
@@ -100,7 +101,8 @@ public class Post_Puntos_Interes_Ruta extends AsyncTask<Void, Void, Void> {
     /**
      * After completing background task Dismiss the progress dialog
      * **/
-    protected void onPostExecute(String file_url) {
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
 
     }
 

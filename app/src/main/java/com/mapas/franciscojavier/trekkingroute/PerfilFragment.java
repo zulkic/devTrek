@@ -5,15 +5,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,9 +20,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Account.MainCalls;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
-import JSON.Buscar_Usuario;
 import JSON.Cambiar_Contrasenia;
-import JSON.Registrar_Usuario;
 import greendao.Usuario;
 
 /**
@@ -84,9 +81,17 @@ public class PerfilFragment extends SherlockFragment implements AdapterView.OnCl
                     Usuario client = new Usuario();
                     client.setContrasenia(etNewPassword.getText().toString());
                     client.setEmail(etEmail.getText().toString());
-                    Cambiar_Contrasenia cont = new Cambiar_Contrasenia( client, getActivity());
-                    cont.execute();
-
+                    SharedPreferences pref = Globals.context.getSharedPreferences(Globals.PREF, Context.MODE_PRIVATE);
+                    String pass = pref.getString(Globals.PASS, " ");
+                    if(etPassword.getText().toString().equals(pass) )
+                    {
+                        Cambiar_Contrasenia cont = new Cambiar_Contrasenia( client, getActivity());
+                        cont.execute();
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity().getBaseContext(), "Error ", Toast.LENGTH_SHORT).show();
+                    }
                     mListener.goToHome();
                 }
                 break;

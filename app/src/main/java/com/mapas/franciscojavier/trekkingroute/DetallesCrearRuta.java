@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import JSON.Modificar_Ruta;
 import JSON.Nueva_Ruta;
 import JSON.Post_Coordenadas_Ruta;
+import JSON.Post_Obstaculos_Ruta;
 import JSON.Post_Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Obstaculo;
@@ -200,7 +201,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
 
                             Toast.makeText(getActivity().getBaseContext(),"Ruta Modificada con exito ", Toast.LENGTH_SHORT).show();
                             FragmentTransaction ft = Globals.ft.beginTransaction();
-                            ft.replace(R.id.content_frame, new RoutesFragment());
+                            ft.replace(R.id.content_frame, new PantallaInicio());
                             ft.commit();
 
                         }
@@ -221,7 +222,7 @@ public class DetallesCrearRuta extends SherlockFragment implements View.OnClickL
 
                                     Toast.makeText(getActivity().getBaseContext(), "Ruta Creada con exito ", Toast.LENGTH_SHORT).show();
                                     FragmentTransaction ft = Globals.ft.beginTransaction();
-                                    ft.replace(R.id.content_frame, new RoutesFragment());
+                                    ft.replace(R.id.content_frame, new PantallaInicio());
                                     ft.commit();
                                 }
                             }

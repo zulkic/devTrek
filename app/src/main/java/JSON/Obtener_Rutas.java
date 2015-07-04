@@ -124,6 +124,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                 for(Ruta ruta : RutaRepo.getAllRutas(context)) {
                     if(!ruta.getSincronizada()) {
                         this.rutasList.add(ruta);
+                        Log.i("Ruta local:", "ruta local agregada al obtener rutas");
                     }
                 }
             } catch (JSONException e) {
