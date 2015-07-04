@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
@@ -74,6 +75,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private Marker aux;
     private Indicador indicador;
     private DownloadManager mgr=null;
+    private Boolean enabled = true;
     int i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     // GPSTracker class
@@ -92,13 +94,11 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
         ImageButton botonIndicador = (ImageButton) view.findViewById(R.id.imageButton_Indicadores);
         ImageButton botonObstaculo = (ImageButton) view.findViewById(R.id.imageButton_Obstaculos);
-        Button inicio = (Button) view.findViewById(R.id.button_start);
-        Button fin = (Button) view.findViewById(R.id.button_end);
+        ToggleButton tBtnIniFin = (ToggleButton) view.findViewById(R.id.tBtnIniFin);
         botonGps.setOnClickListener(this);
         botonIndicador.setOnClickListener(this);
         botonObstaculo.setOnClickListener(this);
-        inicio.setOnClickListener(this);
-        fin.setOnClickListener(this);
+        tBtnIniFin.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
         osm.setTileSource(Globals.MAPQUESTOSM);
@@ -383,11 +383,18 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         Date c = null;
         Calendar now = Calendar.getInstance();
         switch (v.getId()){
-            case R.id.button_start:
-                if(encendido){
-                    Toast.makeText(v.getContext(), R.string.toast_rute_start, Toast.LENGTH_SHORT).show();
-                }
-                else{
+            case R.id.imageButtonGPS:
+                activarGps();
+                break;
+            case R.id.imageButton_Indicadores:
+                agregarIndicadorAPosicion();
+                break;
+            case R.id.imageButton_Obstaculos:
+                agregarObstaculoAPosicion();
+                break;
+            case R.id.tBtnIniFin:
+                if(enabled) {
+                    enabled = false;
                     int hour = now.get(Calendar.HOUR_OF_DAY);
                     int minute = now.get(Calendar.MINUTE);
                     int second = now.get(Calendar.SECOND);
@@ -397,9 +404,9 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
 
                     grabarRecorrido();
                 }
-                break;
-            case R.id.button_end :
-                if(encendido){
+                else
+                {
+                    enabled = true;
                     int hour = now.get(Calendar.HOUR_OF_DAY);
                     int minute = now.get(Calendar.MINUTE);
                     int second = now.get(Calendar.SECOND);
@@ -424,20 +431,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                     FragmentTransaction ft = Globals.ft.beginTransaction();
                     ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicador.getObstaculos()));
                     ft.commit();
-
                 }
-                else{
-                    Toast.makeText(v.getContext(),R.string.toast_rute_end , Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.imageButtonGPS:
-                activarGps();
-                break;
-            case R.id.imageButton_Indicadores:
-                agregarIndicadorAPosicion();
-                break;
-            case R.id.imageButton_Obstaculos:
-                agregarObstaculoAPosicion();
                 break;
         }
     }

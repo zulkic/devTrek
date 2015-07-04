@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import JSON.Modificar_Ruta;
 import JSON.Nueva_Ruta;
 import JSON.Post_Coordenadas_Ruta;
+import JSON.Post_Obstaculos_Ruta;
 import JSON.Post_Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Obstaculo;
@@ -39,7 +41,7 @@ import greendao.Punto_interes;
 import greendao.Ruta;
 
 
-public class DetallesCrearRuta extends SherlockFragment implements View.OnClickListener{
+public class DetallesCrearRuta extends SherlockFragment implements AdapterView.OnClickListener{
 
     String tiempoTotal;
     private static final String ARG_PARAM1 = "nada";

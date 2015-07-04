@@ -75,7 +75,7 @@
     <string name="descripcion_ruta">Description</string>
     <string name="button_guardar_ruta">Save</string>
     <!--Eliminar ruta-->
-    <string name="title_eliminar_ruta">Data for Rute</string>
+    <string name="title_eliminar_ruta">Data for the route to delete</string>
 
 
     <string name="errorEmpty">Can not be empty</string>
@@ -97,8 +97,7 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">--</string>
-    <string name="btn_cambiar_idioma">Change</string>
+    <string name="btn_cambiar_idioma">Accept</string>
     <string name="btn_cancelar_idioma">Cancel</string>
     <string name="button_cancelar_perfil">Cancel</string>
     <string name="button_guardar_perfil">Accept</string>
@@ -112,6 +111,10 @@
     <string name="title_perfil">User Profile</string>
     <string name="hint_new_password">New Password</string>
     <string name="title_configuracion">Settings</string>
+    <string name="correo_usuario">Email</string>
+    <string name="nombre_usuario">Name</string>
+    <string name="nueva_contraseña_usuario">Change Password</string>
+    <string name="passwordOld">You must enter the current password</string>
 
 
 </resources>
