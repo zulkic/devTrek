@@ -15,19 +15,31 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+import com.mapas.franciscojavier.trekkingroute.Utility.RefreshListener;
 
 import java.util.ArrayList;
 
 import JSON.Coordenadas_Ruta;
 import greendao.Coordenada;
 
-public class FIRHistograma extends Fragment implements View.OnClickListener {
+public class FIRHistograma extends Fragment implements View.OnClickListener, RefreshListener {
 
     private ArrayList<Coordenada> coordenadas;
     private LineChart chart;
     private Integer max;
     private Integer min;
     private View view;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Coordenadas_Ruta coordenadas_ruta = new Coordenadas_Ruta(Globals.ini_rec.getId().intValue() , Globals.context);
+        coordenadas = new ArrayList<>();
+        try {
+            coordenadas = coordenadas_ruta.execute().get();
+        }
+        catch (Exception e){}
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,13 +49,6 @@ public class FIRHistograma extends Fragment implements View.OnClickListener {
             view = inflater.inflate(R.layout.fir_layout_histograma, null);
             ImageButton botonDescarga = (ImageButton) view.findViewById(R.id.imageButton_download);
             botonDescarga.setOnClickListener(this);
-
-            Coordenadas_Ruta coordenadas_ruta = new Coordenadas_Ruta(Globals.ini_rec.getId().intValue() , Globals.context);
-            coordenadas = new ArrayList<>();
-            try {
-                coordenadas = coordenadas_ruta.execute().get();
-            }
-            catch (Exception e){}
 
             ArrayList<Entry> entries = new ArrayList<Entry>();
             ArrayList<String> labels = new ArrayList<String>();
@@ -254,5 +259,10 @@ public class FIRHistograma extends Fragment implements View.OnClickListener {
                 chart.saveToGallery("cerro condell.jpg",85);
                 break;
         }
+    }
+
+    @Override
+    public void fragmentBecameVisible() {
+
     }
 }

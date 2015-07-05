@@ -3,12 +3,15 @@ package com.mapas.franciscojavier.trekkingroute;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+import com.mapas.franciscojavier.trekkingroute.Utility.RefreshListener;
 
 import java.lang.reflect.Field;
 
@@ -30,6 +33,24 @@ public class Frag_Iniciar_Rec extends SherlockFragment implements View.OnClickLi
         adapter = new ViewPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(2);
+        Globals.inicio_fin = true;
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int i, final float v, final int i2) {
+            }
+            @Override
+            public void onPageSelected(final int i) {
+                RefreshListener fragment = (RefreshListener) adapter.instantiateItem(mViewPager, i);
+                if (fragment != null && !(fragment instanceof FIRMapa)) {
+                    fragment.fragmentBecameVisible();
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(final int i) {
+            }
+        });
+
         return view;
     }
 

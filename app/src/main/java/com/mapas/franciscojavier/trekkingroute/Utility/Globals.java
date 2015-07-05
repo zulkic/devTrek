@@ -37,4 +37,5 @@ public class Globals {
     public static FragmentManager ft;
     public static Ruta ini_rec;
     public static final Boolean internet = false;
+    public static Boolean inicio_fin = true;
 }

@@ -10,15 +10,17 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+import com.mapas.franciscojavier.trekkingroute.Utility.RefreshListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import JSON.Obstaculos_Ruta;
 import greendao.Obstaculo;
 import greendao.Ruta;
 
-public class FIRObstaculos extends SherlockFragment{
+public class FIRObstaculos extends SherlockFragment implements RefreshListener{
 
     private ListView listView;
     private Ruta ruta;
@@ -30,6 +32,7 @@ public class FIRObstaculos extends SherlockFragment{
      */
     private ListAdapter mAdapter;
     private ArrayList<Obstaculo> obstaculos;
+    private ArrayList<Obstaculo> aux;
     private View view;
 
     // TODO: Rename and change types of parameters
@@ -46,6 +49,7 @@ public class FIRObstaculos extends SherlockFragment{
         Obstaculos_Ruta tarea_get_obstaculos = new Obstaculos_Ruta(Globals.ini_rec.getId().intValue(),getActivity());
         try {
             this.obstaculos = tarea_get_obstaculos.execute().get();
+            this.aux = new ArrayList<>(this.obstaculos);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -56,16 +60,29 @@ public class FIRObstaculos extends SherlockFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            Log.i("Obstaculos: ", "me han llamado");
-            view = inflater.inflate(R.layout.fragment_detalleindicador, null);
+        Log.i("Obstaculos: ", "me han llamado");
+        view = inflater.inflate(R.layout.fragment_detalleindicador, null);
 
-            // Set the adapter
-            listView = (ListView) view.findViewById(android.R.id.list);
-            if (this.obstaculos.isEmpty()) {
+        // Set the adapter
+        listView = (ListView) view.findViewById(android.R.id.list);
+        if(!Globals.inicio_fin) {
+            Log.i("Obstaculos: ", "debo invertir la lista");
+            Collections.reverse(this.obstaculos);
+        }
+        else
+        {
+            this.obstaculos = (ArrayList<Obstaculo>) this.aux.clone();
+        }
+        if (this.obstaculos.isEmpty()) {
 
-            } else {
-                this.listView.setAdapter(new DetalleIndicadorItemObs(Globals.context, this.obstaculos));
-            }
+        } else {
+            this.listView.setAdapter(new DetalleIndicadorItemObs(Globals.context, this.obstaculos));
+        }
         return view;
+    }
+
+    @Override
+    public void fragmentBecameVisible() {
+
     }
 }

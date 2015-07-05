@@ -18,15 +18,15 @@
     </com.mapas.franciscojavier.trekkingroute.CustomViewPager>
 
     <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/button"
         android:background="@drawable/check"
         android:textOn=""
         android:textOff=""
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_marginBottom="45dp"
+        android:layout_marginBottom="50dp"
 
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

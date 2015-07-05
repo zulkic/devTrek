@@ -10,15 +10,17 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+import com.mapas.franciscojavier.trekkingroute.Utility.RefreshListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import JSON.Puntos_Interes_Ruta;
 import greendao.Punto_interes;
 import greendao.Ruta;
 
-public class FIRDetalles extends SherlockFragment{
+public class FIRDetalles extends SherlockFragment implements RefreshListener{
 
     private ListView listView;
     private Ruta ruta;
@@ -30,6 +32,7 @@ public class FIRDetalles extends SherlockFragment{
      */
     private ListAdapter mAdapter;
     private ArrayList<Punto_interes> lista_puntos;
+    private ArrayList<Punto_interes> aux;
     private View view;
 
     // TODO: Rename and change types of parameters
@@ -46,6 +49,7 @@ public class FIRDetalles extends SherlockFragment{
         Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(Globals.ini_rec.getId().intValue(),getActivity());
         try {
             this.lista_puntos = tarea_get_puntos.execute().get();
+            this.aux = new ArrayList<>(lista_puntos);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -56,16 +60,70 @@ public class FIRDetalles extends SherlockFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            Log.i("Detalles: ", "me han llamado");
-            view = inflater.inflate(R.layout.fragment_detalleindicador, null);
+        Log.i("Detalles: ", "me han llamado");
+        view = inflater.inflate(R.layout.fragment_detalleindicador, null);
 
-            // Set the adapter
-            listView = (ListView) view.findViewById(android.R.id.list);
-            if (this.lista_puntos.isEmpty()) {
+        // Set the adapter
+        listView = (ListView) view.findViewById(android.R.id.list);
+        if(!Globals.inicio_fin) {
+            Log.i("Puntos: ", "debo invertir la lista");
+            Collections.reverse(this.lista_puntos);
+        }
+        else
+        {
+            this.lista_puntos = (ArrayList<Punto_interes>) aux.clone();
+        }
+        if (this.lista_puntos.isEmpty()) {
 
-            } else {
-                this.listView.setAdapter(new DetalleIndicadorItem(Globals.context, this.lista_puntos));
-            }
+        } else {
+            this.listView.setAdapter(new DetalleIndicadorItem(Globals.context, this.lista_puntos));
+        }
         return view;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(Globals.ini_rec.getId().intValue(),getActivity());
+        try {
+            this.lista_puntos = tarea_get_puntos.execute().get();
+            this.aux = new ArrayList<>(lista_puntos);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if(!Globals.inicio_fin) {
+            Log.i("Puntos: ", "debo invertir la lista");
+            Collections.reverse(this.lista_puntos);
+        }
+        else
+        {
+            this.lista_puntos = (ArrayList<Punto_interes>) aux.clone();
+        }
+        if (this.lista_puntos.isEmpty()) {
+
+        } else {
+            this.listView.setAdapter(new DetalleIndicadorItem(Globals.context, this.lista_puntos));
+        }
+    }
+
+    @Override
+    public void fragmentBecameVisible() {
+        Log.i("Aca debo:", " cambiar los datos");
+        if(!Globals.inicio_fin) {
+            Log.i("Puntos: ", "debo invertir la lista");
+            Collections.reverse(this.lista_puntos);
+        }
+        else
+        {
+            this.lista_puntos = (ArrayList<Punto_interes>) aux.clone();
+        }
+        if (this.lista_puntos.isEmpty()) {
+
+        } else {
+            this.listView.setAdapter(new DetalleIndicadorItem(Globals.context, this.lista_puntos));
+        }
     }
 }
