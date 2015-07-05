@@ -67,7 +67,7 @@
     <string name="attempts_Left">Attempts remaining</string>
 
     <!--Crear Ruta-->
-    <string name="title_crear_ruta">Data for create rutes</string>
+    <string name="title_crear_ruta">Data for Rute</string>
     <string name="recorrido_mediante">Travel as</string>
     <string name="nombre_ruta">Rute name</string>
     <string name="tiempo_estimado">Estimated time</string>

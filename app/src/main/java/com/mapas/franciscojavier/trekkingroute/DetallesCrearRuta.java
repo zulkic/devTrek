@@ -31,6 +31,7 @@ import com.mapas.franciscojavier.trekkingroute.Utility.Wrapper;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import JSON.Modificar_Ruta;
 import JSON.Nueva_Ruta;
@@ -40,7 +41,9 @@ import JSON.Post_Puntos_Interes_Ruta;
 import greendao.Coordenada;
 import greendao.Obstaculo;
 import greendao.Punto_interes;
+import greendao.Region;
 import greendao.Ruta;
+import repositorios.RegionRepo;
 
 
 public class DetallesCrearRuta extends SherlockFragment implements AdapterView.OnClickListener{
@@ -53,8 +56,9 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
     private static String ARG_NOMBRE_RUTA="";
     private static String ARG_DESCRIPCION_RUTA="";
     private static Integer ARG_ID_RUTA;
-    private static boolean ARG_EDITAR;;
+    private static boolean ARG_EDITAR;
     private Spinner spinnerReco;
+    private Spinner spinnerRegion;
     private Button btnSubmit;
     private String Caminando ;
     private String Trotando;
@@ -72,7 +76,10 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
     TextView textDistanciaRecorrida;
     EditText editDescripcion;
 
+    List<String> list = new ArrayList<String>();
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
+
+    String[] listRegion= {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
     public DetallesCrearRuta() {
         // Required empty public constructor
@@ -136,7 +143,37 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         editDescripcion = (EditText) v.findViewById(R.id.editText_descripcion);
 
 
+//SPINER
+        List<Region> regiones = RegionRepo.getAllRegiones(getActivity());
+        int largo = regiones.size();
+        int i=0;
+        while(i<largo){
+            Region reg = regiones.get(i);
+            String nom = reg.getNombre();
+            list.add(nom);
+            i++;
+        }
+        spinnerRegion = (Spinner) v.findViewById(R.id.spinner_region_detalles);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRegion.setAdapter(dataAdapter);
 
+        spinnerRegion = (Spinner) v.findViewById(R.id.spinner_region_detalles);
+
+//        Caminando = getString(R.string.trail_caminando);
+//        Trotando=getString(R.string.trail_trotando);
+//        Corriendo=getString(R.string.trail_corriendo);
+//        Bicicleta=getString(R.string.trail_bicicleta);
+//        Caballo=getString(R.string.trail_caballo);
+//        Auto=getString(R.string.trail_auto);
+//        String[] listRegion = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
+//        this.listRegion = listRegion;
+        //spinnerRegion.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, this.listRegion));
+
+        // Spinner item selection Listener
+        addListenerOnSpinnerItemSelection(spinnerRegion);
+
+//FIN DEL SPINER
 
         //SPINER
         spinnerReco = (Spinner) v.findViewById(R.id.spinner_recorrido);
@@ -152,7 +189,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, this.listRecorido));
 
         // Spinner item selection Listener
-        addListenerOnSpinnerItemSelection();
+        addListenerOnSpinnerItemSelection(spinnerReco);
 
         //FIN DEL SPINER
         textTiempoEstimado.setText(ARG_TIEMPO_RUTA);
@@ -269,9 +306,9 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         }
     }
     // Add spinner data
-    public void addListenerOnSpinnerItemSelection(){
+    public void addListenerOnSpinnerItemSelection(Spinner spin){
 
-        spinnerReco.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        spin.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
     public class MyCustomAdapter extends ArrayAdapter<String>{
@@ -304,6 +341,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
             TextView label=(TextView)row.findViewById(R.id.tipo_recorrido);
             label.setText(listRecorido[position]);
 
+
             ImageView icon=(ImageView)row.findViewById(R.id.icon);
 
             if (listRecorido[position]==Caminando){
@@ -324,6 +362,9 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
             else if (listRecorido[position]==Auto){
                 icon.setImageResource(R.drawable.ic_auto);
             }
+//            else if(listRe[position]==list.get(position)){
+//                icon.setImageResource(R.drawable.ic_auto);
+//            }
             else{
                 icon.setImageResource(R.drawable.ic_droid);
             }
