@@ -151,7 +151,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
 
         return view;
     }
-    /*
+
     @Override
     public void onResume() {
         super.onResume();
@@ -164,7 +164,6 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         mSensorManager.unregisterListener(this, mAccelerometer);
         mSensorManager.unregisterListener(this, mMagnetometer);
     }
-*/
 
     public void initPathOverlay(){
         po = new PathOverlay(Color.CYAN,getActivity());
