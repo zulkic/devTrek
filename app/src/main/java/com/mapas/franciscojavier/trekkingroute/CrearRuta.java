@@ -84,6 +84,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     private GeoPoint punto;
 
+    //Commit para el moya
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
