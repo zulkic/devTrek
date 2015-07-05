@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -77,6 +79,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private Indicador indicador;
     private DownloadManager mgr=null;
     private Boolean enabled = true;
+    private ToggleButton tBtnIniFin;
     int i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     private GeoPoint punto;
@@ -103,10 +106,11 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
         ImageButton botonIndicador = (ImageButton) view.findViewById(R.id.imageButton_Indicadores);
         ImageButton botonObstaculo = (ImageButton) view.findViewById(R.id.imageButton_Obstaculos);
-        ToggleButton tBtnIniFin = (ToggleButton) view.findViewById(R.id.tBtnIniFin);
+        tBtnIniFin = (ToggleButton) view.findViewById(R.id.tBtnIniFin);
         botonGps.setOnClickListener(this);
         botonIndicador.setOnClickListener(this);
         botonObstaculo.setOnClickListener(this);
+        tBtnIniFin.setTextOn("inicio");
         tBtnIniFin.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
@@ -237,7 +241,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         // Mensaje
         alertDialog.setMessage("GPS no esta habilitado. Desea ir al menu de ajustes?");
 
-        // El boton de Configuracion
+        // El botón de Configuración
         alertDialog.setPositiveButton("Ajustes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -245,7 +249,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
             }
         });
 
-        // El boton de Cancelacion
+        // El botón de Cancelación
         alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -259,7 +263,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private void agregarIndicadorAPosicion() {
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setNegativeButton("Cancelar",
+        alertDialog.setNegativeButton(R.string.button_cancelar_ruta,
                 new DialogInterface.OnClickListener() {
 
                     @Override
@@ -281,11 +285,15 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
             public void onItemClick(AdapterView adapter, View view, int position, long arg) {
                 // Loads the given URL
                 //puntos.get(position).getId_tipo_punto_interes()
-                Tipo_punto_interes tipo_punto = (Tipo_punto_interes) tipo_puntos.get(position);
-                Toast.makeText(getActivity(), "Accediendo a: " + tipo_punto.getNombre(), Toast.LENGTH_SHORT).show();
-                addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_punto.getNombre(), tipo_punto.getNombre_icono(),
-                        tipo_punto.getId());
                 alert.dismiss();
+                if(!alert.isShowing())
+                {
+                    Tipo_punto_interes tipo_punto = (Tipo_punto_interes) tipo_puntos.get(position);
+                    Toast.makeText(getActivity(), "Accediendo a: " + tipo_punto.getNombre(), Toast.LENGTH_SHORT).show();
+                    addPoiOverlay(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_punto.getNombre(), tipo_punto.getNombre_icono(),
+                            tipo_punto.getId());
+                }
+
             }
         });
         if(encendido)
@@ -319,7 +327,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
             @Override
             public void onItemClick(AdapterView adapter, View view, int position, long arg) {
                 Tipo_obstaculo tipo_obstaculo = (Tipo_obstaculo) tipo_obstaculos.get(position);
-                Toast.makeText(getActivity(), "Accediendo a: "+ tipo_obstaculo.getNombre(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Accediendo a: " + tipo_obstaculo.getNombre(), Toast.LENGTH_SHORT).show();
                 addPoiOverlayObs(new GeoPoint(punto.getLatitude(), punto.getLongitude()), tipo_obstaculo.getNombre(), tipo_obstaculo.getNombre_icono(),
                         tipo_obstaculo.getId());
                 alert.dismiss();
@@ -332,22 +340,93 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
 
     }
 
-    private void addPoiOverlayObs(GeoPoint gp, String titulo,String icono,Long id_tipo) {
+    private void addPoiOverlayObs(final GeoPoint gp,final String titulo,final String icono,final Long id_tipo) {
+        final AlertDialog.Builder alertDialogo = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View convertView = (View) inflater.inflate(R.layout.popup_detalles_puntos, null);
         int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
-        Drawable drawable= this.getResources().getDrawable(resID);
-        this.indicador.createIndicadorObs(drawable, titulo, titulo, gp, id_tipo);
-        indicadores.clear();
-        indicadores.add(this.indicador);
-        //osm.invalidate();
+        final Drawable drawable= this.getResources().getDrawable(resID);
+        alertDialogo.setNegativeButton(R.string.button_cancelar_ruta,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), "Accediendo a: ", Toast.LENGTH_SHORT).show();
+                        indicador.createIndicadorObs(drawable, titulo,"Sin Descripción", gp, id_tipo);
+                        indicadores.clear();
+                        indicadores.add(indicador);
+                    }
+                });
+
+        alertDialogo.setPositiveButton(R.string.button_aceptar_eliminar_ruta,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                        EditText et = (EditText) convertView.findViewById(R.id.editText_popup_descripcion);
+                        if(et.getText().toString()!=null && !et.getText().toString().isEmpty())
+                            indicador.createIndicadorObs(drawable, titulo, et.getText().toString(), gp, id_tipo);
+                        else
+                            indicador.createIndicadorObs(drawable, titulo, "Sin Descripción", gp, id_tipo);
+                        indicadores.clear();
+                        indicadores.add(indicador);
+                    }
+                });
+        final AlertDialog alerta = alertDialogo.create();
+        alerta.setIcon(drawable);
+        alerta.setView(convertView);
+        alerta.setTitle(titulo);
+        alerta.show();
     }
 
 
-    private void addPoiOverlay(GeoPoint gp, String titulo,String icono,Long id_tipo) {
+    private void addPoiOverlay(final GeoPoint gp, final String titulo,final String icono,final Long id_tipo) {
+        final AlertDialog.Builder alertDialogo = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View convertView = (View) inflater.inflate(R.layout.popup_detalles_puntos, null);
         int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
-        Drawable drawable= this.getResources().getDrawable(resID);
-        this.indicador.createIndicador(drawable,titulo,titulo,gp,id_tipo);
-        indicadores.clear();
-        indicadores.add(this.indicador);
+        final Drawable drawable= this.getResources().getDrawable(resID);
+        alertDialogo.setNegativeButton(R.string.button_cancelar_ruta,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), "Accediendo a: ", Toast.LENGTH_SHORT).show();
+                        indicador.createIndicador(drawable, titulo,"Sin Descripción", gp, id_tipo);
+                        indicadores.clear();
+                        indicadores.add(indicador);
+                    }
+                });
+
+        alertDialogo.setPositiveButton(R.string.button_aceptar_eliminar_ruta,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                        EditText et = (EditText) convertView.findViewById(R.id.editText_popup_descripcion);
+                        if(et.getText().toString()!=null && !et.getText().toString().isEmpty())
+                            indicador.createIndicador(drawable, titulo, et.getText().toString(), gp, id_tipo);
+                        else
+                            indicador.createIndicador(drawable, titulo,"Sin Descripción", gp, id_tipo);
+                        indicadores.clear();
+                        indicadores.add(indicador);
+                    }
+                });
+        final AlertDialog alerta = alertDialogo.create();
+        alerta.setIcon(drawable);
+        alerta.setView(convertView);
+        alerta.setTitle(titulo);
+        alerta.show();
+
+
         //osm.invalidate();
     }
 
@@ -437,46 +516,48 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                 agregarObstaculoAPosicion();
                 break;
             case R.id.tBtnIniFin:
-                if(enabled) {
-                    enabled = false;
-                    int hour = now.get(Calendar.HOUR_OF_DAY);
-                    int minute = now.get(Calendar.MINUTE);
-                    int second = now.get(Calendar.SECOND);
-                    System.out.printf("INICIO %02d:%02d:%02d",hour, minute, second);
-                    i= hour*3600 + minute*60 + second;
-                    System.out.println("getTimeInicio "+i);
-
-                    grabarRecorrido();
-                }
-                else
-                {
-                    enabled = true;
-                    int hour = now.get(Calendar.HOUR_OF_DAY);
-                    int minute = now.get(Calendar.MINUTE);
-                    int second = now.get(Calendar.SECOND);
-                    System.out.printf("FIN %02d:%02d:%02d",hour, minute, second);
-                    f= hour*3600 + minute*60 + second;
-                    System.out.println("getTimeInicio "+f);
-
-                    f=f-i;
-                    hour=f/3600;
-                    minute=(f-(3600*hour))/60;
-                    second=f-((hour*3600)+(minute*60));
-                    System.out.println(hour+"h "+minute+"m "+second+"s");
-                    //String tiempoTotalRecorrido= df.format(f);
-                    String tiempoTotalRecorrido= hour+":"+minute+":"+second;
-                    //System.out.println("tiempoTotalRecorrido "+tiempoTotalRecorrido);
-                    System.out.println("distancia ----------->"+distancia);
-                    distancia = distancia/1000;
-                    System.out.println("distancia nueva------>"+distancia);
-
-                    apagarRecorrido();
-
-                    FragmentTransaction ft = Globals.ft.beginTransaction();
-                    ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicador.getObstaculos()));
-                    ft.addToBackStack("Detalle Crear Ruta");
-                    ft.commit();
-                }
+//                if(enabled) {
+//                    enabled = false;
+//                    tBtnIniFin.setTextOff("Fin");
+//                    int hour = now.get(Calendar.HOUR_OF_DAY);
+//                    int minute = now.get(Calendar.MINUTE);
+//                    int second = now.get(Calendar.SECOND);
+//                    System.out.printf("INICIO %02d:%02d:%02d",hour, minute, second);
+//                    i= hour*3600 + minute*60 + second;
+//                    System.out.println("getTimeInicio "+i);
+//
+//                    grabarRecorrido();
+//                }
+//                else
+//                {
+//                    enabled = true;
+//                    tBtnIniFin.setTextOn("Inicio");
+//                    int hour = now.get(Calendar.HOUR_OF_DAY);
+//                    int minute = now.get(Calendar.MINUTE);
+//                    int second = now.get(Calendar.SECOND);
+//                    System.out.printf("FIN %02d:%02d:%02d",hour, minute, second);
+//                    f= hour*3600 + minute*60 + second;
+//                    System.out.println("getTimeInicio "+f);
+//
+//                    f=f-i;
+//                    hour=f/3600;
+//                    minute=(f-(3600*hour))/60;
+//                    second=f-((hour*3600)+(minute*60));
+//                    System.out.println(hour+"h "+minute+"m "+second+"s");
+//                    //String tiempoTotalRecorrido= df.format(f);
+//                    String tiempoTotalRecorrido= hour+":"+minute+":"+second;
+//                    //System.out.println("tiempoTotalRecorrido "+tiempoTotalRecorrido);
+//                    System.out.println("distancia ----------->"+distancia);
+//                    distancia = distancia/1000;
+//                    System.out.println("distancia nueva------>"+distancia);
+//
+//                    apagarRecorrido();
+//
+//                    FragmentTransaction ft = Globals.ft.beginTransaction();
+//                    ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicador.getObstaculos()));
+//                    ft.addToBackStack("Detalle Crear Ruta");
+//                    ft.commit();
+//                }
                 break;
         }
     }

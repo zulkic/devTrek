@@ -58,7 +58,7 @@
     <string name="hint_name">Nombre de usuario</string>
     <string name="btn_login">Inicio Sesion</string>
     <string name="btn_register">Registrarse</string>
-    <string name="btn_link_to_register">No tienes cuenta?</string>
+    <string name="btn_link_to_register">Registrarse</string>
     <string name="btn_link_to_remember">No recuerdas tu cuenta?</string>
     <string name="btn_link_to_login">Ya estas registrado!? ve al Inicio Sesion.</string>
     <string name="btn_invitado">Ingresar como invitado</string>
@@ -110,7 +110,7 @@
     <string name="radio_Ingles"> Ingles </string>
     <string name="radio_Mapudungun"> Mapudungun </string>
     <string name="btn_cambiar_idioma"> Aceptar </string>
-    <string name="btn_cancelar_idioma"> Cacelar </string>
+    <string name="btn_cancelar_idioma"> Cancelar </string>
     <string name="seleccion_idioma">Seleccione el idioma</string>
     <string name="title_configuracion">Configuración</string>
     <string name="title_perfil">Perfil del Usuario</string>

@@ -57,7 +57,7 @@
     <string name="hint_name">User Name</string>
     <string name="btn_login">Login</string>
     <string name="btn_register">Registration</string>
-    <string name="btn_link_to_register">Do not have account?</string>
+    <string name="btn_link_to_register">Sign Up</string>
     <string name="btn_link_to_remember">Do not remember your account?</string>
     <string name="btn_link_to_login">Already registered? go to Login.</string>
     <string name="btn_invitado">Log in as Guest</string>
