@@ -1,6 +1,9 @@
 package com.mapas.franciscojavier.trekkingroute;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
@@ -13,6 +16,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
@@ -108,10 +113,16 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+            if(location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+            else{
+                //posicion curico
+                latitude = -34.98605794;
+                longitude = -71.24138117;
+            }
         }
-
         else{
             //posicion curico
             latitude = -34.98605794;
@@ -377,11 +388,43 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     public void activarGps() {
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
-            mc.animateTo(punto);
+            if(location != null) {
+                GeoPoint punto = new GeoPoint(location.getLatitude(), location.getLongitude());
+                mc.animateTo(punto);
+            }
+            else{
+                Toast.makeText(getActivity(), "Espere a tener señal Gps", Toast.LENGTH_SHORT).show();
+            }
         }else{
-            //gps.showSettingsAlert();
+            showSettingsAlert();
         }
+    }
+    public void showSettingsAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+
+        // Titulo de la alerta
+        alertDialog.setTitle("GPS apagado");
+
+        // Mensaje
+        alertDialog.setMessage("GPS no esta habilitado. Desea ir al menu de ajustes?");
+
+        // El botón de Configuración
+        alertDialog.setPositiveButton("Ajustes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                getActivity().startActivity(intent);
+            }
+        });
+
+        // El botón de Cancelación
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Mostrando el mensaje de alerta
+        alertDialog.show();
     }
 
     @Override

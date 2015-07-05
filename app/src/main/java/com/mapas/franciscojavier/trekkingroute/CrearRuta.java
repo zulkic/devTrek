@@ -94,8 +94,14 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         double longitude;
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+            if(location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+            else{
+                latitude = -34.98605794;
+                longitude = -71.24138117;
+            }
         }
         else{
             //posicion curico
@@ -227,8 +233,13 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
 
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
-            mc.animateTo(punto);
+            if(location != null) {
+                GeoPoint punto = new GeoPoint(location.getLatitude(), location.getLongitude());
+                mc.animateTo(punto);
+            }
+            else{
+                Toast.makeText(getActivity(), "Espere a tener señal Gps", Toast.LENGTH_SHORT).show();
+            }
         }else{
             showSettingsAlert();
         }
@@ -517,48 +528,48 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                 agregarObstaculoAPosicion();
                 break;
             case R.id.tBtnIniFin:
-//                if(enabled) {
-//                    enabled = false;
-//                    tBtnIniFin.setTextOff("Fin");
-//                    int hour = now.get(Calendar.HOUR_OF_DAY);
-//                    int minute = now.get(Calendar.MINUTE);
-//                    int second = now.get(Calendar.SECOND);
-//                    System.out.printf("INICIO %02d:%02d:%02d",hour, minute, second);
-//                    i= hour*3600 + minute*60 + second;
-//                    System.out.println("getTimeInicio "+i);
-//
-//                    grabarRecorrido();
-//                }
-//                else
-//                {
-//                    enabled = true;
-//                    tBtnIniFin.setTextOn("Inicio");
-//                    int hour = now.get(Calendar.HOUR_OF_DAY);
-//                    int minute = now.get(Calendar.MINUTE);
-//                    int second = now.get(Calendar.SECOND);
-//                    System.out.printf("FIN %02d:%02d:%02d",hour, minute, second);
-//                    f= hour*3600 + minute*60 + second;
-//                    System.out.println("getTimeInicio "+f);
-//
-//                    f=f-i;
-//                    hour=f/3600;
-//                    minute=(f-(3600*hour))/60;
-//                    second=f-((hour*3600)+(minute*60));
-//                    System.out.println(hour+"h "+minute+"m "+second+"s");
-//                    //String tiempoTotalRecorrido= df.format(f);
-//                    String tiempoTotalRecorrido= hour+":"+minute+":"+second;
-//                    //System.out.println("tiempoTotalRecorrido "+tiempoTotalRecorrido);
-//                    System.out.println("distancia ----------->"+distancia);
-//                    distancia = distancia/1000;
-//                    System.out.println("distancia nueva------>"+distancia);
-//
-//                    apagarRecorrido();
-//
-//                    FragmentTransaction ft = Globals.ft.beginTransaction();
-//                    ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicador.getObstaculos()));
-//                    ft.addToBackStack("Detalle Crear Ruta");
-//                    ft.commit();
-//                }
+                if(enabled) {
+                    enabled = false;
+                    tBtnIniFin.setTextOff("Fin");
+                    int hour = now.get(Calendar.HOUR_OF_DAY);
+                    int minute = now.get(Calendar.MINUTE);
+                    int second = now.get(Calendar.SECOND);
+                    System.out.printf("INICIO %02d:%02d:%02d",hour, minute, second);
+                    i= hour*3600 + minute*60 + second;
+                    System.out.println("getTimeInicio "+i);
+
+                    grabarRecorrido();
+                }
+                else
+                {
+                    enabled = true;
+                    tBtnIniFin.setTextOn("Inicio");
+                    int hour = now.get(Calendar.HOUR_OF_DAY);
+                    int minute = now.get(Calendar.MINUTE);
+                    int second = now.get(Calendar.SECOND);
+                    System.out.printf("FIN %02d:%02d:%02d",hour, minute, second);
+                    f= hour*3600 + minute*60 + second;
+                    System.out.println("getTimeInicio "+f);
+
+                    f=f-i;
+                    hour=f/3600;
+                    minute=(f-(3600*hour))/60;
+                    second=f-((hour*3600)+(minute*60));
+                    System.out.println(hour+"h "+minute+"m "+second+"s");
+                    //String tiempoTotalRecorrido= df.format(f);
+                    String tiempoTotalRecorrido= hour+":"+minute+":"+second;
+                    //System.out.println("tiempoTotalRecorrido "+tiempoTotalRecorrido);
+                    System.out.println("distancia ----------->"+distancia);
+                    distancia = distancia/1000;
+                    System.out.println("distancia nueva------>"+distancia);
+
+                    apagarRecorrido();
+
+                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, new DetallesCrearRuta().newInstance(tiempoTotalRecorrido, distancia, this.coordenadas,this.indicador.getPuntos(), this.indicador.getObstaculos()));
+                    ft.addToBackStack("Detalle Crear Ruta");
+                    ft.commit();
+                }
                 break;
         }
     }
