@@ -1,30 +1,26 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.actionbarsherlock.app.SherlockFragment;
-//import com.mapas.franciscojavier.trekkingroute.dummy.DummyContent;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import JSON.Puntos_Interes_Ruta;
-import greendao.Punto_interes;
-import greendao.Ruta;
+import greendao.Indicador;
+
+//import com.mapas.franciscojavier.trekkingroute.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
@@ -49,7 +45,7 @@ public class DetalleIndicadorFragment extends SherlockFragment implements AbsLis
      * Views.
      */
     private ListAdapter mAdapter;
-    private ArrayList<Punto_interes> lista_puntos;
+    private ArrayList<Indicador> lista_puntos;
 
     // TODO: Rename and change types of parameters
     public static DetalleIndicadorFragment newInstance(String param1, String param2) {
@@ -69,9 +65,11 @@ public class DetalleIndicadorFragment extends SherlockFragment implements AbsLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.lista_puntos = new ArrayList<>();
         Puntos_Interes_Ruta tarea_get_puntos = new Puntos_Interes_Ruta(18,getActivity());
         try {
-            this.lista_puntos = tarea_get_puntos.execute().get();
+            for(Indicador indicador : tarea_get_puntos.execute().get())
+                this.lista_puntos.add(indicador);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

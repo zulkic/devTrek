@@ -204,12 +204,12 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
         Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
         for(OverlayItem item : this.ind_ini)
         {
-            Indicador ini = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), item.getTitle(), item.getSnippet(), item.getPoint());
+            Indicadores ini = new Indicadores(drawable,new ResourceProxyImpl(getActivity()),getActivity(), item.getTitle(), item.getSnippet(), item.getPoint());
             mapOverlays.add(ini);
         }
         drawable = this.getResources().getDrawable(R.drawable.ic_fin);
         for(OverlayItem item : this.ind_fin) {
-            Indicador fi = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), item.getTitle(), item.getSnippet(), item.getPoint());
+            Indicadores fi = new Indicadores(drawable,new ResourceProxyImpl(getActivity()),getActivity(), item.getTitle(), item.getSnippet(), item.getPoint());
             mapOverlays.add(fi);
         }
     }

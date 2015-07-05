@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -65,6 +64,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private PathOverlay po;
     private Boolean encendido= false;
     private Integer contador = 1;
+    private Integer cantIndicadores = 1;
     private Integer id_ruta = 1;
     private ArrayList<Tipo_Indicador> tipo_puntos = new ArrayList<>();
     private ArrayList<Tipo_Indicador> tipo_obstaculos = new ArrayList<>();
@@ -76,7 +76,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private Boolean primerLocalicacion = true;
     private float distancia;
     private Marker aux;
-    private Indicador indicador;
+    private Indicadores indicador;
     private DownloadManager mgr=null;
     private Boolean enabled = true;
     private ToggleButton tBtnIniFin;
@@ -145,7 +145,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ResourceProxy rp = new ResourceProxyImpl(getActivity());
-        this.indicador = new Indicador(this.getResources().getDrawable(R.drawable.abs__ab_share_pack_holo_light),rp,getActivity());
+        this.indicador = new Indicadores(this.getResources().getDrawable(R.drawable.abs__ab_share_pack_holo_light),rp,getActivity());
         for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(getActivity()))
         {
             tipo_puntos.add(tipo_punto_interes);

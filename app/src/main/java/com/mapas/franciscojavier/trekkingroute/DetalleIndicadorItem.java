@@ -10,21 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mapas.franciscojavier.trekkingroute.Indicador;
-import com.mapas.franciscojavier.trekkingroute.R;
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
+import greendao.Indicador;
+import greendao.Obstaculo;
 import greendao.Punto_interes;
-import greendao.Ruta;
+import greendao.Tipo_Indicador;
+import greendao.Tipo_obstaculo;
 import greendao.Tipo_punto_interes;
+import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
 /**
@@ -33,18 +34,23 @@ import repositorios.Tipo_Puntos_InteresRepo;
 public class DetalleIndicadorItem extends BaseAdapter implements LocationListener {
 
     private Context context;
-    private List<Punto_interes> items;
-    private ArrayList<Tipo_punto_interes> tp = new ArrayList<>();
+    private List<Indicador> items;
+    private ArrayList<Tipo_Indicador> tp = new ArrayList<>();
     private GeoPoint gps;
     private LocationManager locationManager;
 
-    public DetalleIndicadorItem(Context context, List<Punto_interes> items) {
+    public DetalleIndicadorItem(Context context, List<Indicador> items) {
         this.context = context;
         this.items = items;
         for(Tipo_punto_interes tipo_punto_interes : Tipo_Puntos_InteresRepo.getAllTipos_Puntos_Interes(context))
         {
             this.tp.add(tipo_punto_interes);
         }
+        for(Tipo_obstaculo tipo_obstaculo : Tipo_ObstaculoRepo.getAllTipos_Obstaculos(context))
+        {
+            this.tp.add(tipo_obstaculo);
+        }
+        this.gps = Globals.gps;
     }
 
     @Override
@@ -82,40 +88,66 @@ public class DetalleIndicadorItem extends BaseAdapter implements LocationListene
         TextView descripcion = (TextView) rowView.findViewById(R.id.textView_descripcion);
         TextView distancia = (TextView) rowView.findViewById(R.id.textView_distancia_al_punto);
         //imgPunto.setImageDrawable(context.getResources().getDrawable(R.drawable.zoom_in));
-        Punto_interes punto = this.items.get(position);
-        int i;
-        for(i=0;punto.getId_tipo_punto_interes()!=(int)(long)this.tp.get(i).getId();i++);
-        int resID = context.getResources().getIdentifier(this.tp.get(i).getNombre_icono().trim(),"drawable",context.getPackageName());
-        imgPunto.setImageResource(resID);
-        titulo.setText(this.tp.get(i).getNombre());
-        descripcion.setText(punto.getDescripcion());
-        GeoPoint puntoIn = new GeoPoint(punto.getLatitud(),punto.getLongitud());
-        if(this.gps==null)
-        {
-            this.gps = new GeoPoint(-34.978,-71.2529);
-        }
-        double distanciaEnMetros = 1.0*this.gps.distanceTo(puntoIn)/1000;
+        Tipo_Indicador tipo_punto;
+        if(this.items.get(position) instanceof Punto_interes) {
+            Punto_interes punto = (Punto_interes) this.items.get(position);
+            Tipo_punto_interes tipo = Tipo_Puntos_InteresRepo.getTipo_Punto_InteresForId(context, punto.getId_tipo_punto_interes().longValue());
+            int resID = context.getResources().getIdentifier(tipo.getNombre_icono().trim(),"drawable",context.getPackageName());
+            imgPunto.setImageResource(resID);
+            titulo.setText(tipo.getNombre());
+            descripcion.setText(punto.getDescripcion());
+            GeoPoint puntoIn = new GeoPoint(punto.getLatitud(),punto.getLongitud());
+            if(this.gps==null)
+            {
+                this.gps = new GeoPoint(Globals.coordenadas_inic_rec.get(0).getLatitud(),Globals.coordenadas_inic_rec.get(0).getLongitud());
+            }
+            double distanciaEnMetros = 1.0*this.gps.distanceTo(puntoIn)/1000;
 
-        distancia.setText("Esta a: "+ String.format("%.2f",distanciaEnMetros)+" Kms");
-        if(position%2==0)
-        {
-            rowView.setBackgroundColor(context.getResources().getColor(R.color.background_pair_list));
-            titulo.setTextColor(context.getResources().getColor(R.color.text_pair_list));
-            distancia.setTextColor(context.getResources().getColor(R.color.text_pair_list));
-            descripcion.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+            distancia.setText("Esta a: "+ String.format("%.2f",distanciaEnMetros)+" Kms");
+            if(position%2==0)
+            {
+                rowView.setBackgroundColor(context.getResources().getColor(R.color.background_pair_list));
+                titulo.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+                distancia.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+                descripcion.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+            }
+            else{
+                rowView.setBackgroundColor(context.getResources().getColor(R.color.background_odd_list));
+                titulo.setTextColor(context.getResources().getColor(R.color.white));
+                distancia.setTextColor(context.getResources().getColor(R.color.white));
+                descripcion.setTextColor(context.getResources().getColor(R.color.white));
+            }
         }
-        else{
-            rowView.setBackgroundColor(context.getResources().getColor(R.color.background_odd_list));
-            titulo.setTextColor(context.getResources().getColor(R.color.white));
-            distancia.setTextColor(context.getResources().getColor(R.color.white));
-            descripcion.setTextColor(context.getResources().getColor(R.color.white));
+        else {
+            Obstaculo punto = (Obstaculo) this.items.get(position);
+            Tipo_obstaculo tipo = Tipo_ObstaculoRepo.getTipo_ObstaculoForId(context, punto.getId_tipo_obstaculo().longValue());
+            int resID = context.getResources().getIdentifier(tipo.getNombre_icono().trim(),"drawable",context.getPackageName());
+            imgPunto.setImageResource(resID);
+            titulo.setText(tipo.getNombre());
+            descripcion.setText(punto.getDescripcion());
+            GeoPoint puntoIn = new GeoPoint(punto.getLatitud(),punto.getLongitud());
+            if(this.gps==null)
+            {
+                this.gps = new GeoPoint(-34.978,-71.2529);
+            }
+            double distanciaEnMetros = 1.0*this.gps.distanceTo(puntoIn)/1000;
+
+            distancia.setText("Esta a: "+ String.format("%.2f",distanciaEnMetros)+" Kms");
+            if(position%2==0)
+            {
+                rowView.setBackgroundColor(context.getResources().getColor(R.color.background_pair_list));
+                titulo.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+                distancia.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+                descripcion.setTextColor(context.getResources().getColor(R.color.text_pair_list));
+            }
+            else{
+                rowView.setBackgroundColor(context.getResources().getColor(R.color.background_odd_list));
+                titulo.setTextColor(context.getResources().getColor(R.color.white));
+                distancia.setTextColor(context.getResources().getColor(R.color.white));
+                descripcion.setTextColor(context.getResources().getColor(R.color.white));
+            }
         }
 
-        /*TextView nombre = (TextView) rowView.findViewById(R.id.nombre_ruta);
-        TextView distancia = (TextView) rowView.findViewById(R.id.kms_ruta);
-        TextView tiempo = (TextView) rowView.findViewById(R.id.tiempo_ruta);
-        TextView oficial = (TextView) rowView.findViewById(R.id.oficial_ruta);
-        */
         return rowView;
     }
 
@@ -140,3 +172,4 @@ public class DetalleIndicadorItem extends BaseAdapter implements LocationListene
 
     }
 }
+

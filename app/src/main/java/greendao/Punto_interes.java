@@ -4,7 +4,7 @@ package greendao;
 /**
  * Entity mapped to table PUNTO_INTERES.
  */
-public class Punto_interes {
+public class Punto_interes extends Indicador {
 
     private Long id;
     private String descripcion;

@@ -20,19 +20,19 @@ import greendao.Punto_interes;
 /**
  * Created by FranciscoJavier on 10-05-2015.
  */
-public class Indicador extends ItemizedOverlay {
+public class Indicadores extends ItemizedOverlay {
     private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
     private OverlayItem overlay;
     private Context mContext;
     private ArrayList<Punto_interes> puntos = new ArrayList<>();
     private ArrayList<Obstaculo> obstaculos = new ArrayList<>();
 
-    public Indicador(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context) {
+    public Indicadores(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context) {
         super(pDefaultMarker, pResourceProxy);
         mContext = context;
     }
 
-    public Indicador(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context,String titulo, String descripcion, GeoPoint gp) {
+    public Indicadores(Drawable pDefaultMarker, ResourceProxy pResourceProxy, Context context, String titulo, String descripcion, GeoPoint gp) {
         super(pDefaultMarker, pResourceProxy);
         mContext = context;
         overlay = new OverlayItem(titulo,descripcion,gp);

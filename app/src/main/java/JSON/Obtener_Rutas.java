@@ -1,8 +1,11 @@
 package JSON;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
@@ -26,6 +29,7 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
     private JSONParser jsonParser;
     private String tiempo;
     private static String url_obtener_rutas = "http://trythistrail.16mb.com/obtener_rutas.php";
+    private static String url_obtener_rutas_invitado = "http://trythistrail.16mb.com/obtener_rutas_invitado.php";
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_TIEMPO_SYNC = "tiempo";
@@ -40,6 +44,8 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
     private static final String TAG_TIPO = "tipo";
     private String tiempo_sync;
     private Sync sync;
+    private SharedPreferences pref;
+    private String rol;
 
     /**
      * Before starting background thread Show Progress Dialog
@@ -72,10 +78,18 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
     protected ArrayList<Ruta> doInBackground(Void... args) {
         if(!tiempo_sync.equals("error") && !tiempo_sync.equals(this.sync.getTiempo())){
             // Building Parameters
+            pref = context.getSharedPreferences(Globals.PREF, Context.MODE_PRIVATE);
+            rol = pref.getString(Globals.ROL, "invitado");
+
             Log.i("obtener rutas online: ", "rutas obtenidas online");
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             // getting JSON string from URL
-            JSONObject json = jsonParser.makeHttpRequest(url_obtener_rutas, "GET", params);
+            JSONObject json;
+            Log.i("rol: "," rol obtener rutas");
+            if(!rol.equals("invitado"))
+                json = jsonParser.makeHttpRequest(url_obtener_rutas, "GET", params);
+            else
+                json = jsonParser.makeHttpRequest(url_obtener_rutas_invitado, "GET", params);
 
             // Check your log cat for JSON reponse
             Log.d("All Rutas: ", json.toString());
@@ -118,8 +132,10 @@ public class Obtener_Rutas extends AsyncTask<Void, Void, ArrayList<Ruta>> {
                     Log.i("Vamos a guardar: ", "guardaremos las rutas en sqlite");
                     Guardar_Rutas guardar_rutas = new Guardar_Rutas(this.rutasList, context);
                     guardar_rutas.execute();
-                    this.sync.setTiempo(tiempo);
-                    SyncRepo.insertOrUpdate(context, this.sync);
+                    if(!rol.equals("invitado")) {
+                        this.sync.setTiempo(tiempo);
+                        SyncRepo.insertOrUpdate(context, this.sync);
+                    }
                 }
                 for(Ruta ruta : RutaRepo.getAllRutas(context)) {
                     if(!ruta.getSincronizada()) {

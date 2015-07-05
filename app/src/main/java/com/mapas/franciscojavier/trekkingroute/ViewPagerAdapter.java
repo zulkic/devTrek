@@ -10,12 +10,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     // Declare the number of ViewPager pages
-    private final int PAGE_COUNT = 4;
-    private FIRObstaculos tab1;
-    private FIRDetalles tab2;
-    private FIRMapa tab3;
-    private FIRHistograma tab4;
-    private String titles[] = new String[] { "Obstaculos", "Detalles", "Mapa", "Histograma" };
+    private final int PAGE_COUNT = 3;
+    //private FIRObstaculos tab1;
+    private FIRDetalles tab1;
+    private FIRMapa tab2;
+    private FIRHistograma tab3;
+    private String titles[] = new String[] { "Detalles", "Mapa", "Histograma" };
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -25,20 +25,16 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                tab1 = new FIRObstaculos();
+                tab1 = new FIRDetalles();
                 return tab1;
 
             case 1:
-                tab2 = new FIRDetalles();
+                tab2 = new FIRMapa();
                 return tab2;
 
             case 2:
-                tab3 = new FIRMapa();
+                tab3 = new FIRHistograma();
                 return tab3;
-
-            case 3:
-                tab4 = new FIRHistograma();
-                return tab4;
 
             default:
                 break;

@@ -6,7 +6,11 @@ import android.support.v4.app.FragmentManager;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
+import org.osmdroid.util.GeoPoint;
 
+import java.util.ArrayList;
+
+import greendao.Coordenada;
 import greendao.Ruta;
 
 /**
@@ -38,4 +42,6 @@ public class Globals {
     public static Ruta ini_rec;
     public static final Boolean internet = false;
     public static Boolean inicio_fin = true;
+    public static ArrayList<Coordenada> coordenadas_inic_rec = new ArrayList<>();
+    public static GeoPoint gps;
 }
