@@ -206,7 +206,7 @@ public class LoginFragment extends SherlockFragment implements AdapterView.OnCli
             haveErrors = true;
         }
 
-        else if (!editUserEmail.getText().toString().matches(Globals.EMAIL_REGEX)) {
+        else if (!editUserEmail.getText().toString().matches(Globals.EMAIL_REGEX2)) {
             editUserEmail.setError(getString(R.string.errorFormat));
             editUserEmail.startAnimation(shake);
             haveErrors = true;
