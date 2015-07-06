@@ -33,6 +33,7 @@
 
 
     <string name="rec_prompt">Como recorrio la ruta?</string>
+    <string name="rec_prompt_region">Regiones</string>
     <string name="button_aceptar_eliminar_ruta">Aceptar</string>
     <string name="button_cancelar_eliminar_ruta">Cancelar</string>
 
@@ -69,8 +70,9 @@
     <string name="alert_btn_login_bloqued">Inicio Sesion BLOCKEADO!!!</string>
 
 <!--Crear Ruta-->
-    <string name="title_crear_ruta">Datos para crear ruta</string>
+    <string name="title_crear_ruta">Datos para la ruta</string>
     <string name="recorrido_mediante">Recorrido mediante</string>
+    <string name="region_detalles">Region</string>
     <string name="nombre_ruta">Nombre de la Ruta</string>
     <string name="tiempo_estimado">Tiempo Estimado</string>
     <string name="distacia_recorrida">Distancia Recorrida (km)</string>

@@ -1,22 +1,22 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ScrollViewDetallesRuta"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fitsSystemWindows="true"
-    android:scrollbars="none" >
-    <RelativeLayout
 
-        android:orientation="horizontal"
-        android:background="@color/bg_ruta"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"
-        android:id="@+id/relativeLay">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/bg_ruta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:id="@+id/relativeLay">
+    <ScrollView
+        android:id="@+id/ScrollViewDetallesRuta"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:fitsSystemWindows="true"
+        android:scrollbars="none" >
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -30,6 +30,23 @@
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dip"
                 android:textSize="30sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/region_detalles"
+                android:id="@+id/textView_region_detalles" />
+            <Spinner
+                android:id="@+id/spinner_region_detalles"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/into_edit_text"
+                android:prompt="@string/rec_prompt_region" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +70,6 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/nombre_ruta"
                 android:id="@+id/textView_nombre_ruta" />
-
             <EditText
                 android:id="@+id/editText_nombre_ruta"
                 android:layout_width="fill_parent"
@@ -82,7 +98,6 @@
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="textCapWords" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,7 +106,6 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/tiempo_estimado"
                 android:id="@+id/textView_tiempo_estimado" />
-
             <TextView
                 android:id="@+id/editTextiempo_estimado"
                 android:layout_width="fill_parent"
@@ -102,9 +116,7 @@
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="datetime"
-                android:enabled="false"
-                />
-
+                android:enabled="false"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,42 +135,41 @@
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="number"
-                android:enabled="false"
-                />
-
+                android:enabled="false"/>
         </LinearLayout>
-        <LinearLayout
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="bottom"
+        android:layout_below="@id/linearLayout1"
+        android:layout_weight="1"
+        android:id="@+id/linearLayout2">
+        <Button
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:gravity="bottom"
-            android:layout_below="@id/linearLayout1"
-            android:id="@+id/linearLayout2">
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/btn_orange"
-                android:textColor="@color/white"
-                android:text="@string/button_guardar_ruta"
-                android:id="@+id/button_guardar_ruta"
-                android:layout_marginRight="2dip"
-                android:layout_weight="1"
-                />
+            android:background="@color/btn_orange"
+            android:textColor="@color/white"
+            android:text="@string/button_guardar_ruta"
+            android:id="@+id/button_guardar_ruta"
+            android:layout_marginRight="2dip"
+            android:layout_weight="1"
+            />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/btn_orange"
-                android:textColor="@color/white"
-                android:text="@string/button_cancelar_ruta"
-                android:id="@+id/button_cancelar_ruta"
-                android:layout_weight="1" />
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/btn_orange"
+            android:textColor="@color/white"
+            android:text="@string/button_cancelar_ruta"
+            android:id="@+id/button_cancelar_ruta"
+            android:layout_weight="1" />
 
-        </LinearLayout>
-    </RelativeLayout>
-</ScrollView>
+    </LinearLayout>
+</LinearLayout>
