@@ -183,21 +183,23 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
                 }
                 Log.i("coordenadas offline: ", "obtiene coordenadas offline");
             }
-            List lineData = new ArrayList();
-            this.inicio = new OverlayItem("Inicio ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(0).getLatitud(), lista_coordenadas.get(0).getLongitud()));
-            this.ind_ini.add(this.inicio);
-            this.fin = new OverlayItem("Fin ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(lista_coordenadas.size() - 1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size() - 1).getLongitud()));
-            this.ind_fin.add(this.fin);
-            for (Coordenada coordenada : lista_coordenadas) {
-                lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
-            }
-            // apply line style & data and add to map
+            if(lista_coordenadas.size() >= 2) {
+                List lineData = new ArrayList();
+                this.inicio = new OverlayItem("Inicio ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(0).getLatitud(), lista_coordenadas.get(0).getLongitud()));
+                this.ind_ini.add(this.inicio);
+                this.fin = new OverlayItem("Fin ruta", ruta.getNombre(), new GeoPoint(lista_coordenadas.get(lista_coordenadas.size() - 1).getLatitud(), lista_coordenadas.get(lista_coordenadas.size() - 1).getLongitud()));
+                this.ind_fin.add(this.fin);
+                for (Coordenada coordenada : lista_coordenadas) {
+                    lineData.add(new GeoPoint(coordenada.getLatitud(), coordenada.getLongitud()));
+                }
+                // apply line style & data and add to map
 
-            PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA, getActivity());
-            lineOverlay.setPaint(paint);
-            lineOverlay.addPoints(lineData);
-            //lineOverlay.setData(lineData);
-            osm.getOverlays().add(lineOverlay);
+                PathOverlay lineOverlay = new PathOverlay(Color.MAGENTA, getActivity());
+                lineOverlay.setPaint(paint);
+                lineOverlay.addPoints(lineData);
+                //lineOverlay.setData(lineData);
+                osm.getOverlays().add(lineOverlay);
+            }
         }
         addPoiOverlay();
     }

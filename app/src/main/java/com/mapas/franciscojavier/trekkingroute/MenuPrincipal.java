@@ -88,7 +88,7 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
                                   };
 
             // Generate icon
-            icon = new int[] { R.drawable.ic_inicio, R.drawable.ic_visualizar_map, R.drawable.ic_planificar, R.drawable.ic_crear, R.drawable.ic_iniciar_rec, R.drawable.ic_inicia_sesion, R.drawable.ic_cerrar_sesion };
+            icon = new int[] { R.drawable.ic_inicio, R.drawable.ic_visualizar_map, R.drawable.ic_planificar, R.drawable.ic_crear, R.drawable.ic_iniciar_rec, R.drawable.ic_perfil, R.drawable.ic_cierra_sesion };
         }
         else if(rol.equals(Globals.CLIENTE)) {
             // Generate title
@@ -103,7 +103,7 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
             };
 
             // Generate icon
-            icon = new int[] { R.drawable.ic_inicio, R.drawable.ic_visualizar_map, R.drawable.ic_planificar, R.drawable.ic_crear, R.drawable.ic_iniciar_rec, R.drawable.ic_inicia_sesion, R.drawable.ic_cerrar_sesion  };
+            icon = new int[] { R.drawable.ic_inicio, R.drawable.ic_visualizar_map, R.drawable.ic_planificar, R.drawable.ic_crear, R.drawable.ic_iniciar_rec, R.drawable.ic_perfil, R.drawable.ic_cierra_sesion  };
         }
         else{
             // Generate title

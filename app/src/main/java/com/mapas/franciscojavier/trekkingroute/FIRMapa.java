@@ -120,6 +120,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
 
         view = inflater.inflate(R.layout.fir_layout_mapa, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
+        ImageButton al_inicio = (ImageButton) view.findViewById(R.id.al_inicio);
         ToggleButton BtnIniFin = (ToggleButton) view.findViewById(R.id.BtnIniFin);
         ToggleButton direction = (ToggleButton) view.findViewById(R.id.direction);
         crono = (Chronometer) view.findViewById(R.id.textView_cronometro);
@@ -128,6 +129,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         direction.setOnClickListener(this);
         BtnIniFin.setOnClickListener(this);
         botonGps.setOnClickListener(this);
+        al_inicio.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
         osm.setTileSource(Globals.MAPQUESTOSM);
@@ -422,6 +424,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                     t.interrupt();
                     //Cosas para finalizar el recorrido
                 }
+                break;
             case R.id.direction:
                 if(Globals.inicio_fin)
                     Globals.inicio_fin = false;

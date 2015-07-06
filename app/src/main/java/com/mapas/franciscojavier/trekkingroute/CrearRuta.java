@@ -177,7 +177,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     }
 
     public void initPathOverlay(){
-        po = new PathOverlay(Color.CYAN,getActivity());
+        po = new PathOverlay(Color.MAGENTA,getActivity());
         po.getPaint().setStyle(Paint.Style.STROKE);
         po.getPaint().setStrokeWidth(5);
         //Paint p = new Paint();
