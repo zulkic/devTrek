@@ -16,6 +16,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ImageView;
@@ -45,6 +47,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +85,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     private GeoPoint punto;
     private View view;
     private Boolean enabled = true;
+    private Chronometer crono;
 
     //SENSOR
     private ImageView mPointer;
@@ -109,31 +113,12 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         ruta = Globals.ini_rec;
         double latitude;
         double longitude;
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            }
-            else{
-                //posicion curico
-                latitude = -34.98605794;
-                longitude = -71.24138117;
-            }
-        }
-        else{
-            //posicion curico
-            latitude = -34.98605794;
-            longitude = -71.24138117;
-        }
-
 
         view = inflater.inflate(R.layout.fir_layout_mapa, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
         ToggleButton BtnIniFin = (ToggleButton) view.findViewById(R.id.BtnIniFin);
         ToggleButton direction = (ToggleButton) view.findViewById(R.id.direction);
+        crono = (Chronometer) view.findViewById(R.id.textView_cronometro);
         direction.setOnClickListener(this);
         BtnIniFin.setOnClickListener(this);
         botonGps.setOnClickListener(this);
@@ -153,7 +138,27 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         Globals.coordenadas_inic_rec = lista_coordenadas;
         puntosDeInteres = osm.getOverlays();
 
-        GeoPoint center = new GeoPoint(latitude, longitude);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+            else{
+                //posicion curico
+                latitude = inicio.getPoint().getLatitude();
+                longitude = inicio.getPoint().getLongitude();
+            }
+        }
+        else{
+            //posicion curico
+            latitude = inicio.getPoint().getLatitude();
+            longitude = inicio.getPoint().getLongitude();
+        }
+
+        GeoPoint center = new GeoPoint(latitude+0.014, longitude-0.018);
         mc.animateTo(center);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -374,9 +379,14 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                 if(enabled)
                 {
                     //Cosas para iniciar el recorrido
+                    crono.setBase(SystemClock.elapsedRealtime());
+                    crono.start();
+                    enabled=false;
                 }
                 else
                 {
+                    enabled= true;
+                    crono.stop();
                     //Cosas para finalizar el recorrido
                 }
             case R.id.direction:

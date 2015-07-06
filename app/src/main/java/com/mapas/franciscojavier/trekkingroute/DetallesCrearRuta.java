@@ -394,21 +394,6 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
             else{
                 icon.setImageResource(R.drawable.ic_droid);
             }
-//            View row2=inflater.inflate(R.layout.row_spinner, parent, false);
-//            TextView label2=(TextView)row2.findViewById(R.id.tipo_region);
-//            label2.setText(listReg.get(position));
-//
-//
-//            ImageView icon2=(ImageView)row.findViewById(R.id.icon_region);
-//            for(int i=0 ; i<listReg.size();i++){
-//
-//                if(listReg.get(position).equals(listReg.get(i))){
-//                    icon2.setImageResource(R.drawable.ic_agua);
-//                }
-//                if(listReg.get(position).equals(listReg.get(i))){
-//                    icon2.setImageResource(R.drawable.ic_inicia_sesion);
-//                }
-//            }
 
             return row;
         }
