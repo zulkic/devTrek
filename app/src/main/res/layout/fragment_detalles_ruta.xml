@@ -43,7 +43,6 @@
                 android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_height="wrap_content"
-
                 android:background="@color/bg_edit_text"
                 android:textColor="@color/into_edit_text"
                 android:prompt="@string/rec_prompt_region" />

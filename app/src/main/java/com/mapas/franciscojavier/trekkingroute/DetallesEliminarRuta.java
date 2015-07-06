@@ -13,7 +13,11 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
 
+import java.util.List;
+
 import JSON.Eliminar_Ruta;
+import greendao.Region;
+import repositorios.RegionRepo;
 
 
 public class DetallesEliminarRuta extends SherlockFragment implements View.OnClickListener{
@@ -21,6 +25,7 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
     int LARGO_NOMBRE_RUTA=1;
     private static Long ID_RUTA;
     private static String NOMBRE="nada", TIEMPO="nada", TIPO="nada", DESCRIPCION="nada";
+    private static int ID_REGION=0;
     private static float KMS=0;
 
 
@@ -28,7 +33,7 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
         // Required empty public constructor
     }
     public static DetallesEliminarRuta newInstance(Long idRuta, String nombre, String tiempo,
-                                                   float kms,String tipo, String descripcion) {
+                                                   float kms,String tipo, String descripcion, Integer idRegionInt) {
         DetallesEliminarRuta fragment = new DetallesEliminarRuta();
         Bundle args = new Bundle();
         ID_RUTA=idRuta;
@@ -37,6 +42,7 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
         KMS=kms;
         TIPO=tipo;
         DESCRIPCION=descripcion;
+        ID_REGION = idRegionInt;
         return fragment;
     }
 
@@ -52,6 +58,7 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
         TextView distanciaRecorrida = (TextView) v.findViewById(R.id.editTextEliminar_distancia_recorrida);
         TextView tipoRecorrido = (TextView) v.findViewById(R.id.editTextEliminar_recorrido_mediante);
         TextView descripcion = (TextView) v.findViewById(R.id.editTextEliminar_descripcion);
+        TextView region = (TextView) v.findViewById(R.id.editTextEliminar_nombre_region);
 
         String km = Float.toString(KMS);
 
@@ -65,12 +72,27 @@ public class DetallesEliminarRuta extends SherlockFragment implements View.OnCli
         tipoRecorrido.setOnClickListener(this);
         descripcion.setText(DESCRIPCION);
         descripcion.setOnClickListener(this);
+        String regionNombre = buscarNombreRegion(ID_REGION);
+        region.setText(regionNombre);
 
         botonAceptar.setOnClickListener(this);
         botonCancelar.setOnClickListener(this);
 
         return v;
     }
+
+    private String buscarNombreRegion(Integer id_region) {
+        String nombre="nombre";
+        Long idRegionLong = id_region.longValue();
+        List<Region> regiones = RegionRepo.getAllRegiones(getActivity());
+        for(int i=0; i<regiones.size();i++){
+            if(regiones.get(i).getId().equals(idRegionLong)){
+                nombre = regiones.get(i).getNombre();
+            }
+        }
+        return nombre;
+    }
+
     @Override
     public void onClick(View v) {
         FragmentTransaction ft;

@@ -290,7 +290,7 @@ public class MostrarRuta extends SherlockFragment {
 
             FragmentTransaction ft = Globals.ft.beginTransaction();
             ft.replace(R.id.content_frame, new DetallesEliminarRuta().newInstance(ruta.getId(),
-                    ruta.getNombre(), ruta.getTiempo_estimado(), ruta.getKms(), "tipo", ruta.getDescripcion()));
+                    ruta.getNombre(), ruta.getTiempo_estimado(), ruta.getKms(), ruta.getTipo(), ruta.getDescripcion(), ruta.getId_region()));
             ft.addToBackStack("Eliminar Ruta");
             ft.commit();
             return true;

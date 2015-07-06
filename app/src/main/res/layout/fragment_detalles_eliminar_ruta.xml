@@ -1,24 +1,24 @@
-<ScrollView
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mapas.franciscojavier.trekkingroute.DetallesEliminarRuta"
-    android:id="@+id/ScrollViewDetallesEliminarRuta"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fitsSystemWindows="true"
-    android:scrollbars="none" >
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:background="@color/bg_ruta"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp">
+    android:orientation="vertical"
+    android:background="@color/bg_ruta"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
-        <!-- TODO: Update blank fragment layout -->
+    <ScrollView
+        android:id="@+id/ScrollViewDetallesEliminarRuta"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_weight="4"
+        android:scrollbars="none" >
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -51,6 +51,25 @@
                 android:inputType="time"
                 android:text="0"
                 android:id="@+id/editTextEliminar_nombre_ruta" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/nombre_region"
+                android:id="@+id/textViewEliminar_nombre_region" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/into_edit_text"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:inputType="time"
+                android:text="0"
+                android:id="@+id/editTextEliminar_nombre_region" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,39 +147,40 @@
                 android:id="@+id/editTextEliminar_descripcion" />
 
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayoutEliminar2"
+        android:layout_weight="1"
+        android:layout_below="@id/linearLayoutEliminar1">
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:id="@+id/linearLayoutEliminar2"
-            android:layout_below="@id/linearLayoutEliminar1">
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/btn_orange"
-                android:textColor="@color/white"
-                android:text="@string/button_aceptar_eliminar_ruta"
-                android:id="@+id/button_aceptar_eliminar_ruta"
-                android:layout_marginRight="2dip"
-                android:layout_weight="1"
-                />
+            android:background="@color/btn_orange"
+            android:textColor="@color/white"
+            android:text="@string/button_aceptar_eliminar_ruta"
+            android:id="@+id/button_aceptar_eliminar_ruta"
+            android:layout_marginRight="2dip"
+            android:layout_weight="1"
+            />
 
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/btn_orange"
-                android:textColor="@color/white"
-                android:text="@string/button_cancelar_eliminar_ruta"
-                android:id="@+id/button_cancelar_eliminar_ruta"
-                android:layout_weight="1" />
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/btn_orange"
+            android:textColor="@color/white"
+            android:text="@string/button_cancelar_eliminar_ruta"
+            android:id="@+id/button_cancelar_eliminar_ruta"
+            android:layout_weight="1" />
 
-        </LinearLayout>
-    </RelativeLayout>
-</ScrollView>
+    </LinearLayout>
+</LinearLayout>

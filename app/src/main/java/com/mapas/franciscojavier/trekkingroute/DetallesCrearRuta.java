@@ -76,7 +76,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
     TextView textDistanciaRecorrida;
     EditText editDescripcion;
 
-    List<String> list = new ArrayList<String>();
+    List<String> listReg = new ArrayList<String>();
     String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
 
     String[] listRegion= {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
@@ -106,7 +106,9 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         lista_obstaculos = obstaculos;
         return fragment;
     }
-    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta, String nombreRuta, String descripcionRuta, Integer id_ruta) {
+    public static DetallesCrearRuta newInstance(String tiempoTotalRuta, float distaciaRuta,
+                                                String nombreRuta, String descripcionRuta,
+                                                Integer id_ruta) {
         DetallesCrearRuta fragment = new DetallesCrearRuta();
         ARG_EDITAR = true;
         Bundle args = new Bundle();
@@ -150,11 +152,11 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         while(i<largo){
             Region reg = regiones.get(i);
             String nom = reg.getNombre();
-            list.add(nom);
+            listReg.add(nom);
             i++;
         }
         spinnerRegion = (Spinner) v.findViewById(R.id.spinner_region_detalles);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_spinner_item, listReg);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRegion.setAdapter(dataAdapter);
 
@@ -172,6 +174,7 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
 
         // Spinner item selection Listener
         addListenerOnSpinnerItemSelection(spinnerRegion);
+        /*spinnerRegion.setOnClickListener(this);*/
 
 //FIN DEL SPINER
 
@@ -184,12 +187,13 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
         Bicicleta=getString(R.string.trail_bicicleta);
         Caballo=getString(R.string.trail_caballo);
         Auto=getString(R.string.trail_auto);
-        String[] listRecorido = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
-        this.listRecorido = listRecorido;
+        String[] listReco = {Caminando, Trotando, Corriendo,Bicicleta, Caballo, Auto};
+        this.listRecorido = listReco;
         spinnerReco.setAdapter(new MyCustomAdapter(getActivity(), R.layout.row_spinner, this.listRecorido));
 
         // Spinner item selection Listener
         addListenerOnSpinnerItemSelection(spinnerReco);
+        /*spinnerReco.setOnClickListener(this);*/
 
         //FIN DEL SPINER
         textTiempoEstimado.setText(ARG_TIEMPO_RUTA);
@@ -210,8 +214,13 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
                 EditText editTextNombreRuta= (EditText) getActivity().findViewById(R.id.editText_nombre_ruta);
                 TextView textTiempoEstimado = (TextView)getActivity().findViewById(R.id.editTextiempo_estimado);
                 spinnerReco = (Spinner) getActivity().findViewById(R.id.spinner_recorrido);
+                spinnerRegion = (Spinner) getActivity().findViewById(R.id.spinner_region_detalles);
                 EditText editTextDescripcion= (EditText) getActivity().findViewById(R.id.editText_descripcion);
                 String tipoRuta = String.valueOf(spinnerReco.getSelectedItem());
+
+                Long idRegionLong = buscarRegionSpin(spinnerRegion);
+                Integer idRegionInt = Integer.valueOf(idRegionLong.intValue());
+
                 if(!formHaveErrors(editTextNombreRuta)) {
                     String nombreRuta = editTextNombreRuta.getText().toString();
                     String tiempoRuta = textTiempoEstimado.getText().toString();
@@ -226,14 +235,15 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
                     Ruta nuevaRuta = new Ruta();
                     nuevaRuta.setNombre(nombreRuta);
                     nuevaRuta.setTiempo_estimado(tiempoRuta);
-                    //nuevaRuta.setTipo(tipoRuta);      FALTA AGREGAR ESTA FUNCION
+                    nuevaRuta.setTipo(tipoRuta);
                     nuevaRuta.setDescripcion(descripcionRuta);
                     nuevaRuta.setKms(mtrs);
                     nuevaRuta.setOficial(true);    //verificar mas adelante
                     nuevaRuta.setSincronizada(false);
                     nuevaRuta.setTipo(tipoRuta);
-                    nuevaRuta.setId_region(9); //Obtener el Id de la region desde un spinner
+                    nuevaRuta.setId_region(idRegionInt);
                     nuevaRuta.setFavorita(false);
+                    //Toast.makeText(getActivity().getBaseContext(),tipoRuta+"+ "+idRegionInt, Toast.LENGTH_SHORT).show();
 
                     try
                     {
@@ -305,6 +315,22 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
                 break;
         }
     }
+
+    private Long buscarRegionSpin(Spinner spinnerRegion) {
+
+        Long id=0l;
+        String stgRegion = String.valueOf(spinnerRegion.getSelectedItem());
+        List<Region> regiones = RegionRepo.getAllRegiones(getActivity());
+        for(int i=0; i<regiones.size();i++){
+            if(regiones.get(i).getNombre().equals(stgRegion)){
+                id = regiones.get(i).getId();
+                break;
+            }
+        }
+        return id;
+
+    }
+
     // Add spinner data
     public void addListenerOnSpinnerItemSelection(Spinner spin){
 
@@ -368,6 +394,21 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
             else{
                 icon.setImageResource(R.drawable.ic_droid);
             }
+//            View row2=inflater.inflate(R.layout.row_spinner, parent, false);
+//            TextView label2=(TextView)row2.findViewById(R.id.tipo_region);
+//            label2.setText(listReg.get(position));
+//
+//
+//            ImageView icon2=(ImageView)row.findViewById(R.id.icon_region);
+//            for(int i=0 ; i<listReg.size();i++){
+//
+//                if(listReg.get(position).equals(listReg.get(i))){
+//                    icon2.setImageResource(R.drawable.ic_agua);
+//                }
+//                if(listReg.get(position).equals(listReg.get(i))){
+//                    icon2.setImageResource(R.drawable.ic_inicia_sesion);
+//                }
+//            }
 
             return row;
         }

@@ -100,13 +100,13 @@ public class EliminarRuta extends Fragment{
                     // Loads the given URL
                     Ruta item = (Ruta) listView.getAdapter().getItem(position);
 
-                    Toast.makeText(getActivity(), "Accediendo a: " + item.getNombre()
+                    Toast.makeText(getActivity(), "Accediendo a: " + item.getId_region()
                             , Toast.LENGTH_SHORT).show();
 
 
                     android.support.v4.app.FragmentTransaction ft = Globals.ft.beginTransaction();
                     ft.replace(R.id.content_frame, new DetallesEliminarRuta().newInstance(item.getId(),
-                            item.getNombre(), item.getTiempo_estimado(), item.getKms(),"tipo", item.getDescripcion()));
+                            item.getNombre(), item.getTiempo_estimado(), item.getKms(),item.getTipo(), item.getDescripcion(),item.getId_region()));
                     ft.commit();
                 }
             });
