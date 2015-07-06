@@ -43,9 +43,8 @@
                 android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_height="wrap_content"
-
                 android:background="@color/bg_edit_text"
-                android:textColor="@color/into_edit_text"
+                android:textColor="@color/white"
                 android:prompt="@string/rec_prompt_region" />
             <TextView
                 android:layout_width="wrap_content"
@@ -60,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/bg_edit_text"
-                android:textColor="@color/into_edit_text"
+                android:textColor="@color/white"
                 android:prompt="@string/rec_prompt" />
             <TextView
                 android:layout_width="wrap_content"
@@ -76,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@color/bg_edit_text"
-                android:textColor="@color/into_edit_text"
+                android:textColor="@color/white"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="textCapWords" />
@@ -94,7 +93,7 @@
                 android:id="@+id/editText_descripcion"
                 android:layout_marginBottom="10dp"
                 android:background="@color/bg_edit_text"
-                android:textColor="@color/into_edit_text"
+                android:textColor="@color/white"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="textCapWords" />
@@ -112,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@color/bg_edit_text"
-                android:textColor="@color/into_edit_text"
+                android:textColor="@color/white"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="datetime"
@@ -131,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@color/bg_edit_text"
-                android:textColor="@color/into_edit_text"
+                android:textColor="@color/white"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="number"

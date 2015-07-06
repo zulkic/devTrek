@@ -548,17 +548,37 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                         f = hour * 3600 + minute * 60 + second;
                         System.out.println("getTimeInicio " + f);
 
-                        f = f - i;
-                        hour = f / 3600;
-                        minute = (f - (3600 * hour)) / 60;
-                        second = f - ((hour * 3600) + (minute * 60));
-                        System.out.println(hour + "h " + minute + "m " + second + "s");
-                        //String tiempoTotalRecorrido= df.format(f);
-                        String tiempoTotalRecorrido = hour + ":" + minute + ":" + second;
-                        //System.out.println("tiempoTotalRecorrido "+tiempoTotalRecorrido);
-                        System.out.println("distancia ----------->" + distancia);
-                        distancia = distancia / 1000;
-                        System.out.println("distancia nueva------>" + distancia);
+                    f=f-i;
+                    hour=f/3600;
+                    minute=(f-(3600*hour))/60;
+                    second=f-((hour*3600)+(minute*60));
+                    System.out.println(hour+"h "+minute+"m "+second+"s");
+                    String h,m,s;
+                    if(hour<10){
+                        h="0"+hour+":";
+                    }
+                    else{
+                        h=hour+":";
+                    }
+                    if(minute<10){
+                        m="0"+minute+":";
+                    }
+                    else{
+                        m=minute+":";
+                    }
+                    if(second<10){
+                        s="0"+second+"";
+                    }
+                    else{
+                        s=second+"";
+                    }
+
+                    //String tiempoTotalRecorrido= df.format(f);
+                    String tiempoTotalRecorrido= h+m+s;
+                    //System.out.println("tiempoTotalRecorrido "+tiempoTotalRecorrido);
+                    System.out.println("distancia ----------->"+distancia);
+                    distancia = distancia/1000;
+                    System.out.println("distancia nueva------>"+distancia);
 
                         apagarRecorrido();
 

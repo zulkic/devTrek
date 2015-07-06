@@ -70,12 +70,13 @@
     <string name="title_crear_ruta">Data for Rute</string>
     <string name="recorrido_mediante">Travel as</string>
     <string name="nombre_ruta">Rute name</string>
+    <string name="nombre_region">Region name</string>
     <string name="tiempo_estimado">Estimated time</string>
     <string name="distacia_recorrida">Distance traveled (mts)</string>
     <string name="descripcion_ruta">Description</string>
     <string name="button_guardar_ruta">Save</string>
     <!--Eliminar ruta-->
-    <string name="title_eliminar_ruta">Data for the route to delete</string>
+    <string name="title_eliminar_ruta">Route data to delete</string>
 
 
     <string name="errorEmpty">Can not be empty</string>
