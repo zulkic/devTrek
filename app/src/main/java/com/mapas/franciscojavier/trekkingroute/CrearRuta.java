@@ -117,7 +117,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         botonGps.setOnClickListener(this);
         botonIndicador.setOnClickListener(this);
         botonObstaculo.setOnClickListener(this);
-        tBtnIniFin.setTextOn("Inicio");
+
         tBtnIniFin.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
