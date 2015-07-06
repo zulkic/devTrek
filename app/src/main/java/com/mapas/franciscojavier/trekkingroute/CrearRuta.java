@@ -156,15 +156,13 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         }
         //setContentView(R.layout.activity_main);
 
-
-
     }
     public void addMarket(GeoPoint center, Boolean encendido)
     {
         Marker marker = new Marker(osm);
         marker.setPosition(center);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        //marker.setIcon(getResources().getDrawable(R.drawable.zoom_in));
+        marker.setIcon(getResources().getDrawable(R.drawable.ic_me));
         if(osm.getOverlays().size()>0 && aux!=null)
             osm.getOverlays().remove(aux);
         if(encendido)

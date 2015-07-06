@@ -27,8 +27,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
-import android.widget.Toast;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -47,7 +47,6 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,12 +115,14 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
 
         view = inflater.inflate(R.layout.fir_layout_mapa, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
+        ImageButton al_inicio = (ImageButton) view.findViewById(R.id.al_inicio);
         ToggleButton BtnIniFin = (ToggleButton) view.findViewById(R.id.BtnIniFin);
         ToggleButton direction = (ToggleButton) view.findViewById(R.id.direction);
         crono = (Chronometer) view.findViewById(R.id.textView_cronometro);
         direction.setOnClickListener(this);
         BtnIniFin.setOnClickListener(this);
         botonGps.setOnClickListener(this);
+        al_inicio.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
         osm.setTileSource(Globals.MAPQUESTOSM);
@@ -139,7 +140,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         puntosDeInteres = osm.getOverlays();
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if(location != null) {
@@ -394,6 +395,11 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                     Globals.inicio_fin = false;
                 else
                     Globals.inicio_fin = true;
+                break;
+
+            case R.id.al_inicio:
+                al_punto_inicio();
+                break;
         }
     }
 
@@ -411,6 +417,15 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             showSettingsAlert();
         }
     }
+
+    public void al_punto_inicio()
+    {
+        if(!Globals.inicio_fin)
+            mc.animateTo(fin.getPoint());
+        else
+            mc.animateTo(inicio.getPoint());
+    }
+
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 

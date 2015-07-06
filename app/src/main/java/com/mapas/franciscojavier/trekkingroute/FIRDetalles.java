@@ -137,6 +137,7 @@ public class FIRDetalles extends SherlockFragment implements RefreshListener{
         else
         {
             this.puntos = (ArrayList<Indicador>) aux.clone();
+            ordenarPuntos();
         }
         if (this.puntos.isEmpty()) {
 
