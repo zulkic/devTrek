@@ -1,23 +1,37 @@
 package com.mapas.franciscojavier.trekkingroute;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
+import com.mapas.franciscojavier.trekkingroute.Utility.RefreshListener;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -49,7 +63,7 @@ import repositorios.Punto_interesRepo;
 import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
-public class FIRMapa extends SherlockFragment implements LocationListener, AdapterView.OnClickListener {
+public class FIRMapa extends SherlockFragment implements LocationListener, AdapterView.OnClickListener, RefreshListener, SensorEventListener {
 
     private MapView osm;
     private MapController mc;
@@ -67,7 +81,25 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     private PathOverlay po;
     private GeoPoint punto;
     private View view;
+    private Boolean enabled = true;
 
+    //SENSOR
+    private ImageView mPointer;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private Sensor mMagnetometer;
+    private float[] mLastAccelerometer = new float[3];
+    private float[] mLastMagnetometer = new float[3];
+    private boolean mLastAccelerometerSet = false;
+    private boolean mLastMagnetometerSet = false;
+    private float[] mR = new float[9];
+    private float[] mOrientation = new float[3];
+    private float mCurrentDegree = 0f;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,8 +113,15 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+            if(location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+            else{
+                //posicion curico
+                latitude = -34.98605794;
+                longitude = -71.24138117;
+            }
         }
         else{
             //posicion curico
@@ -91,8 +130,12 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         }
 
 
-        view = inflater.inflate(R.layout.fir_layout_mapa, null);
+        view = inflater.inflate(R.layout.fir_layout_mapa, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
+        ToggleButton BtnIniFin = (ToggleButton) view.findViewById(R.id.BtnIniFin);
+        ToggleButton direction = (ToggleButton) view.findViewById(R.id.direction);
+        direction.setOnClickListener(this);
+        BtnIniFin.setOnClickListener(this);
         botonGps.setOnClickListener(this);
 
         osm = (MapView) view.findViewById(R.id.mapview);
@@ -107,11 +150,31 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
 
         initPathOverlay();
         addLineOverlay();
+        Globals.coordenadas_inic_rec = lista_coordenadas;
         puntosDeInteres = osm.getOverlays();
 
         GeoPoint center = new GeoPoint(latitude, longitude);
         mc.animateTo(center);
+
+        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mPointer = (ImageView) view.findViewById(R.id.pointer);
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_GAME);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this, mAccelerometer);
+        mSensorManager.unregisterListener(this, mMagnetometer);
     }
 
     public void initPathOverlay(){
@@ -147,7 +210,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         Marker marker = new Marker(osm);
         marker.setPosition(center);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        //marker.setIcon(getResources().getDrawable(R.drawable.zoom_in));
+        marker.setIcon(getResources().getDrawable(R.drawable.ic_me));
         if(osm.getOverlays().size()>0 && aux!=null)
             osm.getOverlays().remove(aux);
         osm.getOverlays().add(po);
@@ -240,9 +303,9 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
 
         List<Overlay> mapOverlays = osm.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
-        Indicador ini = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.inicio.getTitle(), this.inicio.getSnippet(), this.inicio.getPoint());
+        Indicadores ini = new Indicadores(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.inicio.getTitle(), this.inicio.getSnippet(), this.inicio.getPoint());
         drawable = this.getResources().getDrawable(R.drawable.ic_fin);
-        Indicador fi = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.fin.getTitle(), this.fin.getSnippet(), this.fin.getPoint());
+        Indicadores fi = new Indicadores(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.fin.getTitle(), this.fin.getSnippet(), this.fin.getPoint());
         mapOverlays.add(ini);
         mapOverlays.add(fi);
 
@@ -255,7 +318,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
             drawable= this.getResources().getDrawable(resID);
             ResourceProxy rp = new ResourceProxyImpl(getActivity());
-            Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
+            Indicadores in = new Indicadores(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
             mapOverlays.add(in);
         }
 
@@ -268,7 +331,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
             drawable= this.getResources().getDrawable(resID);
             ResourceProxy rp = new ResourceProxyImpl(getActivity());
-            Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
+            Indicadores in = new Indicadores(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
             mapOverlays.add(in);
         }
 
@@ -281,6 +344,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         gps.setLongitude(location.getLongitude());
         gps.setAltitude(location.getAltitude());*/
         this.punto = new GeoPoint(location.getLatitude(), location.getLongitude(), location.getAltitude());
+        Globals.gps = this.punto;
         //mc.animateTo(punto);
         addMarket(punto);
     }
@@ -306,17 +370,104 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             case R.id.imageButtonGPS:
                 activarGps();
                 break;
+            case R.id.BtnIniFin:
+                if(enabled)
+                {
+                    //Cosas para iniciar el recorrido
+                }
+                else
+                {
+                    //Cosas para finalizar el recorrido
+                }
+            case R.id.direction:
+                if(Globals.inicio_fin)
+                    Globals.inicio_fin = false;
+                else
+                    Globals.inicio_fin = true;
         }
     }
 
     public void activarGps() {
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            GeoPoint punto = new GeoPoint(location.getLatitude(),location.getLongitude());
-            mc.animateTo(punto);
+            if(location != null) {
+                GeoPoint punto = new GeoPoint(location.getLatitude(), location.getLongitude());
+                mc.animateTo(punto);
+            }
+            else{
+                Toast.makeText(getActivity(), "Espere a tener señal Gps", Toast.LENGTH_SHORT).show();
+            }
         }else{
-            //gps.showSettingsAlert();
+            showSettingsAlert();
+        }
+    }
+    public void showSettingsAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+
+        // Titulo de la alerta
+        alertDialog.setTitle("GPS apagado");
+
+        // Mensaje
+        alertDialog.setMessage("GPS no esta habilitado. Desea ir al menu de ajustes?");
+
+        // El botón de Configuración
+        alertDialog.setPositiveButton("Ajustes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                getActivity().startActivity(intent);
+            }
+        });
+
+        // El botón de Cancelación
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Mostrando el mensaje de alerta
+        alertDialog.show();
+    }
+
+    @Override
+    public void fragmentBecameVisible() {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        if (event.sensor == mAccelerometer) {
+            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
+            mLastAccelerometerSet = true;
+        } else if (event.sensor == mMagnetometer) {
+            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
+            mLastMagnetometerSet = true;
+        }
+        if (mLastAccelerometerSet && mLastMagnetometerSet) {
+            SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
+            SensorManager.getOrientation(mR, mOrientation);
+            float azimuthInRadians = mOrientation[0];
+            float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
+            RotateAnimation ra = new RotateAnimation(
+                    mCurrentDegree,
+                    -azimuthInDegress,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f);
+
+            ra.setDuration(250);
+
+            ra.setFillAfter(true);
+
+            mPointer.startAnimation(ra);
+            mCurrentDegree = -azimuthInDegress;
         }
     }
 
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // TODO Auto-generated method stub
+
+    }
 }

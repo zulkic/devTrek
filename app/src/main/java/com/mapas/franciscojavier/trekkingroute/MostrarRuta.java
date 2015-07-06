@@ -177,9 +177,9 @@ public class MostrarRuta extends SherlockFragment {
 
         List<Overlay> mapOverlays = osm.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.location_marker);
-        Indicador ini = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.inicio.getTitle(), this.inicio.getSnippet(), this.inicio.getPoint());
+        Indicadores ini = new Indicadores(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.inicio.getTitle(), this.inicio.getSnippet(), this.inicio.getPoint());
         drawable = this.getResources().getDrawable(R.drawable.ic_fin);
-        Indicador fi = new Indicador(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.fin.getTitle(), this.fin.getSnippet(), this.fin.getPoint());
+        Indicadores fi = new Indicadores(drawable,new ResourceProxyImpl(getActivity()),getActivity(), this.fin.getTitle(), this.fin.getSnippet(), this.fin.getPoint());
         mapOverlays.add(ini);
         mapOverlays.add(fi);
 
@@ -192,7 +192,7 @@ public class MostrarRuta extends SherlockFragment {
             int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
             drawable= this.getResources().getDrawable(resID);
             ResourceProxy rp = new ResourceProxyImpl(getActivity());
-            Indicador in = new Indicador(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
+            Indicadores in = new Indicadores(drawable,rp,getActivity(),titulo,pi.getDescripcion(),gp);
             mapOverlays.add(in);
         }
 
@@ -205,7 +205,7 @@ public class MostrarRuta extends SherlockFragment {
             int resID = getActivity().getResources().getIdentifier(icono.trim(), "drawable", getActivity().getPackageName());
             drawable= this.getResources().getDrawable(resID);
             ResourceProxy rp = new ResourceProxyImpl(getActivity());
-            Indicador in = new Indicador(drawable,rp,getActivity(),titulo,obs.getDescripcion(),gp);
+            Indicadores in = new Indicadores(drawable,rp,getActivity(),titulo,obs.getDescripcion(),gp);
             mapOverlays.add(in);
         }
 
