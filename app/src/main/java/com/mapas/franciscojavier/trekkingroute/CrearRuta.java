@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -79,7 +80,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private Indicadores indicador;
     private DownloadManager mgr=null;
     private Boolean enabled = true;
-    private ToggleButton tBtnIniFin;
+    private Button tBtnIniFin;
     int i, f;
     SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     private GeoPoint punto;
@@ -113,7 +114,8 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
         ImageButton botonIndicador = (ImageButton) view.findViewById(R.id.imageButton_Indicadores);
         ImageButton botonObstaculo = (ImageButton) view.findViewById(R.id.imageButton_Obstaculos);
-        tBtnIniFin = (ToggleButton) view.findViewById(R.id.tBtnIniFin);
+        tBtnIniFin = (Button) view.findViewById(R.id.tBtnIniFin);
+        tBtnIniFin.setText("Inicio");
         botonGps.setOnClickListener(this);
         botonIndicador.setOnClickListener(this);
         botonObstaculo.setOnClickListener(this);
@@ -529,7 +531,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                 if(punto != null) {
                     if (enabled) {
                         enabled = false;
-                        tBtnIniFin.setTextOff("Fin");
+                        tBtnIniFin.setText("Fin");
                         int hour = now.get(Calendar.HOUR_OF_DAY);
                         int minute = now.get(Calendar.MINUTE);
                         int second = now.get(Calendar.SECOND);
@@ -540,7 +542,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
                         grabarRecorrido();
                     } else {
                         enabled = true;
-                        tBtnIniFin.setTextOn("Inicio");
+                        tBtnIniFin.setText("Inicio");
                         int hour = now.get(Calendar.HOUR_OF_DAY);
                         int minute = now.get(Calendar.MINUTE);
                         int second = now.get(Calendar.SECOND);
