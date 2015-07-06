@@ -116,6 +116,7 @@
     <string name="btn_cancelar_idioma"> Cancelar </string>
     <string name="seleccion_idioma">Seleccione el idioma</string>
     <string name="title_configuracion">Configuración</string>
+
     <string name="title_perfil">Perfil del Usuario</string>
     <string name="button_guardar_perfil">Aceptar</string>
     <string name="button_cancelar_perfil">Cancelar</string>
@@ -125,6 +126,11 @@
     <string name="nombre_usuario">Nombre</string>
     <string name="nueva_contraseña_usuario">Cambiar contraseña?</string>
     <string name="passwordOld">Debes ingresar la contraseña actual</string>
+    <string name="title_fin_recorrido">Detalles al final del recorrido</string>
+    <string name="tiempo_recorrido_inicio">Hora de inicio</string>
+    <string name="tiempo_recorrido_fin">Hora de Termino</string>
+    <string name="tiempo_recorrido">Tiempo total del recorrido</string>
+    <string name="button_aceptar_detalles_fin">Aceptar</string>
 
 
 </resources>

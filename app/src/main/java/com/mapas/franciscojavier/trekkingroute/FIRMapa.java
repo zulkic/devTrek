@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +104,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     private float[] mR = new float[9];
     private float[] mOrientation = new float[3];
     private float mCurrentDegree = 0f;
+    private String distanciaRecoFin;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -392,7 +394,6 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                     distanciaFaltante.setText(ruta.getKms().toString());
                     enabled=false;
                     final GeoPoint primerPunto= Globals.gps;
-
                     final float distancia = primerPunto.distanceTo(Globals.gps);
                     t = new Thread() {
 
@@ -406,6 +407,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                                         public void run() {
                                             DecimalFormat df = new DecimalFormat("##.##");
                                             String distancia = df.format(primerPunto.distanceTo(Globals.gps));
+                                            distanciaRecoFin = distancia;
                                             distanciaRecorrida.setText(distancia);
                                         }
                                     });
@@ -423,6 +425,11 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                     crono.stop();
                     t.interrupt();
                     //Cosas para finalizar el recorrido
+                    Toast.makeText(getActivity(), "||||crono: "+crono.getText()+"||||distancia: "+distanciaRecoFin+"|||", Toast.LENGTH_LONG).show();
+                    FragmentTransaction ft = Globals.ft.beginTransaction();
+                    ft.replace(R.id.content_frame, new DetallesFinRecorrido().newInstance(crono.getText().toString(), distanciaRecoFin));
+                    ft.addToBackStack("Detalle Fin Recorrido");
+                    ft.commit();
                 }
                 break;
             case R.id.direction:

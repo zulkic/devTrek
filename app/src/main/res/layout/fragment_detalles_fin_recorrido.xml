@@ -1,0 +1,134 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/bg_ruta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+    <ScrollView
+        android:id="@+id/ScrollViewDetallesFinRuta"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:fitsSystemWindows="true"
+        android:scrollbars="none" >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_fin_recorrido"
+                android:id="@+id/textViewName"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dip"
+                android:textSize="30sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tiempo_recorrido_inicio"
+                android:id="@+id/textView_tiempo_inicio" />
+            <TextView
+                android:id="@+id/edittextiempo_inicio"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:inputType="datetime"
+                android:enabled="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tiempo_recorrido_fin"
+                android:id="@+id/textView_tiempo_fin" />
+            <TextView
+                android:id="@+id/edittextiempo_fin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:inputType="datetime"
+                android:enabled="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tiempo_recorrido"
+                android:id="@+id/textView_tiempo_recorrido" />
+            <TextView
+                android:id="@+id/edittextiempo_recorrido"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:inputType="datetime"
+                android:enabled="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/distacia_recorrida"
+                android:id="@+id/textView_distancia_recorrida_fin" />
+            <TextView
+                android:id="@+id/editText_distancia_recorrida_fin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/bg_edit_text"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:inputType="number"
+                android:enabled="false"/>
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="bottom"
+        android:layout_weight="1"
+        android:id="@+id/linearLayout2">
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/btn_orange"
+            android:textColor="@color/white"
+            android:text="@string/button_aceptar_detalles_fin"
+            android:id="@+id/button_aceptar_detalles_fin"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>
