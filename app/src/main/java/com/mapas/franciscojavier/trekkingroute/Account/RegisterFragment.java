@@ -161,7 +161,7 @@ public class RegisterFragment extends SherlockFragment implements AdapterView.On
             haveErrors = true;
         }
 
-        else if (!etEmail.getText().toString().matches(Globals.EMAIL_REGEX)) {
+        else if (!etEmail.getText().toString().matches(Globals.EMAIL_REGEX2)) {
             etEmail.setError(getString(R.string.errorFormat));
             etEmail.startAnimation(shake);
             haveErrors = true;

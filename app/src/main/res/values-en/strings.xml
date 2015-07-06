@@ -116,6 +116,9 @@
     <string name="nombre_usuario">Name</string>
     <string name="nueva_contraseña_usuario">Change Password</string>
     <string name="passwordOld">You must enter the current password</string>
+    <string name="rec_prompt_region">Regions</string>
+    <string name="radio_Mapudungun">Mapudungu</string>
+    <string name="region_detalles">Zona</string>
 
 
 </resources>
