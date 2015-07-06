@@ -189,7 +189,6 @@ public class DetallesCrearRuta extends SherlockFragment implements AdapterView.O
                     Ruta nuevaRuta = new Ruta();
                     nuevaRuta.setNombre(nombreRuta);
                     nuevaRuta.setTiempo_estimado(tiempoRuta);
-                    //nuevaRuta.setTipo(tipoRuta);      FALTA AGREGAR ESTA FUNCION
                     nuevaRuta.setDescripcion(descripcionRuta);
                     nuevaRuta.setKms(mtrs);
                     nuevaRuta.setOficial(true);    //verificar mas adelante

@@ -76,6 +76,7 @@ public class Modificar_Ruta extends AsyncTask<Void, Void, Void> {
             JSONObject json = jsonParser.makeHttpRequest(url_modificar_ruta,
                     "POST", params);
 
+            Log.d("Create Response", json.toString());
             // check json success tag
             try {
                 int success = json.getInt(TAG_SUCCESS);

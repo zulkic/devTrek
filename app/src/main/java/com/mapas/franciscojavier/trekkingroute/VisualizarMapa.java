@@ -69,12 +69,15 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
-        mc.setZoom(14);
+        mc.setZoom(15);
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
-        GeoPoint center = new GeoPoint(-34.98604036, -71.24007225);
-        mc.setCenter(center);
         addLineOverlay();
+
+        Double latitude = inicio.getPoint().getLatitude();
+        Double longitude = inicio.getPoint().getLongitude();
+        GeoPoint center = new GeoPoint(latitude+0.014, longitude-0.018);
+        mc.animateTo(center);
 
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);

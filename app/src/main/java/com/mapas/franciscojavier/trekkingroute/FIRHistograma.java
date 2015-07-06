@@ -165,9 +165,10 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
         Log.i("max: ", max.toString());
         Log.i("min: ", min.toString());
         for(Entry punto : entries) {
-            if(max >= 0 && min <= 250)
+            if(max >= 0 && min <= 250) {
                 entry = new Entry(250, i);
                 entries1.add(entry);
+            }
             if (max >= 250 && min <= 500) {
                 entry = new Entry(500, i);
                 entries2.add(entry);
@@ -190,7 +191,7 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
             }
             i+=1;
         }
-        if(entries1 != null) {
+        if(entries1 != null && entries1.size() > 0) {
             LineDataSet nivel1 = new LineDataSet(entries1, "0-250mts");
             nivel1.setColor(Color.rgb(3, 128, 0));
             nivel1.setDrawValues(false);
@@ -199,7 +200,7 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
             nivel1.setDrawCircles(false);
             datos.add(nivel1);
         }
-        if(entries2 != null) {
+        if(entries2 != null && entries2.size() > 0) {
             LineDataSet nivel2 = new LineDataSet(entries2, "250-500mts");
             nivel2.setColor(Color.rgb(141, 212, 40));
             nivel2.setDrawValues(false);
@@ -209,7 +210,7 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
             datos.add(nivel2);
         }
 
-        if(entries3 != null) {
+        if(entries3 != null && entries3.size() > 0) {
             LineDataSet nivel3 = new LineDataSet(entries3, "500-1000mts");
             nivel3.setColor(Color.rgb(154, 226, 143));
             nivel3.setDrawValues(false);
@@ -219,7 +220,7 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
             datos.add(nivel3);
         }
 
-        if(entries4 != null) {
+        if(entries4 != null && entries4.size() > 0) {
             LineDataSet nivel4 = new LineDataSet(entries4, "1000-1500mts");
             nivel4.setColor(Color.rgb(255, 180, 91));
             nivel4.setDrawValues(false);
@@ -229,7 +230,7 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
             datos.add(nivel4);
         }
 
-        if(entries5 != null) {
+        if(entries5 != null && entries5.size() > 0) {
             LineDataSet nivel5 = new LineDataSet(entries5, "1500-3000mts");
             nivel5.setColor(Color.rgb(134, 73, 0));
             nivel5.setDrawValues(false);
@@ -238,7 +239,7 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
             nivel5.setDrawCircles(false);
             datos.add(nivel5);
         }
-        if(entries6 != null) {
+        if(entries6 != null && entries6.size() > 0) {
             LineDataSet nivel6 = new LineDataSet(entries6, "+3000mts");
             nivel6.setColor(Color.rgb(255, 217, 172));
             nivel6.setDrawValues(false);

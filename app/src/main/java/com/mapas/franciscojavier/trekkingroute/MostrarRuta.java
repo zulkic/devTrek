@@ -84,15 +84,16 @@ public class MostrarRuta extends SherlockFragment {
         osm.setBuiltInZoomControls(true);
         osm.setMultiTouchControls(true);
         mc = (MapController) osm.getController();
-        mc.setZoom(16);
+        mc.setZoom(15);
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
         //setupMyLocation();
         //addPolyOverlay();
         addLineOverlay();
-        //GeoPoint center = new GeoPoint(, );
-        //mc.animateTo(center);
-        //addMarket(center);
+        Double latitude = inicio.getPoint().getLatitude();
+        Double longitude = inicio.getPoint().getLongitude();
+        GeoPoint center = new GeoPoint(latitude+0.014, longitude-0.018);
+        mc.animateTo(center);
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
     }
