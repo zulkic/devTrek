@@ -49,7 +49,7 @@ public class Puntos_Interes_Ruta extends AsyncTask<Void, Void, ArrayList<Punto_i
         this.puntos_interesList = new ArrayList<Punto_interes>();
         this.jsonParser = new JSONParser();
         List<Punto_interes> aux = Punto_interesRepo.punto_intereses_ruta(context, id.longValue());
-        if(RutaRepo.isValid(context, id.longValue()) == 1 && !aux.isEmpty())
+        if(RutaRepo.isValid(context, id.longValue()) != -1 && !aux.isEmpty())
         {
             for(Punto_interes punto_interes : aux)
             {

@@ -60,7 +60,6 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
     // GPSTracker class
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_visualizar_mapa, container, false);
         ImageButton botonDescarga = (ImageButton) view.findViewById(R.id.imageButton_download);
         botonDescarga.setOnClickListener(this);

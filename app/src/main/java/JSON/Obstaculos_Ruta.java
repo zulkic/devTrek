@@ -49,7 +49,7 @@ public class Obstaculos_Ruta extends AsyncTask<Void, Void, ArrayList<Obstaculo>>
         this.obstaculosList = new ArrayList<Obstaculo>();
         this.jsonParser = new JSONParser();
         List<Obstaculo> aux = ObstaculoRepo.obstaculos_ruta(context, id.longValue());
-        if(RutaRepo.isValid(context, id.longValue()) == 1 && !aux.isEmpty())
+        if(RutaRepo.isValid(context, id.longValue()) != -1 && !aux.isEmpty())
         {
             for(Obstaculo obsculo : aux)
             {
