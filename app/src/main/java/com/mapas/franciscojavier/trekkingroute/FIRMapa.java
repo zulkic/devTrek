@@ -27,6 +27,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
@@ -48,6 +49,8 @@ import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +89,9 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     private View view;
     private Boolean enabled = true;
     private Chronometer crono;
+    private TextView distanciaFaltante;
+    private TextView distanciaRecorrida;
+    private Thread t;
 
     //SENSOR
     private ImageView mPointer;
@@ -119,6 +125,8 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         ToggleButton BtnIniFin = (ToggleButton) view.findViewById(R.id.BtnIniFin);
         ToggleButton direction = (ToggleButton) view.findViewById(R.id.direction);
         crono = (Chronometer) view.findViewById(R.id.textView_cronometro);
+        distanciaFaltante = (TextView) view.findViewById(R.id.textView_distancia_faltante);
+        distanciaRecorrida = (TextView) view.findViewById(R.id.textView_distancia_recorrida);
         direction.setOnClickListener(this);
         BtnIniFin.setOnClickListener(this);
         botonGps.setOnClickListener(this);
@@ -381,12 +389,39 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                     //Cosas para iniciar el recorrido
                     crono.setBase(SystemClock.elapsedRealtime());
                     crono.start();
+                    distanciaFaltante.setText(ruta.getKms().toString());
                     enabled=false;
+                    final GeoPoint primerPunto= Globals.gps;
+
+                    final float distancia = primerPunto.distanceTo(Globals.gps);
+                    t = new Thread() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                while (!isInterrupted()) {
+                                    Thread.sleep(5000);
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            DecimalFormat df = new DecimalFormat("##.##");
+                                            String distancia = df.format(primerPunto.distanceTo(Globals.gps));
+                                            distanciaRecorrida.setText(distancia);
+                                        }
+                                    });
+                                }
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                    };
+
+                    t.start();
                 }
                 else
                 {
                     enabled= true;
                     crono.stop();
+                    t.interrupt();
                     //Cosas para finalizar el recorrido
                 }
             case R.id.direction:
