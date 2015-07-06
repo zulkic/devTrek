@@ -51,7 +51,7 @@ public class Coordenadas_Ruta extends AsyncTask<Void, Void, ArrayList<Coordenada
         this.coordenadasList = new ArrayList<Coordenada>();
         this.jsonParser = new JSONParser();
         List<Coordenada> aux = CoordenadaRepo.coordenadas_ruta(context, id.longValue());
-        if(RutaRepo.isValid(context, id.longValue()) == 1 && aux.size() > 0)
+        if(RutaRepo.isValid(context, id.longValue()) != -1 && aux.size() > 0)
         {
             for(Coordenada coordenada : aux)
             {

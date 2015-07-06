@@ -1,6 +1,7 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -89,6 +90,11 @@ public class RoutesFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final ProgressDialog mDialog = new ProgressDialog(getActivity());
+        mDialog.setMessage("Cargando coordenadas");
+        mDialog.setCancelable(false);
+        mDialog.setIndeterminate(true);
+        mDialog.show();
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_routes, container, false);
 
@@ -123,7 +129,7 @@ public class RoutesFragment extends SherlockFragment {
             });
 
         }
-
+        mDialog.dismiss();
         return view;
     }
     @Override

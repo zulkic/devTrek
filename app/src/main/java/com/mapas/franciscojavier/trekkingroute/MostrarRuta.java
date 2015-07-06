@@ -1,5 +1,6 @@
 package com.mapas.franciscojavier.trekkingroute;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -73,6 +74,12 @@ public class MostrarRuta extends SherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final ProgressDialog mDialog = new ProgressDialog(getActivity());
+        mDialog.setMessage("Cargando coordenadas");
+        mDialog.setCancelable(false);
+        mDialog.setIndeterminate(true);
+        mDialog.show();
+
         this.id = this.getArguments().getInt("id_ruta");
 
         this.ruta = RutaRepo.getRutaForId(getActivity(),this.id.longValue());
@@ -94,6 +101,7 @@ public class MostrarRuta extends SherlockFragment {
         Double longitude = inicio.getPoint().getLongitude();
         GeoPoint center = new GeoPoint(latitude+0.014, longitude-0.018);
         mc.animateTo(center);
+        mDialog.dismiss();
         return view;
         //return super.onCreateView(inflater, container, savedInstanceState);
     }
