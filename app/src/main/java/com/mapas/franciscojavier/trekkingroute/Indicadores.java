@@ -91,6 +91,7 @@ public class Indicadores extends ItemizedOverlay {
         OverlayItem item = mOverlays.get(index);
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
         dialog.setTitle(item.getTitle());
+        /*
         dialog.setNeutralButton(R.string.action_delet,
                 new DialogInterface.OnClickListener(){
                     @Override
@@ -102,6 +103,7 @@ public class Indicadores extends ItemizedOverlay {
                         populate();
                     }
                 });
+        */
         dialog.setNegativeButton(R.string.button_cancelar_ruta,
                 new DialogInterface.OnClickListener() {
 
