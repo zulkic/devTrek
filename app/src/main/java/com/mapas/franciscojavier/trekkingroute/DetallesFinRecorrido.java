@@ -48,7 +48,6 @@ public class DetallesFinRecorrido  extends SherlockFragment implements AdapterVi
         TextView distanciaRecorrida = (TextView) v.findViewById(R.id.editText_distancia_recorrida_fin);
         Button aceptar = (Button) v.findViewById(R.id.button_aceptar_detalles_fin);
 
-        tiempoTotalRecorrido.setText(CRONO_TIEMPO);
         distanciaRecorrida.setText(DISTANCIA_FINAL);
 
         String tiempoFinal = calcularTiempoFinal();
@@ -56,6 +55,7 @@ public class DetallesFinRecorrido  extends SherlockFragment implements AdapterVi
 
         String tiempoInicial = calcularTiempoInicial(tiempoFinal);
         tiempoInicio.setText(tiempoInicial);
+        tiempoTotalRecorrido.setText(CRONO_TIEMPO);
 
         aceptar.setOnClickListener(this);
 
@@ -63,7 +63,45 @@ public class DetallesFinRecorrido  extends SherlockFragment implements AdapterVi
     }
 
     private String calcularTiempoInicial(String tiempoFinal) {
-        return "null";
+
+        String tiempo="", h, m, s;
+        int seg=0, hor=0, min=0;
+        String delimiter = ":";
+        String[] tempF,tempC;
+        tempF = tiempoFinal.split(delimiter);
+        tempC = CRONO_TIEMPO.split(delimiter);
+
+        if(tempC.length<3){
+            CRONO_TIEMPO="00:"+CRONO_TIEMPO;
+            int horaF = Integer.parseInt(tempF[0]);
+            hor=horaF;
+            int minutoF = Integer.parseInt(tempF[1]);
+            int minutoC = Integer.parseInt(tempC[0]);
+            min=minutoF-minutoC;
+            int segundoF = Integer.parseInt(tempF[2]);
+            int segundoC = Integer.parseInt(tempC[1]);
+            seg=segundoF-segundoC;
+        }
+        else if (tempC.length==tempF.length){
+            int horaF = Integer.parseInt(tempF[0]);
+            int horaC = Integer.parseInt(tempC[0]);
+            hor=horaF-horaC;
+            int minutoF = Integer.parseInt(tempF[1]);
+            int minutoC = Integer.parseInt(tempC[1]);
+            min=minutoF-minutoC;
+            int segundoF = Integer.parseInt(tempF[2]);
+            int segundoC = Integer.parseInt(tempC[2]);
+            seg=segundoF-segundoC;
+        }
+        if(hor<10) h="0"+hor+":";
+        else  h=hor+":";
+        if(min<10) m="0"+min+":";
+        else  m=min+":";
+        if(seg<10) s="0"+seg;
+        else  s=seg+"";
+
+        tiempo = h+m+s;
+        return tiempo;
     }
 
     private String calcularTiempoFinal() {
@@ -72,7 +110,7 @@ public class DetallesFinRecorrido  extends SherlockFragment implements AdapterVi
         int hour = now.get(Calendar.HOUR_OF_DAY);
         int minute = now.get(Calendar.MINUTE);
         int second = now.get(Calendar.SECOND);
-        System.out.printf("FIN %02d:%02d:%02d", hour, minute, second);
+//        System.out.printf("FIN %02d:%02d:%02d", hour, minute, second);
         String h,m,s;
         if(hour<10){
             h="0"+hour+":";
@@ -98,9 +136,8 @@ public class DetallesFinRecorrido  extends SherlockFragment implements AdapterVi
 
     @Override
     public void onClick(View v) {
-        FragmentTransaction ft;
         switch (v.getId()) {
-            case R.id.button_aceptar_eliminar_ruta:
+            case R.id.button_aceptar_detalles_fin:
                 mListener.goToHome();
                 break;
         }
