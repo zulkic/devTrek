@@ -138,7 +138,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         distanciaFaltante = (TextView) view.findViewById(R.id.textView_distancia_faltante);
         distanciaRecorrida = (TextView) view.findViewById(R.id.textView_distancia_recorrida);
         distanciaFaltante.setText(ruta.getKms().toString());
-        distanciaFalt = ruta.getKms()*1000;
+        distanciaFalt = ruta.getKms();
         distanciaRecorrida.setText("0");
         btnIniFin.setText("Inicio");
         direction.setOnClickListener(this);
@@ -155,12 +155,10 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         mc.setZoom(15);
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
-
         initPathOverlay();
         addLineOverlay();
         Globals.coordenadas_inic_rec = lista_coordenadas;
         puntosDeInteres = osm.getOverlays();
-
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
@@ -188,7 +186,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mPointer = (ImageView) view.findViewById(R.id.pointer);
-
+        activarGps();
         return view;
     }
 
@@ -421,11 +419,11 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                                                     primerLocalicacion = false;
                                                 } else {
                                                     localicacionB= Globals.gps;
-                                                    distancia = distancia + localicacionA.distanceTo(localicacionB);
+                                                    distancia = distancia + (localicacionA.distanceTo(localicacionB)/1000f);
                                                     localicacionA= localicacionB;
                                                 }
-                                                distanciaRecorrida.setText(Float.toString(distancia));
-                                                distanciaFaltante.setText(Float.toString(distanciaFalt-distancia));
+                                                distanciaRecorrida.setText(String.format("%.2f", (distancia)));
+                                                distanciaFaltante.setText(String.format("%.2f",((distanciaFalt - distancia))));
                                             }
                                         });
                                         Thread.sleep(5000);
@@ -441,19 +439,15 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                         crono.stop();
                         t.interrupt();
                         //Cosas para finalizar el recorrido
+                        Toast.makeText(getActivity(), "||||crono: "+crono.getText()+"||||distancia: "+distanciaRecoFin+"|||", Toast.LENGTH_LONG).show();
+                        FragmentTransaction ft = Globals.ft.beginTransaction();
+                        ft.replace(R.id.content_frame, new DetallesFinRecorrido().newInstance(crono.getText().toString(), Float.toString(distancia)));
+                        ft.addToBackStack("Detalle Fin Recorrido");
+                        ft.commit();
                     }
                 }
                 else{
                     activarGps();
-                    enabled= true;
-                    crono.stop();
-                    t.interrupt();
-                    //Cosas para finalizar el recorrido
-                    Toast.makeText(getActivity(), "||||crono: "+crono.getText()+"||||distancia: "+distanciaRecoFin+"|||", Toast.LENGTH_LONG).show();
-                    FragmentTransaction ft = Globals.ft.beginTransaction();
-                    ft.replace(R.id.content_frame, new DetallesFinRecorrido().newInstance(crono.getText().toString(), distanciaRecoFin));
-                    ft.addToBackStack("Detalle Fin Recorrido");
-                    ft.commit();
                 }
                 break;
             case R.id.direction:
