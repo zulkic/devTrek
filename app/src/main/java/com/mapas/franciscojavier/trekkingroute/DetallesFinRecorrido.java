@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Account.MainCalls;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 /**
@@ -48,7 +50,12 @@ public class DetallesFinRecorrido  extends SherlockFragment implements AdapterVi
         TextView distanciaRecorrida = (TextView) v.findViewById(R.id.editText_distancia_recorrida_fin);
         Button aceptar = (Button) v.findViewById(R.id.button_aceptar_detalles_fin);
 
-        distanciaRecorrida.setText(DISTANCIA_FINAL);
+        //trunco la distacia con 2 decimales
+        DecimalFormat df = new DecimalFormat("##.###");
+        df.setRoundingMode(RoundingMode.DOWN);
+        float cr = Float.parseFloat(DISTANCIA_FINAL);
+        String mts = df.format(cr);
+        distanciaRecorrida.setText(mts);
 
         String tiempoFinal = calcularTiempoFinal();
         tiempoFin.setText(tiempoFinal);
@@ -70,35 +77,46 @@ public class DetallesFinRecorrido  extends SherlockFragment implements AdapterVi
         String[] tempF,tempC;
         tempF = tiempoFinal.split(delimiter);
         tempC = CRONO_TIEMPO.split(delimiter);
-
+        int horaF=0,minutoF=0,segundoF=0;
+        int horaC=0,minutoC=0,segundoC=0;
+        int horaT=0,minutoT=0,segundoT=0;
         if(tempC.length<3){
             CRONO_TIEMPO="00:"+CRONO_TIEMPO;
-            int horaF = Integer.parseInt(tempF[0]);
-            hor=horaF;
-            int minutoF = Integer.parseInt(tempF[1]);
-            int minutoC = Integer.parseInt(tempC[0]);
-            min=minutoF-minutoC;
-            int segundoF = Integer.parseInt(tempF[2]);
-            int segundoC = Integer.parseInt(tempC[1]);
-            seg=segundoF-segundoC;
+            horaF = Integer.parseInt(tempF[0]);
+//            hor=horaF;
+            minutoF = Integer.parseInt(tempF[1]);
+            minutoC = Integer.parseInt(tempC[0]);
+//            min=minutoF-minutoC;
+            segundoF = Integer.parseInt(tempF[2]);
+            segundoC = Integer.parseInt(tempC[1]);
+//            seg=segundoF-segundoC;
         }
         else if (tempC.length==tempF.length){
-            int horaF = Integer.parseInt(tempF[0]);
-            int horaC = Integer.parseInt(tempC[0]);
-            hor=horaF-horaC;
-            int minutoF = Integer.parseInt(tempF[1]);
-            int minutoC = Integer.parseInt(tempC[1]);
-            min=minutoF-minutoC;
-            int segundoF = Integer.parseInt(tempF[2]);
-            int segundoC = Integer.parseInt(tempC[2]);
-            seg=segundoF-segundoC;
+            horaF = Integer.parseInt(tempF[0]);
+            horaC = Integer.parseInt(tempC[0]);
+//            hor=horaF-horaC;
+            minutoF = Integer.parseInt(tempF[1]);
+            minutoC = Integer.parseInt(tempC[1]);
+//            min=minutoF-minutoC;
+            segundoF = Integer.parseInt(tempF[2]);
+            segundoC = Integer.parseInt(tempC[2]);
+//            seg=segundoF-segundoC;
         }
-        if(hor<10) h="0"+hor+":";
-        else  h=hor+":";
-        if(min<10) m="0"+min+":";
-        else  m=min+":";
-        if(seg<10) s="0"+seg;
-        else  s=seg+"";
+        int iF = horaF * 3600 + minutoF * 60 + segundoF;
+        int iC = horaC * 3600 + minutoC * 60 + segundoC;
+        int iT = iF-iC;
+
+        horaT=iT/3600;
+        minutoT=(iT-(3600*horaT))/60;
+        segundoT=iT-((horaT*3600)+(minutoT*60));
+        System.out.println(horaT+"h "+minutoT+"m "+segundoT+"s");
+
+        if(horaT<10) h="0"+horaT+":";
+        else  h=horaT+":";
+        if(minutoT<10) m="0"+minutoT+":";
+        else  m=minutoT+":";
+        if(segundoT<10) s="0"+segundoT;
+        else  s=segundoT+"";
 
         tiempo = h+m+s;
         return tiempo;
