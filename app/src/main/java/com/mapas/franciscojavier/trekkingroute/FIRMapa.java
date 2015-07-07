@@ -427,7 +427,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                                                 distanciaFaltante.setText(String.format("%.2f",((distanciaFalt - distancia))));
                                             }
                                         });
-                                        Thread.sleep(5000);
+                                        Thread.sleep(2000);
                                     }
                                 } catch (InterruptedException e) {
                                 }
