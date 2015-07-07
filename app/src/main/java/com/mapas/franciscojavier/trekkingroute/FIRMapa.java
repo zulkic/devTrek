@@ -26,7 +26,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -90,7 +92,14 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     private Chronometer crono;
     private TextView distanciaFaltante;
     private TextView distanciaRecorrida;
+    private Button btnIniFin;
+    private boolean gpsActivado = false;
     private Thread t;
+    private float distancia = 0;
+    private float distanciaFalt;
+    private boolean primerLocalicacion = true;
+    private GeoPoint localicacionB;
+    private GeoPoint localicacionA;
 
     //SENSOR
     private ImageView mPointer;
@@ -123,13 +132,17 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         view = inflater.inflate(R.layout.fir_layout_mapa, container, false);
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
         ImageButton al_inicio = (ImageButton) view.findViewById(R.id.al_inicio);
-        ToggleButton BtnIniFin = (ToggleButton) view.findViewById(R.id.BtnIniFin);
+        btnIniFin = (Button) view.findViewById(R.id.BtnIniFin);
         ToggleButton direction = (ToggleButton) view.findViewById(R.id.direction);
         crono = (Chronometer) view.findViewById(R.id.textView_cronometro);
         distanciaFaltante = (TextView) view.findViewById(R.id.textView_distancia_faltante);
         distanciaRecorrida = (TextView) view.findViewById(R.id.textView_distancia_recorrida);
+        distanciaFaltante.setText(ruta.getKms().toString());
+        distanciaFalt = ruta.getKms();
+        distanciaRecorrida.setText("0");
+        btnIniFin.setText("Inicio");
         direction.setOnClickListener(this);
-        BtnIniFin.setOnClickListener(this);
+        btnIniFin.setOnClickListener(this);
         botonGps.setOnClickListener(this);
         al_inicio.setOnClickListener(this);
 
@@ -142,12 +155,10 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         mc.setZoom(15);
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(getActivity());
         this.osm.getOverlays().add(myScaleBarOverlay);
-
         initPathOverlay();
         addLineOverlay();
         Globals.coordenadas_inic_rec = lista_coordenadas;
         puntosDeInteres = osm.getOverlays();
-
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
@@ -175,7 +186,6 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mPointer = (ImageView) view.findViewById(R.id.pointer);
-
         return view;
     }
 
@@ -209,10 +219,10 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
 
         // list of GeoPoint objects to be used to draw polygon
         List<GeoPoint> polyData = new ArrayList<GeoPoint>();
-        polyData.add(new GeoPoint(-34.98489765,-71.240201));
+        polyData.add(new GeoPoint(-34.98489765, -71.240201));
         polyData.add(new GeoPoint(-34.98479217, -71.23884916));
         polyData.add(new GeoPoint(-34.98602278, -71.24007225));
-        polyData.add(new GeoPoint(-34.98589972,-71.2386775));
+        polyData.add(new GeoPoint(-34.98589972, -71.2386775));
 
         // apply polygon style & data and add to map
         Polygon polyOverlay = new Polygon(getActivity());
@@ -230,6 +240,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             osm.getOverlays().remove(aux);
         osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
+        mc.animateTo(center);
         osm.invalidate();
         aux = marker;
     }
@@ -386,50 +397,57 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                 activarGps();
                 break;
             case R.id.BtnIniFin:
-                if(enabled)
-                {
-                    //Cosas para iniciar el recorrido
-                    crono.setBase(SystemClock.elapsedRealtime());
-                    crono.start();
-                    distanciaFaltante.setText(ruta.getKms().toString());
-                    enabled=false;
-                    final GeoPoint primerPunto= Globals.gps;
-                    final float distancia = primerPunto.distanceTo(Globals.gps);
-                    t = new Thread() {
-
-                        @Override
-                        public void run() {
-                            try {
-                                while (!isInterrupted()) {
-                                    Thread.sleep(5000);
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            DecimalFormat df = new DecimalFormat("##.##");
-                                            String distancia = df.format(primerPunto.distanceTo(Globals.gps));
-                                            distanciaRecoFin = distancia;
-                                            distanciaRecorrida.setText(distancia);
-                                        }
-                                    });
+                if(gpsActivado) {
+                    if (enabled) {
+                        //Cosas para iniciar el recorrido
+                        btnIniFin.setText("Fin");
+                        crono.setBase(SystemClock.elapsedRealtime());
+                        crono.start();
+                        distanciaFaltante.setText(ruta.getKms().toString());
+                        enabled = false;
+                        t = new Thread() {
+                            @Override
+                            public void run() {
+                                try {
+                                    while (!isInterrupted()) {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (primerLocalicacion) {
+                                                    localicacionA = Globals.gps;
+                                                    distancia = 0;
+                                                    primerLocalicacion = false;
+                                                } else {
+                                                    localicacionB= Globals.gps;
+                                                    distancia = distancia + (localicacionA.distanceTo(localicacionB)/1000f);
+                                                    localicacionA= localicacionB;
+                                                }
+                                                distanciaRecorrida.setText(String.format("%.2f", (distancia)));
+                                                distanciaFaltante.setText(String.format("%.2f",((distanciaFalt - distancia))));
+                                            }
+                                        });
+                                        Thread.sleep(5000);
+                                    }
+                                } catch (InterruptedException e) {
                                 }
-                            } catch (InterruptedException e) {
                             }
-                        }
-                    };
-
-                    t.start();
+                        };
+                        t.start();
+                    } else {
+                        enabled = true;
+                        btnIniFin.setText("Inicio");
+                        crono.stop();
+                        t.interrupt();
+                        //Cosas para finalizar el recorrido
+                        Toast.makeText(getActivity(), "||||crono: "+crono.getText()+"||||distancia: "+distanciaRecoFin+"|||", Toast.LENGTH_LONG).show();
+                        FragmentTransaction ft = Globals.ft.beginTransaction();
+                        ft.replace(R.id.content_frame, new DetallesFinRecorrido().newInstance(crono.getText().toString(), Float.toString(distancia)));
+                        ft.addToBackStack("Detalle Fin Recorrido");
+                        ft.commit();
+                    }
                 }
-                else
-                {
-                    enabled= true;
-                    crono.stop();
-                    t.interrupt();
-                    //Cosas para finalizar el recorrido
-                    Toast.makeText(getActivity(), "||||crono: "+crono.getText()+"||||distancia: "+distanciaRecoFin+"|||", Toast.LENGTH_LONG).show();
-                    FragmentTransaction ft = Globals.ft.beginTransaction();
-                    ft.replace(R.id.content_frame, new DetallesFinRecorrido().newInstance(crono.getText().toString(), distanciaRecoFin));
-                    ft.addToBackStack("Detalle Fin Recorrido");
-                    ft.commit();
+                else{
+                    activarGps();
                 }
                 break;
             case R.id.direction:
@@ -448,12 +466,14 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     public void activarGps() {
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(location != null) {
-                GeoPoint punto = new GeoPoint(location.getLatitude(), location.getLongitude());
+            if(location != null && Globals.gps != null) {
+                this.punto = new GeoPoint(location.getLatitude(), location.getLongitude());
                 mc.animateTo(punto);
+                gpsActivado=true;
             }
             else{
                 Toast.makeText(getActivity(), "Espere a tener señal Gps", Toast.LENGTH_SHORT).show();
+                gpsActivado=false;
             }
         }else{
             showSettingsAlert();

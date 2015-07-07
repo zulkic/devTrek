@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -350,15 +351,11 @@ public class MenuPrincipal extends SherlockFragmentActivity implements RoutesFra
 
     @Override
     public void onBackPressed() {
-        Log.i("Back pressed: ", "es que me han llamado tio");
-        if (Globals.ft.getBackStackEntryCount() > 0) {
-    // If there are back-stack entries, leave the FragmentActivity
-    // implementation take care of them.
-            Log.i("Back pressed: ", "por el if tio");
-            Globals.ft.popBackStack();
-        } else {
-            Log.i("Back pressed: ", "por el else tio");
-    // Otherwise, ask user if he wants to leave :)
+        FragmentManager fr = getSupportFragmentManager();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            fr.popBackStack();
+        }
+        else {
             super.onBackPressed();
         }
     }

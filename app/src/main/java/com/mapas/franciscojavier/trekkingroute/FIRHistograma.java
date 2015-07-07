@@ -34,11 +34,7 @@ public class FIRHistograma extends Fragment implements View.OnClickListener, Ref
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Coordenadas_Ruta coordenadas_ruta = new Coordenadas_Ruta(Globals.ini_rec.getId().intValue() , Globals.context);
-        coordenadas = new ArrayList<>();
-        try {
-            coordenadas = coordenadas_ruta.execute().get();
-        }
-        catch (Exception e){}
+        coordenadas = new ArrayList<>(Globals.coordenadas_inic_rec);
     }
 
     @Override
