@@ -439,7 +439,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                         crono.stop();
                         t.interrupt();
                         //Cosas para finalizar el recorrido
-                        Toast.makeText(getActivity(), "||||crono: "+crono.getText()+"||||distancia: "+distanciaRecoFin+"|||", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity(), "||||crono: "+crono.getText()+"||||distancia: "+distancia+"|||", Toast.LENGTH_LONG).show();
                         FragmentTransaction ft = Globals.ft.beginTransaction();
                         ft.replace(R.id.content_frame, new DetallesFinRecorrido().newInstance(crono.getText().toString(), Float.toString(distancia)));
                         ft.addToBackStack("Detalle Fin Recorrido");
