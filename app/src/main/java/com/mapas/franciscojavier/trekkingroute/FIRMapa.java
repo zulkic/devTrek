@@ -28,12 +28,10 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.mapas.franciscojavier.trekkingroute.Utility.Globals;
@@ -133,7 +131,6 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         ImageButton botonGps = (ImageButton) view.findViewById(R.id.imageButtonGPS);
         ImageButton al_inicio = (ImageButton) view.findViewById(R.id.al_inicio);
         btnIniFin = (Button) view.findViewById(R.id.BtnIniFin);
-        ToggleButton direction = (ToggleButton) view.findViewById(R.id.direction);
         crono = (Chronometer) view.findViewById(R.id.textView_cronometro);
         distanciaFaltante = (TextView) view.findViewById(R.id.textView_distancia_faltante);
         distanciaRecorrida = (TextView) view.findViewById(R.id.textView_distancia_recorrida);
@@ -141,7 +138,6 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         distanciaFalt = ruta.getKms();
         distanciaRecorrida.setText("0");
         btnIniFin.setText("Inicio");
-        direction.setOnClickListener(this);
         btnIniFin.setOnClickListener(this);
         botonGps.setOnClickListener(this);
         al_inicio.setOnClickListener(this);
@@ -398,6 +394,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                 activarGps();
                 break;
             case R.id.BtnIniFin:
+                activarGps();
                 if(gpsActivado) {
                     if (enabled) {
                         //Cosas para iniciar el recorrido
