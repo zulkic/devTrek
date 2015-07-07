@@ -132,13 +132,9 @@
 
     </RelativeLayout>
 
-    <ToggleButton
+    <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/BtnIniFin"
-        android:textOn="Fin"
-        android:textOff="Inicio"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:id="@+id/BtnIniFin" />
 
 </LinearLayout>

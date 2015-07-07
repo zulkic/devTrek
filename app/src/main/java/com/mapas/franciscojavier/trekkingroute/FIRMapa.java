@@ -28,7 +28,6 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -398,6 +397,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
                 activarGps();
                 break;
             case R.id.BtnIniFin:
+                activarGps();
                 if(gpsActivado) {
                     if (enabled) {
                         //Cosas para iniciar el recorrido
