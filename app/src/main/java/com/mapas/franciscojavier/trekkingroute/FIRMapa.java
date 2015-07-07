@@ -186,7 +186,6 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mPointer = (ImageView) view.findViewById(R.id.pointer);
-        activarGps();
         return view;
     }
 
@@ -241,6 +240,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
             osm.getOverlays().remove(aux);
         osm.getOverlays().add(po);
         osm.getOverlays().add(marker);
+        mc.animateTo(center);
         osm.invalidate();
         aux = marker;
     }
