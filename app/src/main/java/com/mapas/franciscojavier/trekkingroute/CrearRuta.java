@@ -513,6 +513,12 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        locationManager.removeUpdates(this);
+    }
+
+    @Override
     public void onClick(View v) {
         Fragment newFragment=null;
         Date c = null;

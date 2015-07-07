@@ -198,6 +198,7 @@ public class FIRMapa extends SherlockFragment implements LocationListener, Adapt
     @Override
     public void onPause() {
         super.onPause();
+        locationManager.removeUpdates(this);
         mSensorManager.unregisterListener(this, mAccelerometer);
         mSensorManager.unregisterListener(this, mMagnetometer);
     }
