@@ -3,6 +3,7 @@ package com.mapas.franciscojavier.trekkingroute;
 /**
  * Created by juancarlosgonzalezca on 24-06-2015.
  */
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;

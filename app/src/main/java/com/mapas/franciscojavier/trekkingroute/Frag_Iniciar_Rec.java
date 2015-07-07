@@ -1,7 +1,6 @@
 package com.mapas.franciscojavier.trekkingroute;
 
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -25,11 +24,6 @@ public class Frag_Iniciar_Rec extends SherlockFragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final ProgressDialog mDialog = new ProgressDialog(getActivity());
-        mDialog.setMessage("Cargando");
-        mDialog.setCancelable(false);
-        mDialog.setIndeterminate(true);
-        mDialog.show();
         View view = inflater.inflate(R.layout.viewpager_main, container, false);
         // Locate the ViewPager in viewpager_main.xml
         mViewPager = (CustomViewPager) view.findViewById(R.id.viewPager);
@@ -56,7 +50,6 @@ public class Frag_Iniciar_Rec extends SherlockFragment implements View.OnClickLi
             public void onPageScrollStateChanged(final int i) {
             }
         });
-        mDialog.dismiss();
         return view;
     }
 

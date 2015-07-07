@@ -105,7 +105,7 @@ public class Favoritas extends SherlockFragment {
                     Fragment frag = new Frag_Iniciar_Rec();
                     FragmentTransaction ft = Globals.ft.beginTransaction();
                     ft.replace(R.id.content_frame, frag);
-                    ft.addToBackStack("Iniciar Recorrido");
+                    ft.addToBackStack(frag.getTag());
                     ft.commit();
                 }
             });
