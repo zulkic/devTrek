@@ -2,7 +2,6 @@ package com.mapas.franciscojavier.trekkingroute;
 
 
 import android.app.AlertDialog;
-import android.app.DownloadManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,14 +57,12 @@ import repositorios.Tipo_ObstaculoRepo;
 import repositorios.Tipo_Puntos_InteresRepo;
 
 public class CrearRuta extends SherlockFragment implements LocationListener, AdapterView.OnClickListener{
-    View rootView;
     private MapView osm;
     private MapController mc;
     private LocationManager locationManager;
     private PathOverlay po;
     private Boolean encendido= false;
     private Integer contador = 1;
-    private Integer cantIndicadores = 1;
     private Integer id_ruta = 1;
     private ArrayList<Tipo_Indicador> tipo_puntos = new ArrayList<>();
     private ArrayList<Tipo_Indicador> tipo_obstaculos = new ArrayList<>();
@@ -77,11 +75,9 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
     private float distancia;
     private Marker aux;
     private Indicadores indicador;
-    private DownloadManager mgr=null;
     private Boolean enabled = true;
     private Button tBtnIniFin;
     int i, f;
-    SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
     private GeoPoint punto;
 
     //Commit para el moya
@@ -156,6 +152,7 @@ public class CrearRuta extends SherlockFragment implements LocationListener, Ada
             tipo_obstaculos.add(tipo_obstaculo);
         }
         //setContentView(R.layout.activity_main);
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
     public void addMarket(GeoPoint center, Boolean encendido)
