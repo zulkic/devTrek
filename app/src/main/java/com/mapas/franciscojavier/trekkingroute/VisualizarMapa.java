@@ -73,9 +73,9 @@ public class VisualizarMapa extends SherlockFragment implements LocationListener
         this.osm.getOverlays().add(myScaleBarOverlay);
         addLineOverlay();
 
-        Double latitude = inicio.getPoint().getLatitude();
-        Double longitude = inicio.getPoint().getLongitude();
-        GeoPoint center = new GeoPoint(latitude+0.014, longitude-0.018);
+        //Double latitude = inicio.getPoint().getLatitude();
+        //Double longitude = inicio.getPoint().getLongitude();
+        GeoPoint center = new GeoPoint(-34.9881+0.014, -71.2347-0.018);
         mc.animateTo(center);
 
         return view;
